@@ -1,4 +1,6 @@
 (function() {
+    'use strict';
+
     System.config({
         transpiler: 'babel',
         baseURL: '/app',
