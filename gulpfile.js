@@ -55,11 +55,11 @@ gulp.task('watch', function() {
 
     gulp.watch(appFiles,
         function() {
-            gulp.start('default');
+            gulp.start('js');
         });
     gulp.watch(sassFiles,
         function() {
-            gulp.start('default');
+            gulp.start('sass');
         });
     gulp.watch(testFiles, function() {
         gulp.start('karma');
