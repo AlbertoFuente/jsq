@@ -61,7 +61,8 @@ gulp.task('watch', function() {
         function() {
             gulp.start('sass');
         });
-    gulp.watch(testFiles, function() {
-        gulp.start('karma');
-    });
+    gulp.watch(testFiles,
+        function() {
+            gulp.start('karma');
+        });
 });
