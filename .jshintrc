@@ -13,5 +13,15 @@
     "devel": true,
     "jasmine": true,
     "jquery": true,
-    "indent": 4
+    "indent": 4,
+    "predef": [
+        "require",
+        "define",
+        "escape",
+        "self",
+        "export",
+        "import",
+        "modules",
+        "System"
+    ]
 }
