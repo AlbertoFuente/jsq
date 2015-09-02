@@ -20,8 +20,13 @@
         "escape",
         "self",
         "export",
+        "exports",
         "import",
         "modules",
-        "System"
+        "System",
+        "sinon",
+        "let",
+        "const",
+        "class"
     ]
 }
