@@ -32,7 +32,9 @@
     "karma-chrome-launcher": "^0.2.0",
     "karma-firefox-launcher": "^0.1.6",
     "karma-jasmine": "^0.3.6",
+    "karma-sinon": "^1.0.4",
     "karma-spec-reporter": "0.0.20",
+    "sinon": "^1.16.1",
     "systemjs": "^0.18.17"
   }
 }
