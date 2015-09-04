@@ -8,7 +8,7 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     Server = require('karma').Server,
     testFiles = ['js/app.min.js', 'spec/test.js'],
-    appFiles = ['app/*.js'],
+    appFiles = ['app/app.js'],
     sassFiles = ['styles/styles.scss'];
 
 gulp.task('default', function() {
