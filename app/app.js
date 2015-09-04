@@ -1,12 +1,9 @@
-define('app', [], function(app) {
+define('app', ['consts'], function(consts) {
     'use strict';
-
-    const doc = window.document,
-        docBody = doc.body;
 
     class _GameMenu {
         constructor() {
-            this.gameMenu = doc.createElement('div');
+            this.gameMenu = consts.DOC.createElement('div');
             this.gameMenu.id = 'gameMenu';
         }
         getParent() {
@@ -20,4 +17,4 @@ define('app', [], function(app) {
     return {
         GameMenu: _GameMenu
     }
-}());
+});
