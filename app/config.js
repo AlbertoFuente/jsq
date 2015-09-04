@@ -5,6 +5,7 @@
         baseUrl: 'app',
         paths: {
             'consts': 'consts',
+            'buttons': 'buttons',
             'app': 'app'
         },
         callback: function() {
