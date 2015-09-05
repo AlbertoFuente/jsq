@@ -12,10 +12,7 @@
             'use strict';
 
             require(['app', 'consts'], function(app, consts) {
-                var menu = new app.GameMenu(),
-                    parent = menu.getParent();
-
-                menu.appendMenu(parent);
+                app.init();
             });
         }
     })
