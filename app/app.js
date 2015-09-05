@@ -45,7 +45,7 @@ define('app', ['consts', 'buttons'], function(consts, buttons) {
         startButtons.appendStartButton(parentGameMenu);
         startButtons.appendLoadButton(parentGameMenu);
         startButtons.appendExitButton(parentGameMenu);
-    }
+    };
 
     return {
         init: _init,
