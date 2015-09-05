@@ -15,6 +15,20 @@ define('buttons', ['consts'], function(consts) {
     _EXIT.id = 'exitButton';
     _NEXT.id = 'nextButton';
     _PREV.id = 'prevButton';
+    // type
+    _START.setAttribute('type', 'button');
+    _SAVE.setAttribute('type', 'button');
+    _LOAD.setAttribute('type', 'button');
+    _EXIT.setAttribute('type', 'button');
+    _NEXT.setAttribute('type', 'button');
+    _PREV.setAttribute('type', 'button');
+    // VALUES
+    _START.value = 'START';
+    _SAVE.value = 'SAVE';
+    _LOAD.value = 'LOAD';
+    _EXIT.value = 'EXIT';
+    _NEXT.value = 'NEXT';
+    _PREV.value = 'PREV';
 
     return {
         START: _START,
