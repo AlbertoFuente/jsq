@@ -1,5 +1,5 @@
-var allTestFiles = [];
-var TEST_REGEXP = /(spec|test)\.js$/i;
+var allTestFiles = [],
+    TEST_REGEXP = /(spec|test)\.js$/i;
 
 // Get a list of all the test files to include
 Object.keys(window.__karma__.files).forEach(function(file) {
@@ -15,10 +15,13 @@ Object.keys(window.__karma__.files).forEach(function(file) {
 require.config({
     // Karma serves files under /base, which is the basePath from your config file
     baseUrl: '/base',
-
+    paths: {
+        'consts': 'app/consts',
+        'buttons': 'app/buttons',
+        'app': 'app/app'
+    },
     // dynamically load all test files
     deps: allTestFiles,
-
     // we have to kickoff jasmine, as it is asynchronous
     callback: window.__karma__.start
 });
