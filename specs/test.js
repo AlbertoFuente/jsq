@@ -5,6 +5,8 @@ define(['app', 'buttons', 'consts', 'sinon'], function(app, buttons, consts, sin
         beforeEach(function() {
             this.server = sinon.fakeServer.create();
             this.body = consts.DOC.body;
+            this.gameMenuClass = new app.GameMenu();
+            this.startButtonsClass = new app.StartButtons();
 
             // create container
             var container = consts.DOC.createElement('div');
@@ -18,29 +20,41 @@ define(['app', 'buttons', 'consts', 'sinon'], function(app, buttons, consts, sin
             this.server.restore();
         });
         // test Class GameMenu
-        it('Test GameMenu method', function() {
-            var gameMenu = new app.GameMenu(),
-                container = consts.DOC.getElementById('parentContainer');
+        it('Test GameMenu Class [appendMenu] method', function() {
+            var container = consts.DOC.getElementById('parentContainer');
 
-            gameMenu.appendMenu(container);
+            this.gameMenuClass.appendMenu(container);
 
             expect(container.childNodes.length).toBeGreaterThan(0);
             expect(container.childNodes[0].id).toBe('gameMenu');
         });
-        // test Class StartButtons
-        it('Test StartButtons method', function() {
-            var startButtons = new app.StartButtons(),
-                gameContainer = consts.DOC.getElementById('gameMenu');
+        it('Test Gamemenu Class [getGameMenu] method', function() {
+            var getGameMenu = this.gameMenuClass.getGameMenu(),
+                mockResponse = '<div id="gameMenu"></div>';
 
-            startButtons.appendStartButton(gameContainer);
+            expect(getGameMenu.tagName).toBe('DIV');
+            expect(getGameMenu.outerHTML).toBe(mockResponse);
+        });
+        it('Test GameMenu Class [getParent] method', function() {
+            var getParent = this.gameMenuClass.getParent(),
+                mockResponse = '<div id="parentContainer"><div id="gameMenu"></div></div>';
+
+            expect(getParent.tagName).toBe('DIV');
+            expect(getParent.outerHTML).toBe(mockResponse);
+        });
+        // test Class StartButtons
+        it('Test StartButtons Class [appendStartButton, appendLoadButton, appendExitButton] methods', function() {
+            var gameContainer = consts.DOC.getElementById('gameMenu');
+
+            this.startButtonsClass.appendStartButton(gameContainer);
             expect(gameContainer.childNodes.length).toBeGreaterThan(0);
             expect(gameContainer.childNodes[0].id).toBe('startButton');
 
-            startButtons.appendLoadButton(gameContainer);
+            this.startButtonsClass.appendLoadButton(gameContainer);
             expect(gameContainer.childNodes.length).toBeGreaterThan(1);
             expect(gameContainer.childNodes[1].id).toBe('loadButton');
 
-            startButtons.appendExitButton(gameContainer);
+            this.startButtonsClass.appendExitButton(gameContainer);
             expect(gameContainer.childNodes.length).toBeGreaterThan(2);
             expect(gameContainer.childNodes[2].id).toBe('exitButton');
         });
