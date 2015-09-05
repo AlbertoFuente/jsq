@@ -19,6 +19,17 @@ define(['app', 'buttons', 'consts', 'sinon'], function(app, buttons, consts, sin
         afterEach(function() {
             this.server.restore();
         });
+
+        // test init method
+        it('Test app.init method is called', function() {
+            spyOn(app, 'init');
+
+            app.init();
+            expect(app.init).toBeDefined();
+            expect(app.init).toHaveBeenCalled();
+            expect(app.init.calls.count()).toBe(1);
+        });
+
         // test Class GameMenu
         it('Test GameMenu Class [appendMenu] method', function() {
             var container = consts.DOC.getElementById('parentContainer');
@@ -42,6 +53,7 @@ define(['app', 'buttons', 'consts', 'sinon'], function(app, buttons, consts, sin
             expect(getParent.tagName).toBe('DIV');
             expect(getParent.outerHTML).toBe(mockResponse);
         });
+
         // test Class StartButtons
         it('Test StartButtons Class [appendStartButton, appendLoadButton, appendExitButton] methods', function() {
             var gameContainer = consts.DOC.getElementById('gameMenu');
