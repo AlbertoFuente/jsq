@@ -1,29 +1,33 @@
-describe('Test app', function() {
-    'use strict';
+define(['app', 'buttons', 'consts', 'sinon'], function(app, buttons, consts, sinon) {
 
-    beforeEach(function() {
-        this.server = sinon.fakeServer.create();
-        this.body = window.document.body;
+    describe('Test app', function() {
+        'use strict';
 
-        // create container
-        var container = window.document.createElement('div');
-        container.id = 'parentContainer';
+        beforeEach(function() {
+            this.server = sinon.fakeServer.create();
+            this.body = window.document.body;
 
-        // append to body
-        this.body.appendChild(container);
-    });
+            // create container
+            var container = window.document.createElement('div');
+            container.id = 'parentContainer';
 
-    afterEach(function() {
-        this.server.restore();
-    });
+            // append to body
+            this.body.appendChild(container);
+        });
 
-    it('Test gameMenu method', function() {
-        var gameMenu = new GameMenu(),
-            container = document.getElementById('parentContainer');
+        afterEach(function() {
+            this.server.restore();
+        });
 
-        gameMenu.appendMenu(container);
+        it('Test gameMenu method', function() {
+            console.log(app);
+            var gameMenu = new GameMenu(),
+                container = document.getElementById('parentContainer');
 
-        expect(container.childNodes.length).toBeGreaterThan(0);
-        expect(container.childNodes[0].id).toBe('gameMenu');
+            gameMenu.appendMenu(container);
+
+            expect(container.childNodes.length).toBeGreaterThan(0);
+            expect(container.childNodes[0].id).toBe('gameMenu');
+        });
     });
 });
