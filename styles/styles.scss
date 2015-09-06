@@ -1,4 +1,61 @@
 /**
+ * mixins
+ */
+@mixin linerar-gradient() {
+    background:
+    linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+    linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+    linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+    linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+    linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+    linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
+    background-color: #131313;
+    background-size: 20px 20px;
+}
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
+}
+@mixin menu-buttons() {
+    width: 100%;
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #768d87), color-stop(1, #6c7c7c));
+	background:-moz-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
+	background:-webkit-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
+	background:-o-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
+	background:-ms-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
+	background:linear-gradient(to bottom, #768d87 5%, #6c7c7c 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#768d87', endColorstr='#6c7c7c',GradientType=0);
+	background-color:#768d87;
+	border:1px solid #566963;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:12px;
+	padding:15px 40px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2b665e;
+    margin-bottom: 10px;
+    outline: 0;
+    @include border-radius(15px);
+    &:hover {
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #6c7c7c), color-stop(1, #768d87));
+    	background:-moz-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
+    	background:-webkit-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
+    	background:-o-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
+    	background:-ms-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
+    	background:linear-gradient(to bottom, #6c7c7c 5%, #768d87 100%);
+    	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#6c7c7c', endColorstr='#768d87',GradientType=0);
+    	background-color:#6c7c7c;
+    }
+    &:active {
+        position:relative;
+        top:1px;
+    }
+}
+
+/**
  * parentContainer
  */
 #parentContainer {
@@ -9,13 +66,20 @@
     right: 0;
     bottom: 0;
     position: absolute;
-    background:
-    linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
-    linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
-    linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
-    linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
-    linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
-    linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
-    background-color: #131313;
-    background-size: 20px 20px;
+    @include linerar-gradient();
+    #gameMenu {
+        width: 40%;
+        height: auto;
+        border: 1px solid white;
+        padding: 20px;
+        margin: 0 auto;
+        margin-top: 25%;
+        @include border-radius(6px);
+        input {
+            @include menu-buttons();
+        }
+        input:last-child {
+            margin-bottom: 0;
+        }
+    }
 }
