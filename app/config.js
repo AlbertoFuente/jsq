@@ -6,12 +6,14 @@
         paths: {
             'consts': 'consts',
             'buttons': 'buttons',
+            'components': 'components',
+            'events': 'events',
             'app': 'app'
         },
         callback: function() {
             'use strict';
 
-            require(['app', 'consts'], function(app, consts) {
+            require(['app', 'consts', 'buttons', 'events', 'components'], function(app, consts, buttons, events, components) {
                 app.init();
             });
         }
