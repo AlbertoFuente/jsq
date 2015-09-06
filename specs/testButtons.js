@@ -36,11 +36,18 @@ define(['buttons'], function(buttons) {
             expect(next.id).toBe('nextButton');
         });
         // PREV
-        it('Test PREV button', function() {
-            var prev = buttons.PREV;
+        it('Test BACK button', function() {
+            var back = buttons.BACK;
 
-            expect(prev).toBeDefined();
-            expect(prev.id).toBe('prevButton');
+            expect(back).toBeDefined();
+            expect(back.id).toBe('backButton');
+        });
+        // OPTIONS
+        it('Test OPTIONS button', function() {
+            var options = buttons.OPTIONS;
+
+            expect(options).toBeDefined();
+            expect(options.id).toBe('optionsButton');
         });
     });
 });
