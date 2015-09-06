@@ -22,6 +22,7 @@ define('components', ['consts', 'buttons'], function(consts, buttons) {
             this.start = buttons.START;
             this.load = buttons.LOAD;
             this.exit = buttons.EXIT;
+            this.options = buttons.OPTIONS;
         }
         appendStartButton(parent) {
             parent.appendChild(this.start);
@@ -31,6 +32,9 @@ define('components', ['consts', 'buttons'], function(consts, buttons) {
         }
         appendExitButton(parent) {
             parent.appendChild(this.exit);
+        }
+        appendOptionsButton(parent) {
+            parent.appendChild(this.options);
         }
     }
 

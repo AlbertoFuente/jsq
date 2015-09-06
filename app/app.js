@@ -11,6 +11,7 @@ define('app', ['consts', 'buttons', 'components'], function(consts, buttons, com
 
         startButtons.appendStartButton(parentGameMenu);
         startButtons.appendLoadButton(parentGameMenu);
+        startButtons.appendOptionsButton(parentGameMenu);
         startButtons.appendExitButton(parentGameMenu);
     };
 
