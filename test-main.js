@@ -1,5 +1,5 @@
 var allTestFiles = [],
-    TEST_REGEXP = /(spec|test|testButtons|testConsts)\.js$/i;
+    TEST_REGEXP = /(test|testButtons|testConsts)\.js$/i;
 
 // Get a list of all the test files to include
 Object.keys(window.__karma__.files).forEach(function(file) {
@@ -18,6 +18,7 @@ require.config({
     paths: {
         'consts': 'app/consts',
         'buttons': 'app/buttons',
+        'components': 'app/components',
         'app': 'app/app'
     },
     // dynamically load all test files
