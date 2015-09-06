@@ -1,6 +1,13 @@
 /**
  * mixins
  */
+ @mixin vertical-align() {
+   position: relative;
+   top: 50%;
+   -webkit-transform: translateY(-50%);
+   -ms-transform: translateY(-50%);
+   transform: translateY(-50%);
+ }
 @mixin linerar-gradient() {
     background:
     linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
@@ -68,12 +75,14 @@
     position: absolute;
     @include linerar-gradient();
     #gameMenu {
-        width: 40%;
+        width: 30%;
         height: auto;
         border: 1px solid white;
         padding: 20px;
         margin: 0 auto;
-        margin-top: 25%;
+        margin-top: 0;
+        margin-bottom: 0;
+        @include vertical-align();
         @include border-radius(6px);
         input {
             @include menu-buttons();
