@@ -1,12 +1,12 @@
-define(['app', 'buttons', 'consts', 'sinon'], function(app, buttons, consts, sinon) {
+define(['app', 'buttons', 'consts', 'components', 'sinon'], function(app, buttons, consts, components, sinon) {
     describe('Test app', function() {
         'use strict';
 
         beforeEach(function() {
             this.server = sinon.fakeServer.create();
             this.body = consts.DOC.body;
-            this.gameMenuClass = new app.GameMenu();
-            this.startButtonsClass = new app.StartButtons();
+            this.gameMenuClass = new components.GameMenu();
+            this.startButtonsClass = new components.StartButtons();
 
             // create container
             var container = consts.DOC.createElement('div');
