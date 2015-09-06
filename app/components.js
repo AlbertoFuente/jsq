@@ -1,4 +1,4 @@
-define('app', ['consts', 'buttons'], function(consts, buttons) {
+define('components', ['consts', 'buttons'], function(consts, buttons) {
     'use strict';
 
     class _GameMenu {
@@ -34,21 +34,7 @@ define('app', ['consts', 'buttons'], function(consts, buttons) {
         }
     }
 
-    let _init = () => {
-        let menu = new _GameMenu(),
-            parent = menu.getParent(),
-            startButtons = new _StartButtons(),
-            parentGameMenu = menu.getGameMenu();
-
-        menu.appendMenu(parent);
-
-        startButtons.appendStartButton(parentGameMenu);
-        startButtons.appendLoadButton(parentGameMenu);
-        startButtons.appendExitButton(parentGameMenu);
-    };
-
     return {
-        init: _init,
         GameMenu: _GameMenu,
         StartButtons: _StartButtons
     }
