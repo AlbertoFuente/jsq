@@ -91,4 +91,16 @@
             margin-bottom: 0;
         }
     }
+    #gameContainer {
+        width: auto;
+        height: auto;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        position: absolute;
+        margin: 20px 20px 20px 20px;
+        border: 1px solid white;
+        @include border-radius(6px);
+    }
 }
