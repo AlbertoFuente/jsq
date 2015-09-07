@@ -4,7 +4,7 @@
     require.config({
         baseUrl: 'app',
         paths: {
-            'usitls': 'utils',
+            'utils': 'utils',
             'consts': 'consts',
             'buttons': 'buttons',
             'components': 'components',
