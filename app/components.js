@@ -38,8 +38,22 @@ define('components', ['consts', 'buttons'], function(consts, buttons) {
         }
     }
 
+    class _GameContainer {
+        constructor() {
+            this.gameContainer = consts.DOC.createElement('div');
+            this.gameContainer.id = 'gameContainer';
+        }
+        getGameContainer() {
+            return this.gameContainer;
+        }
+        appendGameContainer(parent) {
+            parent.appendChild(this.gameContainer);
+        }
+    }
+
     return {
         GameMenu: _GameMenu,
-        StartButtons: _StartButtons
+        StartButtons: _StartButtons,
+        GameContainer: _GameContainer
     }
 });
