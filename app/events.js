@@ -1,9 +1,12 @@
-define('events', ['consts', 'buttons', 'utils'], function(consts, buttons, utils) {
+define('events', ['components', 'consts', 'buttons', 'utils'], function(components, consts, buttons, utils) {
     'use strict';
 
     const
         _start = () => {
+            let gameContainer = new components.GameContainer();
+
             utils.emptyContainer('parentContainer');
+            gameContainer.appendGameContainer(consts.DOC.getElementById('parentContainer'));
             // TODO: pending...
         },
         _save = () => {
