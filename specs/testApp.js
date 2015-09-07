@@ -7,6 +7,7 @@ define(['app', 'buttons', 'consts', 'components', 'sinon'], function(app, button
             this.body = consts.DOC.body;
             this.gameMenuClass = new components.GameMenu();
             this.startButtonsClass = new components.StartButtons();
+            this.gameContainerClass = new components.GameContainer();
 
             // create container
             var container = consts.DOC.createElement('div');
@@ -73,6 +74,23 @@ define(['app', 'buttons', 'consts', 'components', 'sinon'], function(app, button
             this.startButtonsClass.appendExitButton(gameContainer);
             expect(gameContainer.childNodes.length).toBeGreaterThan(3);
             expect(gameContainer.childNodes[3].id).toBe('exitButton');
+        });
+
+        // test Class gameContainer
+        it('Test GameContainer [getGameContainer] method', function() {
+            var getGameContainer = this.gameContainerClass.getGameContainer(),
+                mockResponse = '<div id="gameContainer"></div>';
+
+            expect(getGameContainer.tagName).toBe('DIV');
+            expect(getGameContainer.outerHTML).toBe(mockResponse);
+        });
+        it('Test GAMEcontainer [appendGameContainer] method', function() {
+            var container = consts.DOC.getElementById('parentContainer');
+
+            this.gameContainerClass.appendGameContainer(container);
+
+            expect(container.childNodes.length).toBeGreaterThan(0);
+            expect(container.childNodes[0].id).toBe('gameMenu');
         });
     });
 });
