@@ -39,6 +39,7 @@
     "sinon": "^1.16.1"
   },
   "dependencies": {
+    "pouchdb": "^4.0.1",
     "requirejs": "^2.1.20"
   }
 }
