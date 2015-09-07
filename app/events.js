@@ -1,27 +1,31 @@
-define('events', ['consts', 'buttons'], function(consts, buttons) {
+define('events', ['consts', 'buttons', 'utils'], function(consts, buttons, utils) {
     'use strict';
 
     const
         _start = () => {
-            console.log('START');
+            utils.emptyContainer('parentContainer');
+            // TODO: pending...
         },
         _save = () => {
-            console.log('SAVE');
+            // TODO: pending...
         },
         _load = () => {
-            console.log('LOAD');
+            // TODO: pending...
         },
         _options = () => {
-            console.log('OPTIONS');
+            utils.emptyContainer('parentContainer');
+            // TODO: pending...
         },
         _exit = () => {
-            console.log('EXIT');
+            // TODO: pending...
         },
         _next = () => {
-            console.log('NEXT');
+            utils.emptyContainer('parentContainer');
+            // TODO: pending...
         },
         _back = () => {
-            console.log('BACK');
+            utils.emptyContainer('parentContainer');
+            // TODO: pending...
         }
 
     // on click
