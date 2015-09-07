@@ -3,15 +3,13 @@ define('utils', ['consts'], function(consts) {
 
     let _emptyContainer = (container) => {
         let element = consts.DOC.getElementById(container),
-            elementChilds = element.childNodes,
-            i = 0,
-            len = elementChilds.length;
+            elementChilds = element.childNodes;
 
-        for (i; i < len; i++) {
-            if (elementChilds[i].tagName === 'DIV') {
-                element.removeChild(elementChilds[i]);
+        Array.from(elementChilds).forEach((key) => {
+            if (key.tagName === 'DIV') {
+                element.removeChild(key);
             }
-        }
+        });
     }
 
     return {
