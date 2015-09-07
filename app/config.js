@@ -4,6 +4,7 @@
     require.config({
         baseUrl: 'app',
         paths: {
+            'usitls': 'utils',
             'consts': 'consts',
             'buttons': 'buttons',
             'components': 'components',
@@ -13,7 +14,7 @@
         callback: function() {
             'use strict';
 
-            require(['app', 'consts', 'buttons', 'events', 'components'], function(app, consts, buttons, events, components) {
+            require(['utils', 'app', 'consts', 'buttons', 'events', 'components'], function(utils, app, consts, buttons, events, components) {
                 app.init();
             });
         }
