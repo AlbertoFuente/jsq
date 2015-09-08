@@ -1,5 +1,32 @@
-define('components', ['consts', 'buttons'], function(consts, buttons) {
+define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, utils) {
     'use strict';
+
+    let createTable = (parent) => {
+        let table = consts.DOC.createElement('table'),
+            rows = 20,
+            columns = 20,
+            trRange = utils.range(0, rows, 0),
+            tdRange = utils.range(0, columns, 0),
+            trs = [],
+            tds = [];
+
+        table.className = 'panelGamerBoard';
+
+        Array.from(trRange).forEach((x) => {
+            let trElement = consts.DOC.createElement('tr');
+            trElement.className = 'tr' + x;
+
+            Array.from(tdRange).forEach((s) => {
+                let tdElement = consts.DOC.createElement('td');
+                tdElement.className = 'td' + s;
+                trElement.appendChild(tdElement);
+            });
+
+            table.appendChild(trElement);
+        });
+
+        return table;
+    };
 
     class _GameMenu {
         constructor() {
@@ -51,9 +78,30 @@ define('components', ['consts', 'buttons'], function(consts, buttons) {
         }
     }
 
+    class _PanelGamer {
+        constructor() {
+            this.panelGamer = consts.DOC.createElement('div');
+            this.panelGamer.id = 'panelGamer';
+
+            this.menuGamer = consts.DOC.createElement('div');
+            this.menuGamer.id = 'menuGamer';
+
+            this.table = createTable(this.panelGamer);
+        }
+        getPanelGamer() {
+            return this.panelGamer;
+        }
+        appendPanelGamer(parent) {
+            parent.appendChild(this.panelGamer);
+            this.panelGamer.appendChild(this.menuGamer);
+            this.panelGamer.appendChild(this.table);
+        }
+    }
+
     return {
         GameMenu: _GameMenu,
         StartButtons: _StartButtons,
-        GameContainer: _GameContainer
+        GameContainer: _GameContainer,
+        PanelGamer: _PanelGamer
     }
 });
