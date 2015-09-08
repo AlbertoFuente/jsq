@@ -8,6 +8,7 @@ define(['app', 'buttons', 'consts', 'components', 'sinon'], function(app, button
             this.gameMenuClass = new components.GameMenu();
             this.startButtonsClass = new components.StartButtons();
             this.gameContainerClass = new components.GameContainer();
+            this.panelGamerClass = new components.PanelGamer();
 
             // create container
             var container = consts.DOC.createElement('div');
@@ -77,20 +78,37 @@ define(['app', 'buttons', 'consts', 'components', 'sinon'], function(app, button
         });
 
         // test Class gameContainer
-        it('Test GameContainer [getGameContainer] method', function() {
+        it('Test GameContainer Class [getGameContainer] method', function() {
             var getGameContainer = this.gameContainerClass.getGameContainer(),
                 mockResponse = '<div id="gameContainer"></div>';
 
             expect(getGameContainer.tagName).toBe('DIV');
             expect(getGameContainer.outerHTML).toBe(mockResponse);
         });
-        it('Test GAMEcontainer [appendGameContainer] method', function() {
+        it('Test GameContainer Class [appendGameContainer] method', function() {
             var container = consts.DOC.getElementById('parentContainer');
 
             this.gameContainerClass.appendGameContainer(container);
 
             expect(container.childNodes.length).toBeGreaterThan(0);
             expect(container.childNodes[0].id).toBe('gameMenu');
+        });
+
+        // test Class panelGamer
+        it('Test PanelGamer Class [getPanelGamer] method', function() {
+            var panelGamer = this.panelGamerClass.getPanelGamer(),
+                mockResponse = '<div id="panelGamer"></div>';
+
+            expect(panelGamer.tagName).toBe('DIV');
+            expect(panelGamer.outerHTML).toBe(mockResponse);
+        });
+        it('Test panelGamer Class [appendPanelGamer] method', function() {
+            var container = consts.DOC.getElementById('gameContainer');
+
+            this.panelGamerClass.appendPanelGamer(container);
+
+            expect(container.childNodes.length).toBeGreaterThan(0);
+            expect(container.childNodes[0].id).toBe('panelGamer');
         });
     });
 });
