@@ -1,9 +1,28 @@
 define(['utils', 'consts'], function(utils, consts) {
     describe('Test Utils', function() {
 
+        beforeEach(function() {
+            this.server = sinon.fakeServer.create();
+            this.body = consts.DOC.body;
+
+            // create container
+            var container = consts.DOC.createElement('div');
+            container.id = 'parentContainer';
+
+            // append to body
+            this.body.appendChild(container);
+        });
+        afterEach(function() {
+            this.server.restore();
+        });
+
         // emptyContainer
         it('Test emptyContainer method', function() {
-            var container = consts.DOC.getElementById('parentContainer');
+            var container = consts.DOC.getElementById('parentContainer'),
+                subDiv = consts.DOC.createElement('div');
+
+            subDiv.id = 'gameMenu';
+            container.appendChild(subDiv);
 
             expect(container.childNodes.length).toBeGreaterThan(0);
             expect(container.childNodes[0].id).toBe('gameMenu');
