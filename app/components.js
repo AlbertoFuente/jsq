@@ -3,10 +3,11 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
 
     let createTable = (parent) => {
         let table = consts.DOC.createElement('table'),
-            rows = 20,
-            columns = 20,
+            rows = 10,
+            columns = 10,
             trRange = utils.range(0, rows, 0),
             tdRange = utils.range(0, columns, 0),
+            lettersRange = utils.range('a', 'j', 0),
             trs = [],
             tds = [];
 
@@ -14,13 +15,38 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
 
         Array.from(trRange).forEach((x) => {
             let trElement = consts.DOC.createElement('tr');
-            trElement.className = 'tr' + x;
 
-            Array.from(tdRange).forEach((s) => {
-                let tdElement = consts.DOC.createElement('td');
-                tdElement.className = 'td' + s;
-                trElement.appendChild(tdElement);
-            });
+            if (x === 0) {
+                trElement.className = 'tr' + x;
+                Array.from(tdRange).forEach((s) => {
+                    let tdElement = consts.DOC.createElement('td'),
+                        tdNumber = consts.DOC.createElement('p');
+
+                    if (s !== 0) {
+                        tdElement.className = 'td' + s;
+                        tdNumber.innerHTML = s + '';
+                        tdElement.appendChild(tdNumber);
+                    }
+
+                    trElement.appendChild(tdElement);
+                });
+            } else {
+                trElement.className = 'tr' + x;
+
+                Array.from(tdRange).forEach((s) => {
+                    let tdElement = consts.DOC.createElement('td'),
+                        tdLetter = consts.DOC.createElement('p'),
+                        letter = lettersRange[x - 1];
+
+                    tdElement.className = 'td' + s;
+                    tdLetter.innerHTML = letter;
+
+                    if (s === 0) {
+                        tdElement.appendChild(tdLetter);
+                    }
+                    trElement.appendChild(tdElement);
+                });
+            }
 
             table.appendChild(trElement);
         });
