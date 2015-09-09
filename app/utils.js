@@ -12,7 +12,8 @@ define('utils', ['consts'], function(consts) {
             });
         },
         _range = (start, end, step) => {
-            let range = [];
+            let range = [],
+                alp = 'abcdefghijklmnopqrstuvwxyz';
 
             if (typeof start === 'number' && typeof end === 'number') {
                 range[0] = start;
@@ -21,6 +22,13 @@ define('utils', ['consts'], function(consts) {
                 while (start + step <= end) {
                     range[range.length] = start += step;
                 }
+            } else {
+                if (start === start.toUpperCase()) {
+                    end = end.toUpperCase();
+                    alp = alp.toUpperCase();
+                }
+                alp = alp.substring(alp.indexOf(start), alp.indexOf(end) + 1);
+                range = alp.toUpperCase().split('');
             }
             return range;
         }
