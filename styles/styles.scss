@@ -102,5 +102,44 @@
         margin: 20px 20px 20px 20px;
         border: 1px solid white;
         @include border-radius(6px);
+        #panelGamer {
+            width: auto;
+            height: auto;
+            margin-right: auto;
+            margin-top: 20px;
+            margin-left: 20px;
+            padding: 10px;
+            position: absolute;
+            border: 1px solid white;
+            @include border-radius(4px);
+            #menuGamer {
+                width: auto;
+                height: 60px;
+                margin-bottom: 10px;
+                background: #DCDCDC;
+                opacity: 0.8;
+                border: 1px solid white;
+                @include border-radius(4px);
+            }
+            .panelGamerBoard {
+                td {
+                    width: 30px;
+                    height: 30px;
+                    display: table-cell;
+                    border: 1px solid white;
+                    cursor: pointer;
+                    background: #00BFFF;
+                    opacity: 0.6;
+                    p {
+                        width: auto;
+                        height: auto;
+                        margin-top: 0;
+                        margin-bottom: 0;
+                        text-align: center;
+                        color: white;
+                    }
+                }
+            }
+        }
     }
 }
