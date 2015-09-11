@@ -137,13 +137,27 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
                         boxes: 2
                     }
                 },
-                selectTitle = consts.DOC.createElement('h3');
+                selectTitle = consts.DOC.createElement('h3'),
+                selectPositionText = consts.DOC.createElement('h3'),
+                position = ['horizontal', 'vertical'],
+                divSelect1 = consts.DOC.createElement('div'),
+                divSelect2 = consts.DOC.createElement('div'),
+                divSelect3 = consts.DOC.createElement('div'),
+                startButton = consts.DOC.createElement('input');
+
+            startButton.id = 'runGameButton';
+            startButton.type = 'button';
+            startButton.value = 'START';
+
+            divSelect1.className = 'divSelect1';
+            divSelect2.className = 'divSelect2';
+            divSelect3.className = 'divSelect3';
 
             selectTitle.className = 'selectShipsText';
             selectTitle.innerHTML = 'Place your ships:';
 
-            this.selectMenu = consts.DOC.createElement('select');
-            this.selectMenu.id = 'gamerSelect';
+            this.selectMenuShips = consts.DOC.createElement('select');
+            this.selectMenuShips.id = 'gamerSelect';
 
             Object.keys(ships).forEach((x) => {
                 let option = consts.DOC.createElement('option');
@@ -152,18 +166,49 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
                 option.setAttribute('data-name', x + '');
                 option.setAttribute('data-box', ships[x].boxes + '');
 
-                this.selectMenu.appendChild(option);
+                this.selectMenuShips.appendChild(option);
             });
 
-            this.menuGamer.appendChild(selectTitle);
-            this.menuGamer.appendChild(this.selectMenu);
+            divSelect1.appendChild(selectTitle);
+            divSelect1.appendChild(this.selectMenuShips);
+            this.menuGamer.appendChild(divSelect1);
 
-            this.selectMenu.onchange = (event) => {
+            this.selectMenuShips.onchange = (event) => {
                 let value = event.target.selectedOptions[0].value,
                     number = event.target.selectedOptions[0].getAttribute('data-box'),
                     name = event.target.selectedOptions[0].getAttribute('data-name');
                 // TODO: pending...
             };
+
+            selectPositionText.className = 'selectPositionText';
+            selectPositionText.innerHTML = 'Ship Position:';
+
+            this.selectShipPosition = consts.DOC.createElement('select');
+            this.selectShipPosition.id = 'selectPosition';
+
+            Array.from(position).forEach((x) => {
+                let option = consts.DOC.createElement('option');
+                option.value = x;
+                option.innerHTML = x + '';
+
+                this.selectShipPosition.appendChild(option);
+            });
+
+            divSelect2.appendChild(selectPositionText);
+            divSelect2.appendChild(this.selectShipPosition);
+            this.menuGamer.appendChild(divSelect2);
+
+            this.selectShipPosition.onchange = (event) => {
+                let option = event.target.selectedOptions[0].value;
+                // TODO: pending...
+            };
+
+            divSelect3.appendChild(startButton);
+            this.menuGamer.appendChild(divSelect3);
+
+            startButton.onclick = () => {
+                // TODO: pending...
+            }
         }
         appendMenuGamer(parent) {
             this.shipsMenu();
