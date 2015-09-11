@@ -10,7 +10,6 @@ define('events', ['components', 'consts', 'buttons', 'utils'], function(componen
             utils.emptyContainer('parentContainer');
             gameContainerClass.appendGameContainer(consts.DOC.getElementById('parentContainer'));
             panelGamerClass.appendPanelGamer(panelContainer);
-            // TODO: pending...
         },
         _save = () => {
             // TODO: pending...
@@ -32,7 +31,7 @@ define('events', ['components', 'consts', 'buttons', 'utils'], function(componen
         _back = () => {
             utils.emptyContainer('parentContainer');
             // TODO: pending...
-        }
+        };
 
     // on click
     buttons.START.onclick = () => {
