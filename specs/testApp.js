@@ -97,10 +97,10 @@ define(['app', 'buttons', 'consts', 'components', 'sinon'], function(app, button
         // test Class panelGamer
         it('Test PanelGamer Class [getPanelGamer] method', function() {
             var panelGamer = this.panelGamerClass.getPanelGamer(),
-                mockResponse = '<div id="panelGamer"></div>';
+                mockResponseId = 'panelGamer';
 
             expect(panelGamer.tagName).toBe('DIV');
-            expect(panelGamer.outerHTML).toBe(mockResponse);
+            expect(panelGamer.id).toBe(mockResponseId);
         });
         it('Test panelGamer Class [appendPanelGamer] method', function() {
             var container = consts.DOC.getElementById('gameContainer');
@@ -109,6 +109,17 @@ define(['app', 'buttons', 'consts', 'components', 'sinon'], function(app, button
 
             expect(container.childNodes.length).toBeGreaterThan(0);
             expect(container.childNodes[0].id).toBe('panelGamer');
+        });
+
+        // test createTable method
+        it('Test createTable method', function() {
+            var panelGamer = this.panelGamerClass.getPanelGamer(),
+                table = components.createTable(panelGamer);
+
+            panelGamer.appendChild(table);
+
+            expect(panelGamer.childNodes.length).toBeGreaterThan(0);
+            expect(panelGamer.childNodes[1].tagName).toBe('TABLE');
         });
     });
 });
