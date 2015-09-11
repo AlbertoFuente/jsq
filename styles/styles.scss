@@ -119,7 +119,17 @@
                 background: #DCDCDC;
                 opacity: 0.8;
                 border: 1px solid white;
+                font-family:Arial;
                 @include border-radius(4px);
+                h3 {
+                    font-size: 13px;
+                    margin-top: 10px;
+                    margin-left: 10px;
+                    margin-bottom: 10px;
+                }
+                select {
+                    margin-left: 10px;
+                }
             }
             .panelGamerBoard {
                 td {
@@ -131,6 +141,7 @@
                     background: #00BFFF;
                     opacity: 0.6;
                     p {
+                        font-family:Arial;
                         width: auto;
                         height: auto;
                         margin-top: 0;
