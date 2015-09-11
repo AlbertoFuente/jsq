@@ -1,7 +1,7 @@
 define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, utils) {
     'use strict';
 
-    let createTable = (parent) => {
+    let _createTable = (parent) => {
         let table = consts.DOC.createElement('table'),
             rows = 10,
             columns = 10,
@@ -39,6 +39,8 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
                         letter = lettersRange[x - 1];
 
                     tdElement.className = 'td' + s;
+                    tdElement.setAttribute('data-number', s + '');
+                    tdElement.setAttribute('data-letter', letter);
                     tdLetter.innerHTML = letter;
 
                     if (s === 0) {
@@ -104,23 +106,87 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
         }
     }
 
+    class _MenuGamer {
+        constructor() {
+            this.menuGamer = consts.DOC.createElement('div');
+            this.menuGamer.id = 'menuGamer';
+        }
+        getMenuGamer() {
+            return this.menuGamer;
+        }
+        shipsMenu() {
+            let ships = {
+                    aircraftCarrier: {
+                        name: 'Aircraft Carrier',
+                        boxes: 5
+                    },
+                    battleship: {
+                        name: 'Battleship',
+                        boxes: 4
+                    },
+                    submarine: {
+                        name: 'Submarine',
+                        boxes: 3
+                    },
+                    destroyer: {
+                        name: 'Destroyer',
+                        boxes: 3
+                    },
+                    patrolBoat: {
+                        name: 'Patrol boat',
+                        boxes: 2
+                    }
+                },
+                selectTitle = consts.DOC.createElement('h3');
+
+            selectTitle.className = 'selectShipsText';
+            selectTitle.innerHTML = 'Place your ships:';
+
+            this.selectMenu = consts.DOC.createElement('select');
+            this.selectMenu.id = 'gamerSelect';
+
+            Object.keys(ships).forEach((x) => {
+                let option = consts.DOC.createElement('option');
+                option.value = ships[x].name;
+                option.innerHTML = ships[x].name;
+                option.setAttribute('data-name', x + '');
+                option.setAttribute('data-box', ships[x].boxes + '');
+
+                this.selectMenu.appendChild(option);
+            });
+
+            this.menuGamer.appendChild(selectTitle);
+            this.menuGamer.appendChild(this.selectMenu);
+
+            this.selectMenu.onchange = (event) => {
+                let value = event.target.selectedOptions[0].value,
+                    number = event.target.selectedOptions[0].getAttribute('data-box'),
+                    name = event.target.selectedOptions[0].getAttribute('data-name');
+                // TODO: pending...
+            };
+        }
+        appendMenuGamer(parent) {
+            this.shipsMenu();
+            parent.appendChild(this.menuGamer);
+        }
+    }
+
     class _PanelGamer {
         constructor() {
             this.panelGamer = consts.DOC.createElement('div');
             this.panelGamer.id = 'panelGamer';
 
-            this.menuGamer = consts.DOC.createElement('div');
-            this.menuGamer.id = 'menuGamer';
+            this._menuGamer = new _MenuGamer();
+            this._menuGamer.appendMenuGamer(this.panelGamer);
 
-            this.table = createTable(this.panelGamer);
+            this._table = _createTable(this.panelGamer);
+            this.panelGamer.appendChild(this._table);
         }
         getPanelGamer() {
             return this.panelGamer;
         }
         appendPanelGamer(parent) {
             parent.appendChild(this.panelGamer);
-            this.panelGamer.appendChild(this.menuGamer);
-            this.panelGamer.appendChild(this.table);
         }
     }
 
@@ -128,6 +194,8 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
         GameMenu: _GameMenu,
         StartButtons: _StartButtons,
         GameContainer: _GameContainer,
-        PanelGamer: _PanelGamer
+        MenuGamer: _MenuGamer,
+        PanelGamer: _PanelGamer,
+        createTable: _createTable
     }
 });
