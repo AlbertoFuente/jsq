@@ -121,14 +121,43 @@
                 border: 1px solid white;
                 font-family:Arial;
                 @include border-radius(4px);
-                h3 {
-                    font-size: 13px;
-                    margin-top: 10px;
-                    margin-left: 10px;
-                    margin-bottom: 10px;
+                .divSelect1 {
+                    float: left;
+                    width: auto;
+                    min-width: 150px;
+                    height: auto;
+                    h3 {
+                        font-size: 13px;
+                        margin-top: 10px;
+                        margin-left: 10px;
+                        margin-bottom: 10px;
+                    }
+                    select {
+                        margin-left: 10px;
+                    }
                 }
-                select {
-                    margin-left: 10px;
+                .divSelect2 {
+                    float: left;
+                    width: auto;
+                    height: auto;
+                    h3 {
+                        font-size: 13px;
+                        margin-top: 10px;
+                        margin-left: 10px;
+                        margin-bottom: 10px;
+                    }
+                    select {
+                        margin-left: 10px;
+                    }
+                }
+                .divSelect3 {
+                    float: left;
+                    width: auto;
+                    height: auto;
+                    padding: 30px;
+                    input {
+                        padding: 15px;
+                    }
                 }
             }
             .panelGamerBoard {
