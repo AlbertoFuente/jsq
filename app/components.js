@@ -83,7 +83,8 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
         },
         _changeVerticalBox = (trs, range, name) => {
             let i = 0,
-                arr = {};
+                arr = {},
+                menuGamer = new _MenuGamer();
 
             Object.keys(trs).forEach((x) => {
                 if (trs[x].childsShips.length === 0 && i < range.length) {
@@ -91,10 +92,16 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
                     i++;
                 }
             });
-            Object.keys(arr).forEach((d) => {
-                arr[d].childs[0].className += ' selected';
-                arr[d].childs[0].setAttribute('data-name', name);
-            })
+
+            if (i === range.length) {
+                Object.keys(arr).forEach((d) => {
+                    arr[d].childs[0].className += ' selected';
+                    arr[d].childs[0].setAttribute('data-name', name);
+                });
+                menuGamer.removeElement(name);
+            } else {
+                // TODO: SHOW ERROR MESSAGE
+            }
         },
         _verticalShip = (num, name) => {
             let _table = consts.DOC.getElementsByClassName('panelGamerBoard'),
@@ -192,6 +199,15 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
         }
         getMenuGamer() {
             return this.menuGamer;
+        }
+        removeElement(element) {
+            let select = consts.DOC.getElementById('gamerSelect');
+            Object.keys(select.childNodes).forEach((x) => {
+                let dataName = select.childNodes[x].getAttribute('data-name');
+                if (dataName === element) {
+                    select.remove(select.selectedIndex);
+                }
+            });
         }
         shipsMenu() {
             let ships = {
