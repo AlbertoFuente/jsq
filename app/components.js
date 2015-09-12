@@ -2,59 +2,97 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
     'use strict';
 
     let _createTable = (parent) => {
-        let table = consts.DOC.createElement('table'),
-            rows = 10,
-            columns = 10,
-            trRange = utils.range(0, rows, 0),
-            tdRange = utils.range(0, columns, 0),
-            lettersRange = utils.range('a', 'j', 0),
-            trs = [],
-            tds = [];
+            let table = consts.DOC.createElement('table'),
+                rows = 10,
+                columns = 10,
+                trRange = utils.range(0, rows, 0),
+                tdRange = utils.range(0, columns, 0),
+                lettersRange = utils.range('a', 'j', 0),
+                trs = [],
+                tds = [];
 
-        table.className = 'panelGamerBoard';
+            table.className = 'panelGamerBoard';
 
-        Array.from(trRange).forEach((x) => {
-            let trElement = consts.DOC.createElement('tr');
+            Array.from(trRange).forEach((x) => {
+                let trElement = consts.DOC.createElement('tr');
 
-            if (x === 0) {
-                trElement.className = 'tr' + x;
-                Array.from(tdRange).forEach((s) => {
-                    let tdElement = consts.DOC.createElement('td'),
-                        tdNumber = consts.DOC.createElement('p');
+                if (x === 0) {
+                    trElement.className = 'tr' + x;
+                    Array.from(tdRange).forEach((s) => {
+                        let tdElement = consts.DOC.createElement('td'),
+                            tdNumber = consts.DOC.createElement('p');
 
-                    if (s !== 0) {
+                        if (s !== 0) {
+                            tdElement.className = 'td' + s;
+                            tdNumber.innerHTML = s + '';
+                            tdElement.appendChild(tdNumber);
+                        }
+
+                        trElement.appendChild(tdElement);
+                    });
+                } else {
+                    trElement.className = 'tr' + x;
+
+                    Array.from(tdRange).forEach((s) => {
+                        let tdElement = consts.DOC.createElement('td'),
+                            tdLetter = consts.DOC.createElement('p'),
+                            letter = lettersRange[x - 1];
+
                         tdElement.className = 'td' + s;
-                        tdNumber.innerHTML = s + '';
-                        tdElement.appendChild(tdNumber);
-                    }
+                        tdElement.setAttribute('data-number', s + '');
+                        tdElement.setAttribute('data-letter', letter);
+                        tdLetter.innerHTML = letter;
 
-                    trElement.appendChild(tdElement);
-                });
-            } else {
-                trElement.className = 'tr' + x;
+                        if (s === 0) {
+                            tdElement.appendChild(tdLetter);
+                        }
+                        trElement.appendChild(tdElement);
+                    });
+                }
 
-                Array.from(tdRange).forEach((s) => {
-                    let tdElement = consts.DOC.createElement('td'),
-                        tdLetter = consts.DOC.createElement('p'),
-                        letter = lettersRange[x - 1];
+                table.appendChild(trElement);
+            });
 
-                    tdElement.className = 'td' + s;
-                    tdElement.setAttribute('data-number', s + '');
-                    tdElement.setAttribute('data-letter', letter);
-                    tdLetter.innerHTML = letter;
+            return table;
+        },
+        _shipSelected = {},
+        _positionSelected = null,
+        _changeBox = (trClass, tdClass) => {
+            let _tr = consts.DOC.getElementsByClassName(trClass),
+                _trChilds = _tr[0].childNodes;
 
-                    if (s === 0) {
-                        tdElement.appendChild(tdLetter);
-                    }
-                    trElement.appendChild(tdElement);
-                });
+            Array.from(_trChilds).forEach((x) => {
+                if (x.className === tdClass) {
+                    x.className += ' selected';
+                }
+            });
+        },
+        _verticalShip = (num) => {
+            let _table = consts.DOC.getElementsByClassName('panelGamerBoard'),
+                _td = 'td1',
+                _range = utils.range(1, parseFloat(num), 0);
+
+            for (let i of _range) {
+                _changeBox('tr' + i, _td);
             }
-
-            table.appendChild(trElement);
-        });
-
-        return table;
-    };
+        },
+        _horizontalShip = (num) => {
+            // TODO: pending...
+        },
+        _placeShip = (ship, position) => {
+            if (typeof ship === 'object' && position) {
+                switch (position) {
+                    case 'vertical':
+                        _verticalShip(ship.boxes);
+                        break;
+                    case 'horizontal':
+                        _horizontalShip(ship.boxes);
+                        break;
+                }
+            } else {
+                // TODO: SHOW ERROR MESSAGE
+            }
+        };
 
     class _GameMenu {
         constructor() {
@@ -143,11 +181,11 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
                 divSelect1 = consts.DOC.createElement('div'),
                 divSelect2 = consts.DOC.createElement('div'),
                 divSelect3 = consts.DOC.createElement('div'),
-                startButton = consts.DOC.createElement('input');
+                placeButton = consts.DOC.createElement('input');
 
-            startButton.id = 'runGameButton';
-            startButton.type = 'button';
-            startButton.value = 'START';
+            placeButton.id = 'placeShipButton';
+            placeButton.type = 'button';
+            placeButton.value = 'PLACE';
 
             divSelect1.className = 'divSelect1';
             divSelect2.className = 'divSelect2';
@@ -174,10 +212,9 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
             this.menuGamer.appendChild(divSelect1);
 
             this.selectMenuShips.onchange = (event) => {
-                let value = event.target.selectedOptions[0].value,
-                    number = event.target.selectedOptions[0].getAttribute('data-box'),
-                    name = event.target.selectedOptions[0].getAttribute('data-name');
-                // TODO: pending...
+                _shipSelected.value = event.target.selectedOptions[0].value;
+                _shipSelected.boxes = event.target.selectedOptions[0].getAttribute('data-box');
+                _shipSelected.name = event.target.selectedOptions[0].getAttribute('data-name');
             };
 
             selectPositionText.className = 'selectPositionText';
@@ -199,15 +236,14 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
             this.menuGamer.appendChild(divSelect2);
 
             this.selectShipPosition.onchange = (event) => {
-                let option = event.target.selectedOptions[0].value;
-                // TODO: pending...
+                _positionSelected = event.target.selectedOptions[0].value;
             };
 
-            divSelect3.appendChild(startButton);
+            divSelect3.appendChild(placeButton);
             this.menuGamer.appendChild(divSelect3);
 
-            startButton.onclick = () => {
-                // TODO: pending...
+            placeButton.onclick = () => {
+                _placeShip(_shipSelected, _positionSelected);
             }
         }
         appendMenuGamer(parent) {
