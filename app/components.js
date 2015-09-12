@@ -55,38 +55,79 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
 
             return table;
         },
+        _defaultShip = {
+            value: 'Aircraft Carrier',
+            name: 'aircraftCarrier',
+            boxes: '5'
+        },
+        _defaultPosition = 'horizontal',
         _shipSelected = {},
         _positionSelected = null,
-        _changeBox = (trClass, tdClass) => {
-            let _tr = consts.DOC.getElementsByClassName(trClass),
-                _trChilds = _tr[0].childNodes;
+        _checkTds = (trChilds, range) => {
+            let table = {},
+                arr = [];
 
-            Array.from(_trChilds).forEach((x) => {
-                if (x.className === tdClass) {
-                    x.className += ' selected';
+            Array.from(trChilds).forEach((x) => {
+                let arr = [],
+                    name = [];
+                Array.from(x.childNodes).forEach((f) => {
+                    if (f.className !== 'td0') arr.push(f);
+                    if (f.hasAttribute('data-name')) name.push(f);
+                });
+                table[x.className] = {
+                    childs: arr,
+                    childsShips: name
+                };
+            });
+            return table;
+        },
+        _changeVerticalBox = (trs, range, name) => {
+            let i = 0,
+                arr = {};
+
+            Object.keys(trs).forEach((x) => {
+                if (trs[x].childsShips.length === 0 && i < range.length) {
+                    arr[x] = trs[x];
+                    i++;
                 }
             });
+            Object.keys(arr).forEach((d) => {
+                arr[d].childs[0].className += ' selected';
+                arr[d].childs[0].setAttribute('data-name', name);
+            })
         },
-        _verticalShip = (num) => {
+        _verticalShip = (num, name) => {
             let _table = consts.DOC.getElementsByClassName('panelGamerBoard'),
-                _td = 'td1',
+                _range = utils.range(1, parseFloat(num), 0),
+                _trs = _table[0].childNodes,
+                _trArr = [],
+                _resultTrs = {};
+
+            Array.from(_trs).forEach((x) => {
+                if (x.className !== 'tr0') {
+                    _trArr.push(x);
+                }
+            });
+            _resultTrs = _checkTds(_trArr, _range);
+            _changeVerticalBox(_resultTrs, _range, name);
+        },
+        _horizontalShip = (num, name) => {
+            let _table = consts.DOC.getElementsByClassName('panelGamerBoard'),
+                _td = null,
                 _range = utils.range(1, parseFloat(num), 0);
 
             for (let i of _range) {
-                _changeBox('tr' + i, _td);
+                //_changeBox('tr1', 'td' + i, name);
             }
-        },
-        _horizontalShip = (num) => {
-            // TODO: pending...
         },
         _placeShip = (ship, position) => {
             if (typeof ship === 'object' && position) {
                 switch (position) {
                     case 'vertical':
-                        _verticalShip(ship.boxes);
+                        _verticalShip(ship.boxes, ship.name);
                         break;
                     case 'horizontal':
-                        _horizontalShip(ship.boxes);
+                        _horizontalShip(ship.boxes, ship.name);
                         break;
                 }
             } else {
