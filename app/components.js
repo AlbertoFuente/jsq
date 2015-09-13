@@ -94,9 +94,10 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
             });
 
             if (i === range.length) {
+                let arrChild = arr[d].childs[0];
                 Object.keys(arr).forEach((d) => {
-                    arr[d].childs[0].className += ' selected';
-                    arr[d].childs[0].setAttribute('data-name', name);
+                    arrChild.className += ' selected';
+                    arrChild.setAttribute('data-name', name);
                 });
                 menuGamer.removeElement(name);
             } else {
@@ -269,9 +270,10 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
             this.menuGamer.appendChild(divSelect1);
 
             this.selectMenuShips.onchange = (event) => {
-                _shipSelected.value = event.target.selectedOptions[0].value;
-                _shipSelected.boxes = event.target.selectedOptions[0].getAttribute('data-box');
-                _shipSelected.name = event.target.selectedOptions[0].getAttribute('data-name');
+                let evTarget = event.target.selectedOptions[0];
+                _shipSelected.value = evTarget.value;
+                _shipSelected.boxes = evTarget.getAttribute('data-box');
+                _shipSelected.name = evTarget.getAttribute('data-name');
             };
 
             selectPositionText.className = 'selectPositionText';
