@@ -55,12 +55,6 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
 
             return table;
         },
-        _defaultShip = {
-            value: 'Aircraft Carrier',
-            name: 'aircraftCarrier',
-            boxes: '5'
-        },
-        _defaultPosition = 'horizontal',
         _shipSelected = {},
         _positionSelected = null,
         _checkTds = (trChilds, range) => {
