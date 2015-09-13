@@ -3,10 +3,12 @@ define('consts', [], function() {
 
     const
         _DOC = window.document,
-        _DOCBODY = _DOC.body;
+        _DOCBODY = _DOC.body,
+        _WIN = window;
 
     return {
         DOC: _DOC,
-        DOCBODY: _DOCBODY
+        DOCBODY: _DOCBODY,
+        WIN: _WIN
     }
 });
