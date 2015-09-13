@@ -94,8 +94,8 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
             });
 
             if (i === range.length) {
-                let arrChild = arr[d].childs[0];
                 Object.keys(arr).forEach((d) => {
+                    let arrChild = arr[d].childs[0];
                     arrChild.className += ' selected';
                     arrChild.setAttribute('data-name', name);
                 });
@@ -204,9 +204,11 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
         removeElement(element) {
             let select = consts.DOC.getElementById('gamerSelect');
             Object.keys(select.childNodes).forEach((x) => {
-                let dataName = select.childNodes[x].getAttribute('data-name');
-                if (dataName === element) {
-                    select.remove(select.selectedIndex);
+                if (select.childNodes[x]) {
+                    let dataName = select.childNodes[x].getAttribute('data-name');
+                    if (dataName === element) {
+                        select.remove(select.selectedIndex);
+                    }
                 }
             });
         }
