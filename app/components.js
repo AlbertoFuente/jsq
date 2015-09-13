@@ -130,7 +130,6 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
             }
         },
         _placeShip = (ship, position) => {
-            debugger
             if (typeof ship === 'object' && position) {
                 switch (position) {
                     case 'vertical':
