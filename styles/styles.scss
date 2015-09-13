@@ -184,5 +184,36 @@
                 }
             }
         }
+        #messageContainer {
+            display: none;
+            width: auto;
+            height: auto;
+            padding: 20px;
+            position: absolute;
+            top: auto;
+            right: auto;
+            left: 20px;
+            bottom: 20px;
+            border: 1px solid white;
+            box-shadow: 0 0 1em black;
+            @include border-radius(6px);
+            &.messageGreen {
+                background-color: #5CE62E;
+                opacity: 0.6;
+            }
+            &.messageRed {
+                background-color: #FF0000;
+                opacity: 0.6;
+            }
+            p {
+                color: white;
+                font-size: 14px;
+                font-family: Arial;
+                margin: 0 auto;
+            }
+            &.showMessage {
+                display: block;
+            }
+        }
     }
 }
