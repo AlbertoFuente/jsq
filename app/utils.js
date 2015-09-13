@@ -31,10 +31,59 @@ define('utils', ['consts'], function(consts) {
                 range = alp.toUpperCase().split('');
             }
             return range;
-        }
+        },
+        _message = (type, message) => {
+            let parentContainer = consts.DOC.getElementById('gameContainer'),
+                toggleClass = (type) => {
+                    let typeClass = null;
+
+                    switch (type) {
+                        case 'green':
+                            typeClass = 'messageGreen';
+                            break;
+                        case 'red':
+                            typeClass = 'messageRed';
+                            break;
+                    }
+                    return typeClass;
+                },
+                showMessage = (container) => {
+                    container.className += ' showMessage';
+                    consts.WIN.setTimeout(() => {
+                        container.className = toggleClass(type);
+                    }, 5000);
+                },
+                createMessage = (type, message) => {
+                    let container = consts.DOC.createElement('div'),
+                        text = consts.DOC.createElement('p');
+
+                    container.id = 'messageContainer';
+                    container.className = toggleClass(type);
+                    text.id = 'messageText';
+                    text.innerHTML = message;
+
+                    container.appendChild(text);
+                    parentContainer.appendChild(container);
+                    showMessage(container);
+                };
+
+            if (consts.DOC.getElementById('messageContainer')) {
+                let messageText = consts.DOC.getElementById('messageText'),
+                    messagecontainer = consts.DOC.getElementById('messageContainer');
+
+                if (messageText) {
+                    messageText.innerHTML = message;
+                    messagecontainer.className = toggleClass(type);
+                    showMessage(messagecontainer);
+                }
+            } else {
+                createMessage(type, message);
+            }
+        };
 
     return {
         emptyContainer: _emptyContainer,
-        range: _range
+        range: _range,
+        message: _message
     }
 });
