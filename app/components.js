@@ -154,13 +154,30 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
             _changeHorizontalBox(_resultTrs, _range, name);
         },
         _placeShip = (ship, position) => {
-            if (typeof ship === 'object' && position) {
-                switch (position) {
+            let num = 0,
+                result = {},
+                defaultPosition = (position) ? position : 'horizontal',
+                defaultShip = () => {
+                    let select = consts.DOC.getElementById('gamerSelect');
+                    Object.keys(select.childNodes).forEach((x) => {
+                        if (select.hasOwnProperty(x) && num < 1) {
+                            let selected = select.childNodes[x];
+                            result.value = selected.value;
+                            result.name = selected.getAttribute('data-name');
+                            result.boxes = selected.getAttribute('data-box');
+                            num++;
+                        }
+                    });
+                    return result;
+                },
+                shipSelected = (typeof ship === 'object' && Object.keys(ship).length !== 0) ? ship : defaultShip();
+            if (shipSelected && defaultPosition) {
+                switch (defaultPosition) {
                     case 'vertical':
-                        _verticalShip(ship.boxes, ship.name);
+                        _verticalShip(shipSelected.boxes, shipSelected.name);
                         break;
                     case 'horizontal':
-                        _horizontalShip(ship.boxes, ship.name);
+                        _horizontalShip(shipSelected.boxes, shipSelected.name);
                         break;
                 }
             } else {
