@@ -101,7 +101,8 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
                 });
                 menuGamer.removeElement(name);
             } else {
-                // TODO: SHOW ERROR MESSAGE
+                let message = 'Move your ships form place more.';
+                utils.message('green', message);
             }
         },
         _verticalShip = (num, name) => {
@@ -129,6 +130,7 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
             }
         },
         _placeShip = (ship, position) => {
+            debugger
             if (typeof ship === 'object' && position) {
                 switch (position) {
                     case 'vertical':
@@ -139,7 +141,8 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
                         break;
                 }
             } else {
-                // TODO: SHOW ERROR MESSAGE
+                let message = 'You must choose one ship and the position you want to place it.';
+                utils.message('red', message);
             }
         };
 
