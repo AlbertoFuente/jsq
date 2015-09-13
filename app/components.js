@@ -120,14 +120,44 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
             _resultTrs = _checkTds(_trArr, _range);
             _changeVerticalBox(_resultTrs, _range, name);
         },
+        _changeHorizontalBox = (trs, range, name) => {
+            let i = 0,
+                d = 0,
+                arr = {},
+                firstChild = null,
+                menuGamer = new _MenuGamer();
+
+            Object.keys(trs).forEach((x) => {
+                if (trs[x].childsShips.length === 0 && i < 1) {
+                    firstChild = x;
+                    arr[x] = trs[x];
+                    i++;
+                }
+            });
+            Array.from(arr[firstChild].childs).forEach((j) => {
+                let arrChilds = arr[firstChild].childs;
+                if (d < range.length) {
+                    j.className += ' selected';
+                    j.setAttribute('data-name', name);
+                    d++;
+                }
+            });
+            menuGamer.removeElement(name);
+        },
         _horizontalShip = (num, name) => {
             let _table = consts.DOC.getElementsByClassName('panelGamerBoard'),
-                _td = null,
-                _range = utils.range(1, parseFloat(num), 0);
+                _range = utils.range(1, parseFloat(num), 0),
+                _trs = _table[0].childNodes,
+                _trArr = [],
+                _resultTrs = {};
 
-            for (let i of _range) {
-                //_changeBox('tr1', 'td' + i, name);
-            }
+            Array.from(_trs).forEach((x) => {
+                if (x.className !== 'tr0') {
+                    _trArr.push(x);
+                }
+            });
+            _resultTrs = _checkTds(_trArr, _range);
+            _changeHorizontalBox(_resultTrs, _range, name);
         },
         _placeShip = (ship, position) => {
             if (typeof ship === 'object' && position) {
