@@ -7,9 +7,7 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
                 columns = 10,
                 trRange = utils.range(0, rows, 0),
                 tdRange = utils.range(0, columns, 0),
-                lettersRange = utils.range('a', 'j', 0),
-                trs = [],
-                tds = [];
+                lettersRange = utils.range('a', 'j', 0);
 
             table.className = 'panelGamerBoard';
 
@@ -156,7 +154,7 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
         _placeShip = (ship, position) => {
             let num = 0,
                 result = {},
-                defaultPosition = (position) ? position : 'horizontal',
+                defaultPosition = (position !== null) ? position : 'horizontal',
                 defaultShip = () => {
                     let select = consts.DOC.getElementById('gamerSelect');
                     Object.keys(select.childNodes).forEach((x) => {
@@ -171,7 +169,8 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
                     return result;
                 },
                 shipSelected = (typeof ship === 'object' && Object.keys(ship).length !== 0) ? ship : defaultShip();
-            if (shipSelected && defaultPosition) {
+
+            if (shipSelected.value && defaultPosition) {
                 switch (defaultPosition) {
                     case 'vertical':
                         _verticalShip(shipSelected.boxes, shipSelected.name);
@@ -184,6 +183,8 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
                 let message = 'You must choose one ship and the position you want to place it.';
                 utils.message('red', message);
             }
+            _shipSelected = {};
+            _positionSelected = null;
         };
 
     class _GameMenu {
