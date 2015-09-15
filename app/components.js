@@ -50,8 +50,31 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
 
                 table.appendChild(trElement);
             });
-
+            _moveShips(table);
             return table;
+        },
+        _tableObject = (table) => {
+            let tableObject = {};
+
+            Object.keys(table.childNodes).forEach((x) => {
+                if (table.childNodes[x].className !== 'tr0') {
+                    let arr = [];
+                    Object.keys(table.childNodes[x].childNodes).forEach((d) => {
+                        if (table.childNodes[x].childNodes[d].className !== 'td0') {
+                            arr.push(table.childNodes[x].childNodes[d]);
+                        }
+                    });
+                    tableObject[table.childNodes[x].className] = {
+                        childs: arr
+                    };
+                    arr = [];
+                }
+            });
+
+            return tableObject;
+        },
+        _moveShips = (table) => {
+            let tableObject = _tableObject(table);
         },
         _shipSelected = {},
         _positionSelected = null,
