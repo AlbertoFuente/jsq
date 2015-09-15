@@ -73,14 +73,17 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
                         selected: selected
                     };
                     arr = [];
+                    selected = [];
                 }
             });
 
             return tableObject;
         },
         _moveShips = (table) => {
-            let tableObject = _tableObject(table);
-            console.log(tableObject);
+            table.onclick = (e) => {
+                let tableObject = _tableObject(table);
+                // TODO: pending...
+            };
         },
         _shipSelected = {},
         _positionSelected = null,
