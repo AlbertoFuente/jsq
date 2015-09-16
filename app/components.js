@@ -51,6 +51,7 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
                 table.appendChild(trElement);
             });
             _moveShips(table);
+            _hoverShips(table);
             return table;
         },
         _tableObject = (table) => {
@@ -80,12 +81,16 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
             return tableObject;
         },
         _hoverSelected = {},
+        _showShip = (element) => {
+            console.log(element);
+        },
         _moveShips = (table) => {
             table.onclick = (e) => {
                 let tableObject = _tableObject(table),
                     elementClass = e.target.classList,
                     elementDataName = e.target.getAttribute('data-name') || null,
-                    elementParent = e.target.parentNode.className;
+                    elementParent = e.target.parentNode.className,
+                    elementNumber = e.target.getAttribute('data-number');
 
                 Array.from(elementClass).forEach((x) => {
                     if (x === 'selected') {
@@ -94,18 +99,37 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
 
                         if (elementDataName !== null && selectedLen > 1) {
                             Array.from(selecteds).forEach((f) => {
-                                _hoverSelected.name = elementDataName;
-                                _hoverSelected.position = 'horizontal';
-                                _hoverSelected.parent = elementParent;
-                                _hoverSelected.len = selectedLen;
-                                f.classList.remove('selected');
+                                _hoverSelected = {
+                                    name: elementDataName,
+                                    position: 'horizontal',
+                                    parent: elementParent,
+                                    len: selectedLen,
+                                    number: elementNumber,
+                                    selected: e.target,
+                                    hover: true
+                                }
+
+                                if (f.classList.contains('selected')) {
+                                    f.classList.remove('selected');
+                                } else if (f.classList.contains('hover')) {
+                                    _showShip(_hoverSelected);
+                                }
                             });
+                        } else if (elementDataName !== null && selectedLen === 1) {
+                            // TODO: pending...
                         }
                     } else {
                         return;
                     }
                 });
-                console.log(_hoverSelected);
+            };
+        },
+        _hoverShips = (table) => {
+            table.onmouseover = (e) => {
+                let elementClass = e.target.classList,
+                    elementNumber = e.target.getAttribute('data-number'),
+                    tdBoxesRange = utils.range(parseFloat(elementNumber), 10, 0),
+                    selectedLen = (_hoverSelected.hasOwnProperty('len')) ? _hoverSelected.len : null;
             };
         },
         _shipSelected = {},
