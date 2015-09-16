@@ -127,9 +127,26 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
         _hoverShips = (table) => {
             table.onmouseover = (e) => {
                 let elementClass = e.target.classList,
+                    classNumber = (elementClass[0].substr(-1) !== '0') ? elementClass[0].substr(-1) : elementClass[0].substr(-2),
+                    number = (classNumber !== 'd') ? classNumber : null,
                     elementNumber = e.target.getAttribute('data-number'),
                     tdBoxesRange = utils.range(parseFloat(elementNumber), 10, 0),
-                    selectedLen = (_hoverSelected.hasOwnProperty('len')) ? _hoverSelected.len : null;
+                    tdBoxesRangeLen = tdBoxesRange.length,
+                    selectedNumber = (_hoverSelected.hasOwnProperty('number')) ? _hoverSelected.number : null,
+                    selectedLen = (_hoverSelected.hasOwnProperty('len')) ? _hoverSelected.len : null,
+                    i = 0;
+
+                if (e.target.tagName === 'TD' && tdBoxesRangeLen >= selectedLen) {
+                    for (i; i < selectedLen; i++) {
+                        let newElement = consts.DOC.getElementsByClassName('td' + number);
+
+                        if (newElement.parentNode.className === _hoverSelected.parent) {
+                            console.log('yes');
+                            newElement.className += ' selected hover';
+                            number++;
+                        }
+                    }
+                }
             };
         },
         _shipSelected = {},
