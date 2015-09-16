@@ -79,10 +79,33 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
 
             return tableObject;
         },
+        _hoverSelected = {},
         _moveShips = (table) => {
             table.onclick = (e) => {
-                let tableObject = _tableObject(table);
-                // TODO: pending...
+                let tableObject = _tableObject(table),
+                    elementClass = e.target.classList,
+                    elementDataName = e.target.getAttribute('data-name') || null,
+                    elementParent = e.target.parentNode.className;
+
+                Array.from(elementClass).forEach((x) => {
+                    if (x === 'selected') {
+                        let selectedLen = tableObject[elementParent].selected.length,
+                            selecteds = tableObject[elementParent].selected;
+
+                        if (elementDataName !== null && selectedLen > 1) {
+                            Array.from(selecteds).forEach((f) => {
+                                _hoverSelected.name = elementDataName;
+                                _hoverSelected.position = 'horizontal';
+                                _hoverSelected.parent = elementParent;
+                                _hoverSelected.len = selectedLen;
+                                f.classList.remove('selected');
+                            });
+                        }
+                    } else {
+                        return;
+                    }
+                });
+                console.log(_hoverSelected);
             };
         },
         _shipSelected = {},
