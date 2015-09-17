@@ -82,7 +82,7 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
         },
         _hoverSelected = {},
         _showShip = (element) => {
-            console.log(element);
+            // TODO: pending...
         },
         _moveShips = (table) => {
             table.onclick = (e) => {
@@ -127,24 +127,34 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
         _hoverShips = (table) => {
             table.onmouseover = (e) => {
                 let elementClass = e.target.classList,
-                    classNumber = (elementClass[0].substr(-1) !== '0') ? elementClass[0].substr(-1) : elementClass[0].substr(-2),
+                    classNumber = (elementClass[0] !== 'panelGamerBoard' && elementClass[0].substr(-1) !== '0') ? elementClass[0].substr(-1) : elementClass[0].substr(-2),
                     number = (classNumber !== 'd') ? classNumber : null,
                     elementNumber = e.target.getAttribute('data-number'),
                     tdBoxesRange = utils.range(parseFloat(elementNumber), 10, 0),
                     tdBoxesRangeLen = tdBoxesRange.length,
                     selectedNumber = (_hoverSelected.hasOwnProperty('number')) ? _hoverSelected.number : null,
                     selectedLen = (_hoverSelected.hasOwnProperty('len')) ? _hoverSelected.len : null,
-                    i = 0;
+                    selectedLenRange = utils.range(1, selectedLen, 0),
+                    selectedIterator = selectedLenRange[Symbol.iterator]();
 
                 if (e.target.tagName === 'TD' && tdBoxesRangeLen >= selectedLen) {
-                    for (i; i < selectedLen; i++) {
-                        let newElement = consts.DOC.getElementsByClassName('td' + number);
+                    let tr = e.target.parentNode,
+                        i = 1;
 
-                        if (newElement.parentNode.className === _hoverSelected.parent) {
-                            console.log('yes');
-                            newElement.className += ' selected hover';
-                            number++;
-                        }
+                    if (tr !== null && _hoverSelected.hasOwnProperty('name')) {
+                        Array.from(tr.childNodes).forEach((x) => {
+                            let num = parseFloat(x.getAttribute('data-number'));
+
+                            if (num !== '0' && x.className !== 'td0') {
+                                if (selectedIterator.next().value && x.className === 'td' + num) {
+                                    x.className += ' selected hover';
+                                    x.setAttribute('data-name', _hoverSelected.name);
+                                    num++;
+                                }
+                            }
+                        });
+                    } else {
+                        return;
                     }
                 }
             };
