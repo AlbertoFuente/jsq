@@ -126,36 +126,34 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
         },
         _hoverShips = (table) => {
             table.onmouseover = (e) => {
-                let elementClass = e.target.classList,
-                    classNumber = (elementClass[0] !== 'panelGamerBoard' && elementClass[0].substr(-1) !== '0') ? elementClass[0].substr(-1) : elementClass[0].substr(-2),
-                    number = (classNumber !== 'd') ? classNumber : null,
-                    elementNumber = e.target.getAttribute('data-number'),
-                    tdBoxesRange = utils.range(parseFloat(elementNumber), 10, 0),
-                    tdBoxesRangeLen = tdBoxesRange.length,
-                    selectedNumber = (_hoverSelected.hasOwnProperty('number')) ? _hoverSelected.number : null,
-                    selectedLen = (_hoverSelected.hasOwnProperty('len')) ? _hoverSelected.len : null,
-                    selectedLenRange = utils.range(1, selectedLen, 0),
-                    selectedIterator = selectedLenRange[Symbol.iterator]();
+                let elementClass = e.target.className,
+                    elementNum = e.target.getAttribute('data-num'),
+                    elementParent = e.target.parentNode,
+                    parentChilds = elementParent.childNodes,
+                    parentChildsLen = parentChilds.length,
+                    elementLetter = e.target.getAttribute('data-letter'),
+                    elementRange = utils.range(parseInt(_hoverSelected.number), parseInt(_hoverSelected.number) + (parseInt(_hoverSelected.len) - 1), 0),
+                    lenNum = parseInt(_hoverSelected.len),
+                    elementIter = elementRange[Symbol.iterator](),
+                    x = 0;
 
-                if (e.target.tagName === 'TD' && tdBoxesRangeLen >= selectedLen) {
-                    let tr = e.target.parentNode,
-                        i = 1;
-
-                    if (tr !== null && _hoverSelected.hasOwnProperty('name')) {
-                        Array.from(tr.childNodes).forEach((x) => {
-                            let num = parseFloat(x.getAttribute('data-number'));
-
-                            if (num !== '0' && x.className !== 'td0') {
-                                if (selectedIterator.next().value && x.className === 'td' + num) {
-                                    x.className += ' selected hover';
-                                    x.setAttribute('data-name', _hoverSelected.name);
-                                    num++;
-                                }
+                if (elementClass !== 'td0' && elementClass !== 'panelGamerBoard' && _hoverSelected.hasOwnProperty('name')) {
+                    switch(_hoverSelected.position) {
+                        case 'horizontal':
+                            if (elementParent && elementParent.tagName === 'TR' && elementParent.className !== 'tr0') {
+                                Array.from(elementRange).forEach((x) => {
+                                    if (!parentChilds[x - 1].classList.contains('selected')) {
+                                        parentChilds[x - 1].className += ' selected hover';
+                                        parentChilds[x - 1].setAttribute('parent-name', _hoverSelected.name);
+                                    }
+                                });
                             }
-                        });
-                    } else {
-                        return;
+                            break;
+                        case 'vertical':
+                            // TODO: pending...
+                            break;
                     }
+
                 }
             };
         },
