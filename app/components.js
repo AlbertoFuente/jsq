@@ -125,37 +125,28 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
             };
         },
         _hoverShips = (table) => {
-            table.onmouseover = (e) => {
-                let elementClass = e.target.className,
-                    elementNum = e.target.getAttribute('data-num'),
-                    elementParent = e.target.parentNode,
-                    parentChilds = elementParent.childNodes,
-                    parentChildsLen = parentChilds.length,
-                    elementLetter = e.target.getAttribute('data-letter'),
-                    elementRange = utils.range(parseInt(_hoverSelected.number), parseInt(_hoverSelected.number) + (parseInt(_hoverSelected.len) - 1), 0),
-                    lenNum = parseInt(_hoverSelected.len),
-                    elementIter = elementRange[Symbol.iterator](),
-                    x = 0;
+            $(table).find('td').hover((e) => {
+                let element = e.currentTarget,
+                    elementParent = e.currentTarget.parentNode,
+                    elementNumber = parseInt(e.currentTarget.getAttribute('data-number')),
+                    len = _hoverSelected.len,
+                    i = 0;
 
-                if (elementClass !== 'td0' && elementClass !== 'panelGamerBoard' && _hoverSelected.hasOwnProperty('name')) {
-                    switch(_hoverSelected.position) {
-                        case 'horizontal':
-                            if (elementParent && elementParent.tagName === 'TR' && elementParent.className !== 'tr0') {
-                                Array.from(elementRange).forEach((x) => {
-                                    if (!parentChilds[x - 1].classList.contains('selected')) {
-                                        parentChilds[x - 1].className += ' selected hover';
-                                        parentChilds[x - 1].setAttribute('parent-name', _hoverSelected.name);
-                                    }
-                                });
-                            }
-                            break;
-                        case 'vertical':
-                            // TODO: pending...
-                            break;
+                if (elementParent.className !== 'tr0'
+                    && element.className !== 'td0'
+                    && _hoverSelected.hasOwnProperty('name')) {
+
+                    for (i; i < len; i++) {
+                        let selected = $('.td' + elementNumber);
+
+                        if (selected.parent().hasClass(elementParent.className)) {
+                            $('.' + elementParent.className).find(selected).addClass('selected hover');
+                            $('.' + elementParent.className).find(selected).attr('data-name', _hoverSelected.name);
+                            elementNumber++;
+                        }
                     }
-
                 }
-            };
+            });
         },
         _shipSelected = {},
         _positionSelected = null,
