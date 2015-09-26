@@ -16,12 +16,18 @@ require.config({
     // Karma serves files under /base, which is the basePath from your config file
     baseUrl: '/base',
     paths: {
+        '$': 'node_modules/jquery/dist/jquery.min',
         'utils': 'app/utils',
         'consts': 'app/consts',
         'buttons': 'app/buttons',
         'components': 'app/components',
         'events': 'app/events',
         'app': 'app/app'
+    },
+    shim: {
+        '$': {
+            exports: '$'
+        }
     },
     // dynamically load all test files
     deps: allTestFiles,
