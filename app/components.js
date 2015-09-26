@@ -16,6 +16,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
 
                 if (x === 0) {
                     trElement.className = 'tr' + x;
+
                     Array.from(tdRange).forEach((s) => {
                         let tdElement = consts.DOC.createElement('td'),
                             tdNumber = consts.DOC.createElement('p');
@@ -30,7 +31,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     });
                 } else {
                     trElement.className = 'tr' + x;
-
+                    trElement.setAttribute('data-number', x);
                     Array.from(tdRange).forEach((s) => {
                         let tdElement = consts.DOC.createElement('td'),
                             tdLetter = consts.DOC.createElement('p'),
@@ -82,7 +83,20 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         },
         _hoverSelected = {},
         _showShip = (element) => {
-            // TODO: pending...
+            if (_hoverSelected.position) {
+                switch (_hoverSelected.position) {
+                    case 'horizontal':
+                        _hoverSelected = {};
+                        Array.from(element.target.parentNode.childNodes).forEach((td) => {
+                            if (td.classList.contains('hover')) {
+                                td.classList.remove('hover');
+                            }
+                        });
+                        break;
+                    case 'vertical':
+                        break;
+                }
+            }
         },
         _moveShips = (table) => {
             table.onclick = (e) => {
@@ -109,10 +123,10 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                     hover: true
                                 }
 
-                                if (f.classList.contains('selected')) {
+                                if (f.classList.contains('selected') && !f.classList.contains('hover')) {
                                     f.classList.remove('selected');
                                 } else if (f.classList.contains('hover')) {
-                                    _showShip(_hoverSelected);
+                                    _showShip(e);
                                 }
                             });
                         } else if (elementDataName !== null && selectedLen === 1) {
@@ -140,6 +154,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             $(table).find('td').hover((e) => {
                 let element = e.currentTarget,
                     elementParent = e.currentTarget.parentNode,
+                    elementParentNumber = elementParent.getAttribute('data-number'),
                     elementNumber = parseInt(e.currentTarget.getAttribute('data-number')),
                     printSelected = (_hoverSelected.len <= (11 - elementNumber)) ? true : false,
                     len = _hoverSelected.len,
@@ -165,9 +180,14 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             }
                             break;
                         case 'vertical':
-                            // TODO: pending...
+                            if (elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
+                                _removeSelected();
+                                // TODO: pending...
+                            }
                             break;
                     }
+                } else {
+                    return;
                 }
             });
         },
