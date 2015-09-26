@@ -1,4 +1,4 @@
-define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, utils) {
+define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, buttons, utils) {
     'use strict';
 
     let _createTable = (parent) => {
