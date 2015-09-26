@@ -142,19 +142,22 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 let element = e.currentTarget,
                     elementParent = e.currentTarget.parentNode,
                     elementNumber = parseInt(e.currentTarget.getAttribute('data-number')),
+                    printSelected = (_hoverSelected.len <= (11 - elementNumber)) ? true : false,
                     len = _hoverSelected.len,
                     i = 0;
 
                 if (elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
                     _removeSelected();
 
-                    for (i; i < len; i++) {
-                        let selected = $('.td' + elementNumber);
+                    if (printSelected) {
+                        for (i; i < len; i++) {
+                            let selected = $('.td' + elementNumber);
 
-                        if (selected.parent().hasClass(elementParent.className)) {
-                            $('.' + elementParent.className).find(selected).addClass('selected hover');
-                            $('.' + elementParent.className).find(selected).attr('data-name', _hoverSelected.name);
-                            elementNumber++;
+                            if (selected.parent().hasClass(elementParent.className)) {
+                                $('.' + elementParent.className).find(selected).addClass('selected hover');
+                                $('.' + elementParent.className).find(selected).attr('data-name', _hoverSelected.name);
+                                elementNumber++;
+                            }
                         }
                     }
                 }
