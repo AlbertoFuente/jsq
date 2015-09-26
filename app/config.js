@@ -14,20 +14,23 @@
             'events': 'events',
             'app': 'app'
         },
-        deps: [
-            '$'
-        ],
+        shim: {
+            '$': {
+                exports: '$'
+            }
+        },
         callback: function() {
             'use strict';
 
             require([
+                '$',
                 'utils',
                 'app',
                 'consts',
                 'buttons',
                 'events',
                 'components'
-            ], function(utils, app, consts, buttons, events, components) {
+            ], function($, utils, app, consts, buttons, events, components) {
                 app.init();
             });
         }
