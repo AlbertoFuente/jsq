@@ -124,6 +124,19 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
                 });
             };
         },
+        _removeSelected = () => {
+            let table = consts.DOC.getElementsByClassName('panelGamerBoard');
+
+            Array.from(table[0].childNodes).forEach((tr) => {
+                let tds = tr.childNodes;
+                Array.from(tds).forEach((td) => {
+                    if (td.hasAttribute('class') && td.className !== 'panelGamerBoard' && td.classList.contains('hover')) {
+                        $(td).removeClass('selected hover');
+                    }
+                });
+            });
+
+        },
         _hoverShips = (table) => {
             $(table).find('td').hover((e) => {
                 let element = e.currentTarget,
@@ -132,9 +145,8 @@ define('components', ['consts', 'buttons', 'utils'], function(consts, buttons, u
                     len = _hoverSelected.len,
                     i = 0;
 
-                if (elementParent.className !== 'tr0'
-                    && element.className !== 'td0'
-                    && _hoverSelected.hasOwnProperty('name')) {
+                if (elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
+                    _removeSelected();
 
                     for (i; i < len; i++) {
                         let selected = $('.td' + elementNumber);
