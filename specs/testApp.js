@@ -1,4 +1,4 @@
-define(['app', 'buttons', 'consts', 'components', 'sinon'], function(app, buttons, consts, components, sinon) {
+define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app, buttons, consts, components, sinon) {
     describe('Test app', function() {
         'use strict';
 
