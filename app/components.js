@@ -135,7 +135,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     }
                 });
             });
-
         },
         _hoverShips = (table) => {
             $(table).find('td').hover((e) => {
@@ -146,19 +145,28 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     len = _hoverSelected.len,
                     i = 0;
 
-                if (elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
-                    _removeSelected();
+                if (_hoverSelected.position) {
+                    switch (_hoverSelected.position) {
+                        case 'horizontal':
+                            if (elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
+                                _removeSelected();
 
-                    if (printSelected) {
-                        for (i; i < len; i++) {
-                            let selected = $('.td' + elementNumber);
+                                if (printSelected) {
+                                    for (i; i < len; i++) {
+                                        let selected = $('.td' + elementNumber);
 
-                            if (selected.parent().hasClass(elementParent.className)) {
-                                $('.' + elementParent.className).find(selected).addClass('selected hover');
-                                $('.' + elementParent.className).find(selected).attr('data-name', _hoverSelected.name);
-                                elementNumber++;
+                                        if (selected.parent().hasClass(elementParent.className)) {
+                                            $('.' + elementParent.className).find(selected).addClass('selected hover');
+                                            $('.' + elementParent.className).find(selected).attr('data-name', _hoverSelected.name);
+                                            elementNumber++;
+                                        }
+                                    }
+                                }
                             }
-                        }
+                            break;
+                        case 'vertical':
+                            // TODO: pending...
+                            break;
                     }
                 }
             });
