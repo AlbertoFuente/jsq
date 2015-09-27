@@ -82,22 +82,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             return tableObject;
         },
         _hoverSelected = {},
-        _showShip = (element) => {
-            if (_hoverSelected.position) {
-                switch (_hoverSelected.position) {
-                    case 'horizontal':
-                        _hoverSelected = {};
-                        Array.from(element.target.parentNode.childNodes).forEach((td) => {
-                            if (td.classList.contains('hover')) {
-                                td.classList.remove('hover');
-                            }
-                        });
-                        break;
-                    case 'vertical':
-                        break;
-                }
-            }
-        },
         _moveShips = (table) => {
             table.onclick = (e) => {
                 let tableObject = _tableObject(table),
@@ -113,20 +97,23 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
 
                         if (elementDataName !== null && selectedLen > 1) {
                             Array.from(selecteds).forEach((f) => {
-                                _hoverSelected = {
-                                    name: elementDataName,
-                                    position: 'horizontal',
-                                    parent: elementParent,
-                                    len: selectedLen,
-                                    number: elementNumber,
-                                    selected: e.target,
-                                    hover: true
-                                }
-
                                 if (f.classList.contains('selected') && !f.classList.contains('hover')) {
+                                    _hoverSelected = {
+                                        name: elementDataName,
+                                        position: 'horizontal',
+                                        parent: elementParent,
+                                        len: selectedLen,
+                                        number: elementNumber,
+                                        selected: e.target,
+                                        hover: true
+                                    };
+
                                     f.classList.remove('selected');
-                                } else if (f.classList.contains('hover')) {
-                                    _showShip(e);
+                                } else if (f.classList.contains('selected') && f.classList.contains('hover')) {
+                                    _hoverSelected = {};
+                                    f.classList.remove('hover');
+                                } else {
+                                    return;
                                 }
                             });
                         } else if (elementDataName !== null && selectedLen === 1) {
@@ -157,7 +144,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     elementParentNumber = elementParent.getAttribute('data-number'),
                     elementNumber = parseInt(e.currentTarget.getAttribute('data-number')),
                     printSelected = (_hoverSelected.len <= (11 - elementNumber)) ? true : false,
-                    len = _hoverSelected.len,
+                    len = _hoverSelected.len ? _hoverSelected.len : 0,
                     i = 0;
 
                 if (_hoverSelected.position) {
