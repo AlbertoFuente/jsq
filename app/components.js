@@ -150,7 +150,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 if (_hoverSelected.position) {
                     switch (_hoverSelected.position) {
                         case 'horizontal':
-                            if (elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
+                            if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
                                 _removeSelected();
 
                                 if (printSelected) {
@@ -167,7 +167,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             }
                             break;
                         case 'vertical':
-                            if (elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
+                            if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
                                 _removeSelected();
                                 // TODO: pending...
                             }
