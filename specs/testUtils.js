@@ -2,7 +2,6 @@ define(['utils', 'consts'], function(utils, consts) {
     describe('Test Utils', function() {
 
         beforeEach(function() {
-            this.server = sinon.fakeServer.create();
             this.body = consts.DOC.body;
 
             // create container
@@ -12,9 +11,7 @@ define(['utils', 'consts'], function(utils, consts) {
             // append to body
             this.body.appendChild(container);
         });
-        afterEach(function() {
-            this.server.restore();
-        });
+        afterEach(function() {});
 
         // emptyContainer
         it('Test emptyContainer method', function() {
