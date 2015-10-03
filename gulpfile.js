@@ -1,18 +1,17 @@
 var gulp = require('gulp'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
-    watch = require('gulp-watch'),
-    babel = require("gulp-babel"),
+    babel = require('gulp-babel'),
     sass = require('gulp-sass'),
     eslint = require('gulp-eslint'),
     minifyCSS = require('gulp-minify-css'),
     rename = require('gulp-rename'),
     Server = require('karma').Server,
     // Files
-    testFiles = ['js/app.min.js', 'spec/*.js'],
+    testFiles = ['js/*.min.js', 'spec/*.js'],
     testJsFiles = ['spec/*.js'],
     appFiles = ['app/*.js'],
-    sassFiles = ['styles/styles.scss'];
+    sassFiles = ['styles/*.scss'];
 
 gulp.task('default', function() {
     'use strict';
@@ -50,19 +49,25 @@ gulp.task('karma', function() {
     'use strict';
 
     new Server({
+        /*eslint-disable */
         configFile: __dirname + '/karma.conf.js',
+        /*eslint-enable */
         singleRun: true
     }).start();
 });
 
 gulp.task('eslint', function() {
-    return gulp.src(appFiles)
+    'use strict';
+
+    gulp.src(appFiles)
         .pipe(eslint('.eslintrc'))
         .pipe(eslint.format());
 });
 
 gulp.task('eslintTestFiles', function() {
-    return gulp.src(testJsFiles)
+    'use strict';
+
+    gulp.src(testJsFiles)
         .pipe(eslint('.eslintrc'))
         .pipe(eslint.format());
 });
@@ -75,10 +80,12 @@ gulp.task('watch', function() {
             gulp.start('js');
             gulp.start('eslint');
         });
+
     gulp.watch(sassFiles,
         function() {
             gulp.start('sass');
         });
+
     gulp.watch(testFiles,
         function() {
             gulp.start('eslintTestFiles');
