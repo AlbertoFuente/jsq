@@ -18,7 +18,13 @@
             2,
             "always"
         ],
-        "strict": 1
+        "strict": 2,
+        "camelcase": 1,
+        "curly": 1,
+        "eqeqeq": 0,
+        "no-alert": 0,
+        "guard-for-in": 1,
+        "no-debugger": 2
     },
     "ecmaFeatures": {
         "arrowFunctions": true,
