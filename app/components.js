@@ -1,7 +1,7 @@
 define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, buttons, utils) {
     'use strict';
 
-    let _createTable = (parent) => {
+    let _createTable = () => {
             let table = consts.DOC.createElement('table'),
                 rows = 10,
                 columns = 10,
@@ -141,7 +141,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             $(table).find('td').hover((e) => {
                 let element = e.currentTarget,
                     elementParent = e.currentTarget.parentNode,
-                    elementParentNumber = elementParent.getAttribute('data-number'),
+                    //elementParentNumber = elementParent.getAttribute('data-number'),
                     elementNumber = parseInt(e.currentTarget.getAttribute('data-number')),
                     printSelected = (_hoverSelected.len <= (11 - elementNumber)) ? true : false,
                     len = _hoverSelected.len ? _hoverSelected.len : 0,
@@ -180,9 +180,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         },
         _shipSelected = {},
         _positionSelected = null,
-        _checkTds = (trChilds, range) => {
-            let table = {},
-                arr = [];
+        _checkTds = (trChilds) => {
+            let table = {};
 
             Array.from(trChilds).forEach((x) => {
                 let arr = [],
@@ -252,7 +251,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 }
             });
             Array.from(arr[firstChild].childs).forEach((j) => {
-                let arrChilds = arr[firstChild].childs;
                 if (d < range.length) {
                     j.className += ' selected';
                     j.setAttribute('data-name', name);
@@ -474,7 +472,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
 
             placeButton.onclick = () => {
                 _placeShip(_shipSelected, _positionSelected);
-            }
+            };
         }
         appendMenuGamer(parent) {
             this.shipsMenu();
@@ -490,7 +488,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             this._menuGamer = new _MenuGamer();
             this._menuGamer.appendMenuGamer(this.panelGamer);
 
-            this._table = _createTable(this.panelGamer);
+            this._table = _createTable();
             this.panelGamer.appendChild(this._table);
         }
         getPanelGamer() {
@@ -508,5 +506,5 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         MenuGamer: _MenuGamer,
         PanelGamer: _PanelGamer,
         createTable: _createTable
-    }
+    };
 });
