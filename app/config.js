@@ -20,8 +20,6 @@
             }
         },
         callback: function() {
-            'use strict';
-
             require([
                 'app',
                 '$',
