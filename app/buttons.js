@@ -43,5 +43,5 @@ define('buttons', ['consts'], function(consts) {
         NEXT: _NEXT,
         BACK: _BACK,
         OPTIONS: _OPTIONS
-    }
+    };
 });

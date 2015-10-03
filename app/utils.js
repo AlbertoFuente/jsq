@@ -85,5 +85,5 @@ define('utils', ['consts'], function(consts) {
         emptyContainer: _emptyContainer,
         range: _range,
         message: _message
-    }
+    };
 });

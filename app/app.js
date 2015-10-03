@@ -17,5 +17,5 @@ define('app', ['consts', 'buttons', 'components'], function(consts, buttons, com
 
     return {
         init: _init
-    }
+    };
 });

@@ -64,5 +64,5 @@ define('events', ['components', 'consts', 'buttons', 'utils'], function(componen
         exit: _exit,
         next: _next,
         back: _back
-    }
+    };
 });

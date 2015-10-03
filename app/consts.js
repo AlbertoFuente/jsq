@@ -10,5 +10,5 @@ define('consts', [], function() {
         DOC: _DOC,
         DOCBODY: _DOCBODY,
         WIN: _WIN
-    }
+    };
 });
