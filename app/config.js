@@ -23,23 +23,26 @@
             'use strict';
 
             require([
+                'app',
                 '$',
                 'utils',
-                'app',
                 'consts',
                 'buttons',
                 'events',
                 'components'
-            ], function($, utils, app, consts, buttons, events, components) {
+            ], function(app) {
                 app.init();
             });
         }
     });
-
+    /*eslint-disable */
     requirejs.onError = function(err) {
         console.log(err.requireType);
+        /*eslint-enable */
         if (err.requireType === 'timeout') {
+            /*eslint-disable */
             console.log('modules: ' + err.requireModules);
+            /*eslint-enable */
         }
 
         throw err;
