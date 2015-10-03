@@ -187,8 +187,12 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 let arr = [],
                     name = [];
                 Array.from(x.childNodes).forEach((f) => {
-                    if (f.className !== 'td0') arr.push(f);
-                    if (f.hasAttribute('data-name')) name.push(f);
+                    if (f.className !== 'td0') {
+                        arr.push(f);
+                    }
+                    if (f.hasAttribute('data-name')) {
+                        name.push(f);
+                    }
                 });
                 table[x.className] = {
                     childs: arr,
