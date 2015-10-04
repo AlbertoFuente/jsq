@@ -132,20 +132,36 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             Array.from(table[0].childNodes).forEach((tr) => {
                 let tds = tr.childNodes;
                 Array.from(tds).forEach((td) => {
-                    if (td.hasAttribute('class') && td.className !== 'panelGamerBoard' && td.classList.contains('hover')) {
+                    if (td.className !== 'panelGamerBoard' && td.classList.contains('hover')) {
                         $(td).removeClass('selected hover');
                         $(td).removeAttr('data-name');
                     }
                 });
             });
         },
+        _checkSelecteds = (table, elementNumber, elementParent, elementLen) => {
+            let printSelected = (_hoverSelected.len <= (11 - elementNumber)) ? true : false,
+                tableObj = _tableObject(table),
+                parentClass = elementParent.className,
+                shipEndNum = (parseInt(elementNumber) + (parseInt(elementLen) - 1)),
+                shipRangeNum = utils.range(parseInt(elementNumber), shipEndNum, 0) || [],
+                trSelecteds = (elementParent.className !== 'tr0') ? Array.from(tableObj[parentClass].selected, x => parseInt(x.attributes[1].value)) : null,
+                result = utils.diff(trSelecteds, shipRangeNum);
+
+            if (printSelected && trSelecteds.length === 0) {
+                return true;
+            } else if (printSelected && (result.length - 1) >= elementLen) {
+                return true;
+            } else {
+                return false;
+            }
+        },
         _hoverShips = (table) => {
             $(table).find('td').hover((e) => {
                 let element = e.currentTarget,
                     elementParent = e.currentTarget.parentNode,
-                    //elementParentNumber = elementParent.getAttribute('data-number'),
                     elementNumber = parseInt(e.currentTarget.getAttribute('data-number')),
-                    printSelected = (_hoverSelected.len <= (11 - elementNumber)) ? true : false,
+                    printSelected = _checkSelecteds(table, elementNumber, elementParent, _hoverSelected.len),
                     len = _hoverSelected.len ? _hoverSelected.len : 0,
                     i = 0;
 
