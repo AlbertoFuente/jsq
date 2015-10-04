@@ -77,8 +77,8 @@ gulp.task('watch', function() {
 
     gulp.watch(appFiles,
         function() {
-            gulp.start('js');
             gulp.start('eslint');
+            gulp.start('js');
         });
 
     gulp.watch(sassFiles,
