@@ -107,8 +107,9 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                         selected: e.target,
                                         hover: true
                                     };
-
-                                    f.classList.remove('selected');
+                                    if (f.hasAttribute('data-name') && f.attributes[3].value === elementDataName) {
+                                        f.classList.remove('selected');
+                                    }
                                 } else if (f.classList.contains('selected') && f.classList.contains('hover')) {
                                     _hoverSelected = {};
                                     f.classList.remove('hover');
@@ -133,6 +134,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 Array.from(tds).forEach((td) => {
                     if (td.hasAttribute('class') && td.className !== 'panelGamerBoard' && td.classList.contains('hover')) {
                         $(td).removeClass('selected hover');
+                        $(td).removeAttr('data-name');
                     }
                 });
             });
