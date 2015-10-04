@@ -79,11 +79,21 @@ define('utils', ['consts'], function(consts) {
             } else {
                 createMessage(type, message);
             }
+        },
+        _difference = (a, b) => {
+            if (a && b) {
+                return a.filter((x) => {
+                    return b.indexOf(x) < 0;
+                });
+            } else {
+                return [];
+            }
         };
 
     return {
         emptyContainer: _emptyContainer,
         range: _range,
-        message: _message
+        message: _message,
+        diff: _difference
     };
 });
