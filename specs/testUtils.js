@@ -34,5 +34,13 @@ define(['utils', 'consts'], function(utils, consts) {
             expect(method(0, 4, 0)).toEqual([0, 1, 2, 3, 4]);
             expect(method(0, 4, 2)).toEqual([0, 2, 4]);
         });
+        // difference
+        it('Test difference method', function() {
+            var arr1 = [1, 2, 3],
+                arr2 = [2, 3, 4],
+                diff = utils.diff(arr1, arr2);
+
+            expect(diff).toEqual([1]);
+        });
     });
 });
