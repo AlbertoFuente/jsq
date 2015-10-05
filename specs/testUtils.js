@@ -5,27 +5,28 @@ define(['utils', 'consts'], function(utils, consts) {
             this.body = consts.DOC.body;
 
             // create container
-            var container = consts.DOC.createElement('div');
-            container.id = 'parentContainer';
-
+            this.container = consts.DOC.createElement('div');
+            this.gameContainer = consts.DOC.createElement('div');
+            this.container.id = 'parentContainer';
+            this.gameContainer.id = 'gameContainer';
             // append to body
-            this.body.appendChild(container);
+            this.container.appendChild(this.gameContainer);
+            this.body.appendChild(this.container);
         });
         afterEach(function() {});
 
         // emptyContainer
         it('Test emptyContainer method', function() {
-            var container = consts.DOC.getElementById('parentContainer'),
-                subDiv = consts.DOC.createElement('div');
+            var subDiv = consts.DOC.createElement('div');
 
             subDiv.id = 'gameMenu';
-            container.appendChild(subDiv);
+            this.container.appendChild(subDiv);
 
-            expect(container.childNodes.length).toBeGreaterThan(0);
-            expect(container.childNodes[0].id).toBe('gameMenu');
+            expect(this.container.childNodes.length).toBeGreaterThan(0);
+            expect(this.container.childNodes[1].id).toBe('gameMenu');
 
             utils.emptyContainer('parentContainer');
-            expect(container.childNodes.length).toBeLessThan(1);
+            expect(this.container.childNodes.length).toBeLessThan(1);
         });
         // range
         it('Test range method', function() {
@@ -34,8 +35,19 @@ define(['utils', 'consts'], function(utils, consts) {
             expect(method(0, 4, 0)).toEqual([0, 1, 2, 3, 4]);
             expect(method(0, 4, 2)).toEqual([0, 2, 4]);
         });
+        // message
+        it('Test message method', function() {
+            // Green message
+            var messageGreen = utils.message('green', 'Green message'),
+                messageGreenContainer = consts.DOC.getElementById('messageContainer');
+            expect(messageGreenContainer.className).toBe('messageGreen showMessage');
+            // Red message
+            var messageRed = utils.message('red', 'Red message'),
+                messageRedContainer = consts.DOC.getElementById('messageContainer');
+            expect(messageRedContainer.className).toBe('messageRed showMessage');
+        });
         // difference
-        it('Test difference method', function() {
+        it('Test diff method', function() {
             var arr1 = [1, 2, 3],
                 arr2 = [2, 3, 4],
                 diff = utils.diff(arr1, arr2);
