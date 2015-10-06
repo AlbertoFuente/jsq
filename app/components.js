@@ -124,15 +124,20 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 });
             };
         },
-        _removeSelected = () => {
+        _removeSelected = (element) => {
             let table = consts.DOC.getElementsByClassName('panelGamerBoard');
 
             Array.from(table[0].childNodes).forEach((tr) => {
                 let tds = tr.childNodes;
                 Array.from(tds).forEach((td) => {
                     if (td.className !== 'panelGamerBoard' && td.classList.contains('hover')) {
-                        $(td).removeClass('selected hover');
-                        $(td).removeAttr('data-name');
+                        if (!!element.attributes[3] && !!td.attributes[3] && element.attributes[3].value === td.attributes[3].value) {
+                            return false;
+                        } else {
+                            td.classList.remove('selected');
+                            td.classList.remove('hover');
+                            $(td).removeAttr('data-name');
+                        }
                     }
                 });
             });
@@ -167,7 +172,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     switch (_hoverSelected.position) {
                         case 'horizontal':
                             if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
-                                _removeSelected();
+                                _removeSelected(element);
 
                                 if (printSelected) {
                                     for (i; i < len; i++) {
