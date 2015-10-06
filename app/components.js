@@ -97,7 +97,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
 
                         if (elementDataName !== null && selectedLen > 1) {
                             Array.from(selecteds).forEach((f) => {
-                                if (f.classList.contains('selected') && !f.classList.contains('hover')) {
+                                if (f.classList.contains('selected') && !f.classList.contains('hover') && f.hasAttribute('data-name') && f.attributes[3].value === elementDataName) {
                                     _hoverSelected = {
                                         name: elementDataName,
                                         position: 'horizontal',
@@ -107,9 +107,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                         selected: e.target,
                                         hover: true
                                     };
-                                    if (f.hasAttribute('data-name') && f.attributes[3].value === elementDataName) {
-                                        f.classList.remove('selected');
-                                    }
+                                    f.classList.remove('selected');
                                 } else if (f.classList.contains('selected') && f.classList.contains('hover')) {
                                     _hoverSelected = {};
                                     f.classList.remove('hover');
