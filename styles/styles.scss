@@ -215,5 +215,23 @@
                 display: block;
             }
         }
+        #shipTooltip {
+            background: grey;
+            width: auto;
+            height: auto;
+            color: white;
+            font-size:12px;
+            padding: 10px;
+            font-family:Arial;
+            border: 1px solid white;
+            position: absolute;
+            @include border-radius(4px);
+            &.show {
+                display: block;
+            }
+            &.hide {
+                display: none;
+            }
+        }
     }
 }
