@@ -152,16 +152,13 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             if (printSelected) {
                 Array.from(tableObj[parentClass].selected).forEach((x) => {
                     if (elementLen) {
-                        let i = 0;
-                        for (i; i < elementLen; i++) {
-                            if (!x.classList.contains('hover')) {
-                                let selNumber = x.attributes[1].value;
-                                Array.from(elementRange).forEach((d) => {
-                                    if (d === parseInt(selNumber)) {
-                                        selecteds.push(d);
-                                    }
-                                });
-                            }
+                        if (!x.classList.contains('hover')) {
+                            let selNumber = x.attributes[1].value;
+                            Array.from(elementRange).forEach((d) => {
+                                if (d === parseInt(selNumber)) {
+                                    selecteds.push(d);
+                                }
+                            });
                         }
                     }
                 });
