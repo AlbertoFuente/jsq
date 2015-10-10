@@ -162,11 +162,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                         }
                     }
                 });
-                if (selecteds.length > 0) {
-                    return false;
-                } else {
-                    return true;
-                }
+                return (selecteds.length > 0) ? false : true;
             } else {
                 return false;
             }
