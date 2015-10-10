@@ -145,16 +145,31 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         _checkSelecteds = (table, elementNumber, elementParent, elementLen) => {
             let printSelected = (_hoverSelected.len <= (11 - elementNumber)) ? true : false,
                 tableObj = _tableObject(table),
+                elementRange = utils.range(parseInt(elementNumber), (parseInt(elementNumber) + (parseInt(elementLen) - 1)), 0),
                 parentClass = elementParent.className,
-                shipEndNum = (parseInt(elementNumber) + (parseInt(elementLen) - 1)),
-                shipRangeNum = utils.range(parseInt(elementNumber), shipEndNum, 0) || [],
-                trSelecteds = (elementParent.className !== 'tr0') ? Array.from(tableObj[parentClass].selected, x => parseInt(x.attributes[1].value)) : null,
-                result = utils.diff(trSelecteds, shipRangeNum);
+                selecteds = [];
 
-            if (printSelected && trSelecteds.length === 0) {
-                return true;
-            } else if (printSelected && (result.length - 1) >= elementLen) {
-                return true;
+            if (printSelected) {
+                Array.from(tableObj[parentClass].selected).forEach((x) => {
+                    if (elementLen) {
+                        let i = 0;
+                        for (i; i < elementLen; i++) {
+                            if (!x.classList.contains('hover')) {
+                                let selNumber = x.attributes[1].value;
+                                Array.from(elementRange).forEach((d) => {
+                                    if (d === parseInt(selNumber)) {
+                                        selecteds.push(d);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+                if (selecteds.length > 0) {
+                    return false;
+                } else {
+                    return true;
+                }
             } else {
                 return false;
             }
