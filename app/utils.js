@@ -88,12 +88,36 @@ define('utils', ['consts'], function(consts) {
             } else {
                 return [];
             }
+        },
+        _tooltip = (element, name, show) => {
+            let container = consts.DOC.createElement('div'),
+                containerText = consts.DOC.createElement('p'),
+                position = element.getBoundingClientRect(),
+                parentContainer = consts.DOC.getElementById('gameContainer');
+
+            container.id = 'shipTooltip';
+            container.appendChild(containerText);
+
+            container.style.top = (position.top - 80) + 'px';
+            container.style.left = (position.left - 50) + 'px';
+
+            if (show) {
+                containerText.innerHTML = name;
+                container.classList.remove('hide');
+                container.className = 'show';
+            } else {
+                container.classList.remove('show');
+                container.className = 'hide';
+            }
+
+            parentContainer.appendChild(container);
         };
 
     return {
         emptyContainer: _emptyContainer,
         range: _range,
         message: _message,
-        diff: _difference
+        diff: _difference,
+        tooltip: _tooltip
     };
 });
