@@ -172,9 +172,14 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 let element = e.currentTarget,
                     elementParent = e.currentTarget.parentNode,
                     elementNumber = parseInt(e.currentTarget.getAttribute('data-number')),
+                    elementName = e.currentTarget.getAttribute('data-name') || null,
                     printSelected = _checkSelecteds(table, elementNumber, elementParent, _hoverSelected.len),
                     len = _hoverSelected.len ? _hoverSelected.len : 0,
                     i = 0;
+
+                if (elementName) {
+                    utils.tooltip(element, elementName, true);
+                }
 
                 if (_hoverSelected.position) {
                     switch (_hoverSelected.position) {
@@ -197,7 +202,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             break;
                         case 'vertical':
                             if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
-                                _removeSelected();
+                                _removeSelected(element);
                                 // TODO: pending...
                             }
                             break;
@@ -205,6 +210,14 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 } else {
                     return;
                 }
+            }).focusout(() => {
+                let panelGamer = consts.DOC.getElementById('panelGamer');
+
+                Array.from(panelGamer.childNodes).forEach((x) => {
+                    if (x.id === 'shipTooltip') {
+                        $(x).remove();
+                    }
+                });
             });
         },
         _shipSelected = {},
