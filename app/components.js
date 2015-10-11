@@ -179,6 +179,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
 
                 if (elementName) {
                     utils.tooltip(element, elementName, true);
+                } else {
+                    utils.tooltip(element, null, false);
                 }
 
                 if (_hoverSelected.position) {
@@ -210,14 +212,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 } else {
                     return;
                 }
-            }).focusout(() => {
-                let panelGamer = consts.DOC.getElementById('panelGamer');
-
-                Array.from(panelGamer.childNodes).forEach((x) => {
-                    if (x.id === 'shipTooltip') {
-                        $(x).remove();
-                    }
-                });
             });
         },
         _shipSelected = {},
