@@ -45,6 +45,9 @@ define(['utils', 'consts'], function(utils, consts) {
             var messageRed = utils.message('red', 'Red message'),
                 messageRedContainer = consts.DOC.getElementById('messageContainer');
             expect(messageRedContainer.className).toBe('messageRed showMessage');
+            // remove messages
+            messageGreenContainer.remove();
+            messageRedContainer.remove();
         });
         // difference
         it('Test diff method', function() {
@@ -53,6 +56,27 @@ define(['utils', 'consts'], function(utils, consts) {
                 diff = utils.diff(arr1, arr2);
 
             expect(diff).toEqual([1]);
+        });
+        // tooltip
+        it('Test tooltip method', function() {
+            var element = consts.DOC.createElement('div'),
+                elementName = null;
+
+            element.id = 'testElement';
+            element.setAttribute('data-name', 'Battleship');
+            elementName = element.getAttribute('data-name');
+
+            this.gameContainer.appendChild(element);
+            // show tooltip
+            utils.tooltip(element, elementName, true);
+            expect(consts.DOC.getElementById('shipTooltip').className).toBe('show');
+            // hide tooltip
+            utils.tooltip(element, null, false);
+            expect(consts.DOC.getElementById('shipTooltip').className).toBe('hide');
+            // remove tooltip
+            consts.DOC.getElementById('shipTooltip').remove();
+            // remove element
+            element.remove();
         });
     });
 });
