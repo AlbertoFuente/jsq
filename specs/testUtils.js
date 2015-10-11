@@ -13,7 +13,9 @@ define(['utils', 'consts'], function(utils, consts) {
             this.container.appendChild(this.gameContainer);
             this.body.appendChild(this.container);
         });
-        afterEach(function() {});
+        afterEach(function() {
+            this.container.remove();
+        });
 
         // emptyContainer
         it('Test emptyContainer method', function() {
@@ -27,6 +29,8 @@ define(['utils', 'consts'], function(utils, consts) {
 
             utils.emptyContainer('parentContainer');
             expect(this.container.childNodes.length).toBeLessThan(1);
+            // remove subDiv
+            subDiv.remove();
         });
         // range
         it('Test range method', function() {
@@ -69,6 +73,7 @@ define(['utils', 'consts'], function(utils, consts) {
             this.gameContainer.appendChild(element);
             // show tooltip
             utils.tooltip(element, elementName, true);
+            expect(consts.DOC.getElementById('shipTooltip')).toBeDefined();
             expect(consts.DOC.getElementById('shipTooltip').className).toBe('show');
             // hide tooltip
             utils.tooltip(element, null, false);
