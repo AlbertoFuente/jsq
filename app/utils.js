@@ -90,19 +90,35 @@ define('utils', ['consts'], function(consts) {
             }
         },
         _tooltip = (element, name, show) => {
-            let container = consts.DOC.createElement('div'),
-                containerText = consts.DOC.createElement('p'),
+            let container = null,
+                containerText = null,
                 position = element.getBoundingClientRect(),
-                parentContainer = consts.DOC.getElementById('gameContainer');
+                parentContainer = consts.DOC.getElementById('gameContainer'),
+                ships = {
+                    aircraftCarrier: 'Aircraft Carrier',
+                    battleship: 'Battleship',
+                    submarine: 'Submarine',
+                    destroyer: 'Destroyer',
+                    patrolBoat: 'Patrol boat'
+                };
 
-            container.id = 'shipTooltip';
-            container.appendChild(containerText);
+            if (!consts.DOC.getElementById('shipTooltip')) {
+                container = consts.DOC.createElement('div');
+                containerText = consts.DOC.createElement('p');
 
-            container.style.top = (position.top - 80) + 'px';
+                container.id = 'shipTooltip';
+                containerText.id = 'shipTooltipText';
+                container.appendChild(containerText);
+            } else {
+                container = consts.DOC.getElementById('shipTooltip');
+                containerText = consts.DOC.getElementById('shipTooltipText');
+            }
+
+            container.style.top = (position.top - 90) + 'px';
             container.style.left = (position.left - 50) + 'px';
 
             if (show) {
-                containerText.innerHTML = name;
+                containerText.innerHTML = ships[name];
                 container.classList.remove('hide');
                 container.className = 'show';
             } else {
