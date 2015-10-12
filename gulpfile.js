@@ -30,12 +30,14 @@ var gulp = require('gulp'),
 gulp.task('default', function() {
     'use strict';
 
-    gulp.start('server:start');
-    gulp.start('js');
-    gulp.start('sass');
-    gulp.start('eslint');
-    gulp.start('eslintTestFiles');
-    gulp.start('karma');
+    gulp.start([
+        'server:start',
+        'js',
+        'sass',
+        'eslint',
+        'eslintTestFiles',
+        'karma'
+    ]);
 });
 
 gulp.task('js', function() {
@@ -106,22 +108,25 @@ gulp.task('server:restart', function() {
 gulp.task('watch', function() {
     'use strict';
 
-    gulp.watch(appFiles,
-        function() {
-            gulp.start('eslint');
-            gulp.start('server:restart');
-            gulp.start('js');
-        });
+    gulp.watch(appFiles, function() {
+        gulp.start([
+            'eslint',
+            'server:restart',
+            'js'
+        ]);
+    });
 
-    gulp.watch(sassFiles,
-        function() {
-            gulp.start('sass');
-            gulp.start('server:restart');
-        });
+    gulp.watch(sassFiles, function() {
+        gulp.start([
+            'sass',
+            'server:restart'
+        ]);
+    });
 
-    gulp.watch(testFiles,
-        function() {
-            gulp.start('eslintTestFiles');
-            gulp.start('karma');
-        });
+    gulp.watch(testFiles, function() {
+        gulp.start([
+            'eslintTestFiles',
+            'karma'
+        ]);
+    });
 });
