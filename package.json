@@ -2,7 +2,7 @@
   "name": "jsq",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,9 +17,12 @@
   },
   "homepage": "https://github.com/AlbertoFuente/jsq",
   "devDependencies": {
+    "browser-sync": "^2.9.11",
+    "express": "^4.13.3",
     "gulp": "^3.9.0",
     "gulp-babel": "^5.2.1",
     "gulp-concat": "^2.6.0",
+    "gulp-develop-server": "^0.4.3",
     "gulp-eslint": "^1.0.0",
     "gulp-karma": "0.0.4",
     "gulp-minify-css": "^1.2.1",
