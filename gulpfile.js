@@ -31,12 +31,12 @@ gulp.task('default', function() {
     'use strict';
 
     gulp.start([
-        'server:start',
         'js',
         'sass',
         'eslint',
         'eslintTestFiles',
-        'karma'
+        'karma',
+        'server:start'
     ]);
 });
 
