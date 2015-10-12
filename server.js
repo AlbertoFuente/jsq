@@ -3,12 +3,16 @@
 var http = require('http'),
     url = require('url'),
     fs = require('fs'),
+    chalk = require('chalk'),
     mimeTypes = {
         'js': 'text/javascript',
         'html': 'text/html',
-        'css': 'text/css'
+        'css': 'text/css',
+        'txt': 'text/plain'
     },
-    port = 3000;
+    port = 3000,
+    error500 = 'Error 500: Internal Error.',
+    error404 = 'Error 404. The link dont exists.';
 
 http.createServer(function(req, res) {
     var path = (url.parse(req.url).pathname === '/') ? './index.html' : url.parse(req.url).pathname,
@@ -19,8 +23,8 @@ http.createServer(function(req, res) {
         if (exists) {
             fs.readFile(path, function(err, data) {
                 if (err) {
-                    res.writeHead(500, 'text/plain');
-                    res.end('Internal Error.');
+                    res.writeHead(500, mimeTypes['txt']);
+                    res.end(error500);
                 } else {
                     res.writeHead(200, {
                         'Content-Type': mime_type
@@ -30,10 +34,10 @@ http.createServer(function(req, res) {
                 }
             });
         } else {
-            res.writeHead(404, 'text/plain');
-            res.end('Error 404. The link dont exists.');
+            res.writeHead(404, mimeTypes['txt']);
+            res.end(error404);
         }
     });
 }).listen(port, '127.0.0.1', function() {
-    console.log('***** The server is working correctly in http://localhost:' + port + ' *****');
+    console.log(chalk.cyan('***** The server is working correctly in http://localhost:' + port + ' *****'));
 });
