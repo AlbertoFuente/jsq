@@ -34,6 +34,6 @@ http.createServer(function(req, res) {
             res.end('Error 404. The link dont exists.');
         }
     });
-}).listen(port, '127.0.0.1');
-
-console.log('The server is working correctly in http://localhost:' + port);
+}).listen(port, '127.0.0.1', function() {
+    console.log('***** The server is working correctly in http://localhost:' + port + ' *****');
+});
