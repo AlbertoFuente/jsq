@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = require('gulp'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
@@ -6,16 +8,29 @@ var gulp = require('gulp'),
     eslint = require('gulp-eslint'),
     minifyCSS = require('gulp-minify-css'),
     rename = require('gulp-rename'),
+    devServer = require('gulp-develop-server'),
+    browserSync = require('browser-sync'),
     Server = require('karma').Server,
     // Files
     testFiles = ['js/*.min.js', 'spec/*.js'],
     testJsFiles = ['spec/*.js'],
     appFiles = ['app/*.js'],
-    sassFiles = ['styles/*.scss'];
+    sassFiles = ['styles/*.scss'],
+    // Develop Server
+    options = {
+        server: {
+            path: 'server.js',
+            execArgv: ['--harmony']
+        },
+        bs: {
+            proxy: 'http://localhost:3000'
+        }
+    };
 
 gulp.task('default', function() {
     'use strict';
 
+    gulp.start('server:start');
     gulp.start('js');
     gulp.start('sass');
     gulp.start('eslint');
@@ -72,18 +87,36 @@ gulp.task('eslintTestFiles', function() {
         .pipe(eslint.format());
 });
 
+gulp.task('server:start', function() {
+    'use strict';
+
+    devServer.listen(options.server, function(error) {
+        if (!error) devServer(options.bs);
+    });
+});
+
+gulp.task('server:restart', function() {
+    'use strict';
+
+    devServer.restart(function(error) {
+        if (!error) devServer.reload();
+    });
+});
+
 gulp.task('watch', function() {
     'use strict';
 
     gulp.watch(appFiles,
         function() {
             gulp.start('eslint');
+            gulp.start('server:restart');
             gulp.start('js');
         });
 
     gulp.watch(sassFiles,
         function() {
             gulp.start('sass');
+            gulp.start('server:restart');
         });
 
     gulp.watch(testFiles,
