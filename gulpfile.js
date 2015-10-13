@@ -19,7 +19,7 @@ var gulp = require('gulp'),
     // Develop Server
     options = {
         server: {
-            path: 'server.js',
+            path: 'index.js',
             execArgv: ['--harmony']
         },
         bs: {
