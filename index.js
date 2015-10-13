@@ -1,6 +1,6 @@
 'use strict';
 
-var http = require('http'),
+let http = require('http'),
     url = require('url'),
     fs = require('fs'),
     chalk = require('chalk'),
@@ -14,14 +14,14 @@ var http = require('http'),
     error500 = 'Error 500: Internal Error.',
     error404 = 'Error 404. The link dont exists.';
 
-http.createServer(function(req, res) {
-    var path = (url.parse(req.url).pathname === '/') ? './index.html' : url.parse(req.url).pathname,
+http.createServer((req, res) => {
+    let path = (url.parse(req.url).pathname === '/') ? './index.html' : url.parse(req.url).pathname,
         ext = path.split('.').pop(),
         mime_type = mimeTypes[ext];
 
-    fs.exists(path, function(exists) {
+    fs.exists(path, (exists) => {
         if (exists) {
-            fs.readFile(path, function(err, data) {
+            fs.readFile(path, (err, data) => {
                 if (err) {
                     res.writeHead(500, mimeTypes['txt']);
                     res.end(error500);
@@ -38,6 +38,6 @@ http.createServer(function(req, res) {
             res.end(error404);
         }
     });
-}).listen(port, '127.0.0.1', function() {
+}).listen(port, '127.0.0.1', () => {
     console.log(chalk.cyan('***** The server is working correctly in http://localhost:' + port + ' *****'));
 });
