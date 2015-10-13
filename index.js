@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var http = require('http'),
+    let http = require('http'),
         url = require('url'),
         fs = require('fs'),
         chalk = require('chalk'),
@@ -16,7 +16,7 @@
         error404 = 'Error 404. The link dont exists.';
 
     function getPaths(url) {
-        var paths = {
+        let paths = {
             '/': './index.html',
             '/css/styles.min.css': './css/styles.min.css',
             '/node_modules/requirejs/require.js': './node_modules/requirejs/require.js',
@@ -33,12 +33,12 @@
         return paths[url];
     }
 
-    http.createServer(function(req, res) {
-        var path = getPaths(url.parse(req.url).pathname),
+    http.createServer((req, res) => {
+        let path = getPaths(url.parse(req.url).pathname) || '',
             ext = (path) ? path.split('.').pop() : null,
             mimeType = mimeTypes[ext];
 
-        fs.exists(path, function(exists) {
+        fs.exists(path, (exists) => {
             if (exists) {
                 fs.readFile(path, (err, data) => {
                     if (err) {
@@ -65,7 +65,7 @@
                 res.end();
             }
         });
-    }).listen(port, '127.0.0.1', function() {
+    }).listen(port, '127.0.0.1', () => {
         /*eslint-disable */
         console.log(chalk.cyan('********************************************************************'));
         console.log(chalk.cyan('***** The server is working correctly in http://localhost:' + port + ' *****'));
