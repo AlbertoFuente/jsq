@@ -14,9 +14,27 @@ let http = require('http'),
     error500 = 'Error 500: Internal Error.',
     error404 = 'Error 404. The link dont exists.';
 
+function getPaths(url) {
+    let paths = {
+        '/': './index.html',
+        '/css/styles.min.css': './css/styles.min.css',
+        '/node_modules/requirejs/require.js': './node_modules/requirejs/require.js',
+        '/app/config.js': './app/config.js',
+        '/app/app.js': './app/app.js',
+        '/app/utils.js': './app/utils.js',
+        '/app/consts.js': './app/consts.js',
+        '/app/buttons.js': './app/buttons.js',
+        '/app/events.js': './app/events.js',
+        '/app/components.js': './app/components.js',
+        '/node_modules/jquery/dist/jquery.min.js': './node_modules/jquery/dist/jquery.min.js',
+        '/node_modules/jquery/dist/jquery.min.map': './node_modules/jquery/dist/jquery.min.map'
+    };
+    return paths[url];
+}
+
 http.createServer((req, res) => {
-    let path = (url.parse(req.url).pathname === '/') ? './index.html' : url.parse(req.url).pathname,
-        ext = path.split('.').pop(),
+    let path = getPaths(url.parse(req.url).pathname),
+        ext = (path) ? path.split('.').pop() : null,
         mime_type = mimeTypes[ext];
 
     fs.exists(path, (exists) => {
