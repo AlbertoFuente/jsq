@@ -14,7 +14,7 @@ var gulp = require('gulp'),
     // Files
     testFiles = ['js/*.min.js', 'spec/*.js'],
     testJsFiles = ['spec/*.js'],
-    appFiles = ['app/*.js'],
+    appFiles = ['app/*.js', 'index.js'],
     sassFiles = ['styles/*.scss'],
     // Develop Server
     options = {
