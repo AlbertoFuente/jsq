@@ -15,6 +15,30 @@
         error500 = 'Error 500: Internal Error.',
         error404 = 'Error 404. The link dont exists.';
 
+    /*eslint-disable */
+    function getDate(path) {
+        let date = new Date(),
+            seconds = date.getSeconds(),
+            minutes = date.getMinutes(),
+            hour = date.getHours(),
+            day = date.getDay();
+
+        if (path) {
+            /*eslint-disable */
+            return console.log(chalk.green(
+                chalk.cyan(`Path:`) + ` ${path} ` +
+                chalk.cyan(`Time:`) + ` ${hour}:${minutes}:${seconds} ` +
+                chalk.cyan(`Day:`) + ` ${day}`
+            ));
+            /*eslint-enable */
+        } else {
+            /*eslint-disable */
+            return console.log(chalk.red(`Path: ${path} Time: ${hour}:${minutes}:${seconds} Day: ${day}`));
+            /*eslint-enable */
+        }
+    }
+    /*eslint-enable */
+
     function getPaths(url) {
         let paths = {
             '/': './index.html',
@@ -30,11 +54,14 @@
             '/node_modules/jquery/dist/jquery.min.js': './node_modules/jquery/dist/jquery.min.js',
             '/node_modules/jquery/dist/jquery.min.map': './node_modules/jquery/dist/jquery.min.map'
         };
-        return paths[url];
+        // Uncomment the following line if you are loading the server with 'node index.js'
+        // Show per console if dependencies loaded correctly, this method does not work with gulp
+        // getDate(paths[url]);
+        return (paths[url]) ? paths[url] : '';
     }
 
     http.createServer((req, res) => {
-        let path = getPaths(url.parse(req.url).pathname) || '',
+        let path = getPaths(url.parse(req.url).pathname),
             ext = (path) ? path.split('.').pop() : null,
             mimeType = mimeTypes[ext];
 
@@ -68,7 +95,7 @@
     }).listen(port, '127.0.0.1', () => {
         /*eslint-disable */
         console.log(chalk.cyan('********************************************************************'));
-        console.log(chalk.cyan('***** The server is working correctly in http://localhost:' + port + ' *****'));
+        console.log(chalk.cyan(`***** The server is working correctly in http://localhost: ${port} *****`));
         console.log(chalk.cyan('********************************************************************'));
         /*eslint-enable */
     });
