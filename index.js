@@ -95,7 +95,7 @@
     }).listen(port, '127.0.0.1', () => {
         /*eslint-disable */
         console.log(chalk.cyan('********************************************************************'));
-        console.log(chalk.cyan(`***** The server is working correctly in http://localhost: ${port} *****`));
+        console.log(chalk.cyan(`***** The server is working correctly in http://localhost:${port} *****`));
         console.log(chalk.cyan('********************************************************************'));
         /*eslint-enable */
     });
