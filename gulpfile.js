@@ -9,7 +9,7 @@ var gulp = require('gulp'),
     minifyCSS = require('gulp-minify-css'),
     rename = require('gulp-rename'),
     devServer = require('gulp-develop-server'),
-    browserSync = require('browser-sync'),
+    liveReload = require('gulp-livereload'),
     Server = require('karma').Server,
     // Files
     testFiles = ['js/*.min.js', 'spec/*.js'],
@@ -18,13 +18,13 @@ var gulp = require('gulp'),
     sassFiles = ['styles/*.scss'],
     // Develop Server
     options = {
-        server: {
-            path: 'index.js',
-            execArgv: ['--harmony']
-        },
-        bs: {
-            proxy: 'http://localhost:3000'
-        }
+        path: 'index.js'
+    },
+    liveReloadOptions = {
+        //port: 3000,
+        host: 'localhost',
+        start: true,
+        reloadPage: 'index.html'
     };
 
 gulp.task('default', function() {
@@ -47,7 +47,8 @@ gulp.task('js', function() {
         .pipe(concat('app.min.js'))
         .pipe(babel())
         .pipe(uglify())
-        .pipe(gulp.dest('js/'));
+        .pipe(gulp.dest('js/'))
+        .pipe(liveReload());
 });
 
 gulp.task('sass', function() {
@@ -59,7 +60,8 @@ gulp.task('sass', function() {
             keepBreaks: true
         }))
         .pipe(rename('styles.min.css'))
-        .pipe(gulp.dest('css'));
+        .pipe(gulp.dest('css'))
+        .pipe(liveReload());
 });
 
 gulp.task('karma', function() {
@@ -92,26 +94,16 @@ gulp.task('eslintTestFiles', function() {
 gulp.task('server:start', function() {
     'use strict';
 
-    devServer.listen(options.server, function(error) {
-        if (!error) devServer(options.bs);
-    });
-});
-
-gulp.task('server:restart', function() {
-    'use strict';
-
-    devServer.restart(function(error) {
-        if (!error) devServer.reload();
-    });
+    devServer.listen(options, liveReload.listen);
 });
 
 gulp.task('watch', function() {
     'use strict';
+    liveReload.listen(liveReloadOptions);
 
     gulp.watch(appFiles, function() {
         gulp.start([
             'eslint',
-            'server:restart',
             'js'
         ]);
     });
