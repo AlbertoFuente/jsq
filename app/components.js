@@ -143,7 +143,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 });
             });
         },
-        _checkSelecteds = (table, elementNumber, elementParent, elementName, elementLen) => {
+        _checkSelecteds = (table, elementNumber, elementParent, elementLen) => {
             let printSelected = (_hoverSelected.len <= (11 - elementNumber)) ? true : false,
                 tableObj = _tableObject(table),
                 elementRange = utils.range(parseInt(elementNumber), (parseInt(elementNumber) + (parseInt(elementLen) - 1)), 0),
@@ -174,7 +174,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     elementParent = e.currentTarget.parentNode,
                     elementNumber = parseInt(e.currentTarget.getAttribute('data-number')),
                     elementName = e.currentTarget.getAttribute('data-name') || null,
-                    printSelected = _checkSelecteds(table, elementNumber, elementParent, elementName, _hoverSelected.len),
+                    printSelected = _checkSelecteds(table, elementNumber, elementParent, _hoverSelected.len),
                     len = _hoverSelected.len ? _hoverSelected.len : 0,
                     i = 0;
 
@@ -424,7 +424,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     name: 'Patrol boat',
                     boxes: 2
                 }
-            }
+            };
         }
         getShipName(ship) {
             return this.ships[ship].name;
