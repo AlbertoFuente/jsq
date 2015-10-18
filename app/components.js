@@ -318,6 +318,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         _placeShip = (ship, position) => {
             let num = 0,
                 result = {},
+                selectBox = new _MenuGamer(),
                 defaultPosition = (position !== null) ? position : 'horizontal',
                 defaultShip = () => {
                     let select = consts.DOC.getElementById('gamerSelect');
@@ -334,7 +335,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 },
                 shipSelected = (typeof ship === 'object' && Object.keys(ship).length !== 0) ? ship : defaultShip();
 
-            if (shipSelected.value && defaultPosition) {
+            if (shipSelected.value && shipSelected.value !== '- NO SHIPS -' && defaultPosition) {
                 switch (defaultPosition) {
                     case 'vertical':
                         _verticalShip(shipSelected.boxes, shipSelected.name);
@@ -347,7 +348,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 let message = 'You must choose one ship and the position you want to place it.';
                 utils.message('red', message);
             } else if (!shipSelected.value && defaultPosition) {
-                let message = 'There are no more ships to select.';
+                let message = 'There are no more ships to select.',
+                    noShips = selectBox.insertHtml('- NO SHIPS -');
                 utils.message('red', message);
             }
             _shipSelected = {};
@@ -534,6 +536,13 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         appendMenuGamer(parent) {
             this.shipsMenu();
             parent.appendChild(this.menuGamer);
+        }
+        insertHtml(text) {
+            let option = consts.DOC.createElement('option'),
+                select = consts.DOC.getElementById('gamerSelect');
+            option.value = text;
+            option.innerHTML = text;
+            select.appendChild(option);
         }
     }
 
