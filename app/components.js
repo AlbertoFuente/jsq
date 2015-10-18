@@ -348,8 +348,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 let message = 'You must choose one ship and the position you want to place it.';
                 utils.message('red', message);
             } else if (!shipSelected.value && defaultPosition) {
-                let message = 'There are no more ships to select.',
-                    noShips = selectBox.insertHtml('- NO SHIPS -');
+                let message = 'There are no more ships to select.';
+                selectBox.insertHtml('- NO SHIPS -');
                 utils.message('red', message);
             }
             _shipSelected = {};
