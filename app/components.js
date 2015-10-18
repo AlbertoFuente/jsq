@@ -343,8 +343,11 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                         _horizontalShip(shipSelected.boxes, shipSelected.name);
                         break;
                 }
-            } else {
+            } else if (shipSelected.value && !defaultPosition) {
                 let message = 'You must choose one ship and the position you want to place it.';
+                utils.message('red', message);
+            } else if (!shipSelected.value && defaultPosition) {
+                let message = 'There are no more ships to select.';
                 utils.message('red', message);
             }
             _shipSelected = {};
