@@ -9,6 +9,7 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
             this.startButtonsClass = new components.StartButtons();
             this.gameContainerClass = new components.GameContainer();
             this.panelGamerClass = new components.PanelGamer();
+            this.menuGamer = new components.MenuGamer();
             this.ships = new components.Ships();
 
             // create container
@@ -148,6 +149,25 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
 
             expect(panelGamer.childNodes.length).toBeGreaterThan(0);
             expect(panelGamer.childNodes[1].tagName).toBe('TABLE');
+        });
+
+        // test MenuGamer Class
+        it('Test MenuGamer Class [getMenuGamer] method', function() {
+            var getMenu = this.menuGamer.getMenuGamer();
+
+            expect(typeof getMenu).toBe('object');
+        });
+        it('Test MenuGamer Class [removeElement] method', function() {
+            var removeElem = this.menuGamer.removeElement('aircraftCarrier'),
+                gamerSlect = consts.DOC.getElementById('gamerSelect');
+
+            expect(gamerSlect.childNodes[0].value).toBe('Battleship');
+        });
+        it('Test MenuGamer Class [insertHtml] method', function() {
+            var insert = this.menuGamer.insertHtml('- NO SHIPS -'),
+                gamerSlect = consts.DOC.getElementById('gamerSelect');
+
+            expect(gamerSlect.childNodes[4].value).toBe('- NO SHIPS -');
         });
     });
 });
