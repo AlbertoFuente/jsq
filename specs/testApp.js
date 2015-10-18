@@ -9,6 +9,7 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
             this.startButtonsClass = new components.StartButtons();
             this.gameContainerClass = new components.GameContainer();
             this.panelGamerClass = new components.PanelGamer();
+            this.ships = new components.Ships();
 
             // create container
             var container = consts.DOC.createElement('div');
@@ -77,7 +78,7 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
             expect(gameContainer.childNodes[3].id).toBe('exitButton');
         });
 
-        // test Class gameContainer
+        // test Class GameContainer
         it('Test GameContainer Class [getGameContainer] method', function() {
             var getGameContainer = this.gameContainerClass.getGameContainer(),
                 mockResponse = '<div id="gameContainer"></div>';
@@ -94,7 +95,34 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
             expect(container.childNodes[0].id).toBe('gameMenu');
         });
 
-        // test Class panelGamer
+        // test Class Ships
+        it('Test Ships Class get ships object', function() {
+            var ships = this.ships.ships;
+
+            expect(typeof ships).toBe('object');
+            expect(ships['aircraftCarrier'].name).toBe('Aircraft Carrier');
+            expect(ships['aircraftCarrier'].boxes).toBe(5);
+            expect(ships['battleship'].name).toBe('Battleship');
+            expect(ships['battleship'].boxes).toBe(4);
+            expect(ships['submarine'].name).toBe('Submarine');
+            expect(ships['submarine'].boxes).toBe(3);
+            expect(ships['destroyer'].name).toBe('Destroyer');
+            expect(ships['destroyer'].boxes).toBe(3);
+            expect(ships['patrolBoat'].name).toBe('Patrol boat');
+            expect(ships['patrolBoat'].boxes).toBe(2);
+        });
+        it('Test Ships Class [getShipName] method', function() {
+            var getShip = this.ships.getShipName('battleship');
+
+            expect(getShip).toBe('Battleship');
+        });
+        it('Test Ships Class [getShipLength] method', function() {
+            var getShipLen = this.ships.getShipLength('aircraftCarrier');
+
+            expect(getShipLen).toBe(5);
+        });
+
+        // test Class PanelGamer
         it('Test PanelGamer Class [getPanelGamer] method', function() {
             var panelGamer = this.panelGamerClass.getPanelGamer(),
                 mockResponseId = 'panelGamer';
