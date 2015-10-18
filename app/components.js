@@ -88,7 +88,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     elementClass = e.target.classList,
                     elementDataName = e.target.getAttribute('data-name') || null,
                     elementParent = e.target.parentNode.className,
-                    elementNumber = e.target.getAttribute('data-number');
+                    elementNumber = e.target.getAttribute('data-number'),
+                    ships = new _Ships();
 
                 Array.from(elementClass).forEach((x) => {
                     if (x === 'selected') {
@@ -102,7 +103,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                         name: elementDataName,
                                         position: 'horizontal',
                                         parent: elementParent,
-                                        len: selectedLen,
+                                        len: ships.getShipLength(elementDataName),
                                         number: elementNumber,
                                         selected: e.target,
                                         hover: true
@@ -142,7 +143,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 });
             });
         },
-        _checkSelecteds = (table, elementNumber, elementParent, elementLen) => {
+        _checkSelecteds = (table, elementNumber, elementParent, elementName, elementLen) => {
             let printSelected = (_hoverSelected.len <= (11 - elementNumber)) ? true : false,
                 tableObj = _tableObject(table),
                 elementRange = utils.range(parseInt(elementNumber), (parseInt(elementNumber) + (parseInt(elementLen) - 1)), 0),
@@ -173,7 +174,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     elementParent = e.currentTarget.parentNode,
                     elementNumber = parseInt(e.currentTarget.getAttribute('data-number')),
                     elementName = e.currentTarget.getAttribute('data-name') || null,
-                    printSelected = _checkSelecteds(table, elementNumber, elementParent, _hoverSelected.len),
+                    printSelected = _checkSelecteds(table, elementNumber, elementParent, elementName, _hoverSelected.len),
                     len = _hoverSelected.len ? _hoverSelected.len : 0,
                     i = 0;
 
@@ -400,10 +401,44 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         }
     }
 
+    class _Ships {
+        constructor() {
+            this.ships = {
+                aircraftCarrier: {
+                    name: 'Aircraft Carrier',
+                    boxes: 5
+                },
+                battleship: {
+                    name: 'Battleship',
+                    boxes: 4
+                },
+                submarine: {
+                    name: 'Submarine',
+                    boxes: 3
+                },
+                destroyer: {
+                    name: 'Destroyer',
+                    boxes: 3
+                },
+                patrolBoat: {
+                    name: 'Patrol boat',
+                    boxes: 2
+                }
+            }
+        }
+        getShipName(ship) {
+            return this.ships[ship].name;
+        }
+        getShipLength(ship) {
+            return this.ships[ship].boxes;
+        }
+    }
+
     class _MenuGamer {
         constructor() {
             this.menuGamer = consts.DOC.createElement('div');
             this.menuGamer.id = 'menuGamer';
+            this.ships = new _Ships();
         }
         getMenuGamer() {
             return this.menuGamer;
@@ -420,28 +455,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             });
         }
         shipsMenu() {
-            let ships = {
-                    aircraftCarrier: {
-                        name: 'Aircraft Carrier',
-                        boxes: 5
-                    },
-                    battleship: {
-                        name: 'Battleship',
-                        boxes: 4
-                    },
-                    submarine: {
-                        name: 'Submarine',
-                        boxes: 3
-                    },
-                    destroyer: {
-                        name: 'Destroyer',
-                        boxes: 3
-                    },
-                    patrolBoat: {
-                        name: 'Patrol boat',
-                        boxes: 2
-                    }
-                },
+            let ships = this.ships.ships,
                 selectTitle = consts.DOC.createElement('h3'),
                 selectPositionText = consts.DOC.createElement('h3'),
                 position = ['horizontal', 'vertical'],
