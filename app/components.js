@@ -557,6 +557,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         GameMenu: _GameMenu,
         StartButtons: _StartButtons,
         GameContainer: _GameContainer,
+        Ships: _Ships,
         MenuGamer: _MenuGamer,
         PanelGamer: _PanelGamer,
         createTable: _createTable
