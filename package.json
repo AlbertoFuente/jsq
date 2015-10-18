@@ -18,7 +18,6 @@
   "homepage": "https://github.com/AlbertoFuente/jsq",
   "devDependencies": {
     "chalk": "^1.1.1",
-    "express": "^4.13.3",
     "gulp": "^3.9.0",
     "gulp-babel": "^5.2.1",
     "gulp-concat": "^2.6.0",
