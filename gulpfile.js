@@ -23,6 +23,7 @@ var gulp = require('gulp'),
     liveReloadOptions = {
         //port: 3000,
         host: 'localhost',
+        basePath: './',
         start: true,
         reloadPage: 'index.html'
     };
@@ -106,6 +107,7 @@ gulp.task('watch', function() {
             'eslint',
             'js'
         ]);
+        liveReload.reload();
     });
 
     gulp.watch(sassFiles, function() {
@@ -113,6 +115,7 @@ gulp.task('watch', function() {
             'sass',
             'server:restart'
         ]);
+        liveReload.reload();
     });
 
     gulp.watch(testFiles, function() {
