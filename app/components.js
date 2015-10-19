@@ -88,6 +88,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     elementClass = e.target.classList,
                     elementDataName = e.target.getAttribute('data-name') || null,
                     elementParent = e.target.parentNode.className,
+                    elementParentNumber = e.target.parentNode.getAttribute('data-number'),
                     elementNumber = e.target.getAttribute('data-number'),
                     ships = new _Ships();
 
@@ -117,7 +118,20 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                 }
                             });
                         } else if (elementDataName !== null && selectedLen === 1) {
-                            // TODO: pending...
+                            let shipLen = ships.getShipLength(elementDataName),
+                                trClasses = Array.from({
+                                    length: shipLen
+                                }, (x, i) => 'tr' + (parseInt(elementParentNumber) + i)),
+                                tdClass = e.target.classList[0];
+
+                            Array.from(trClasses).forEach((x) => {
+                                Array.from(tableObject[x].selected).forEach((d) => {
+                                    if (d.classList.contains(tdClass) && d.classList.contains('selected')) {
+                                        d.classList.remove('selected');
+                                        d.removeAttribute('data-name');
+                                    }
+                                });
+                            });
                         }
                     } else {
                         return;
