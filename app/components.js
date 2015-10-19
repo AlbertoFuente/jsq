@@ -127,7 +127,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             _hoverSelected = {
                                 name: elementDataName,
                                 position: 'vertical',
-                                parent: trClasses,
+                                parent: elementParent,
                                 len: ships.getShipLength(elementDataName),
                                 number: elementNumber,
                                 selected: e.target,
@@ -167,7 +167,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 });
             });
         },
-        _checkSelecteds = (table, elementNumber, elementParent, elementLen) => {
+        _checkHorizontalSelecteds = (table, elementNumber, elementParent, elementLen) => {
             let printSelected = (_hoverSelected.len <= (11 - elementNumber)) ? true : false,
                 tableObj = _tableObject(table),
                 elementRange = utils.range(parseInt(elementNumber), (parseInt(elementNumber) + (parseInt(elementLen) - 1)), 0),
@@ -192,13 +192,18 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 return false;
             }
         },
+        _checkVerticalSelected = (elementParent, elementLen) => {
+            let parentNumber = (elementParent.classList[0] !== 'tr0') ? parseInt(elementParent.getAttribute('data-number')) : null;
+            return ((parentNumber + elementLen) <= 11) ? true : false;
+        },
         _hoverShips = (table) => {
             $(table).find('td').hover((e) => {
                 let element = e.currentTarget,
                     elementParent = e.currentTarget.parentNode,
                     elementNumber = parseInt(e.currentTarget.getAttribute('data-number')),
                     elementName = e.currentTarget.getAttribute('data-name') || null,
-                    printSelected = _checkSelecteds(table, elementNumber, elementParent, _hoverSelected.len),
+                    printHorizontalSelected = _checkHorizontalSelecteds(table, elementNumber, elementParent, _hoverSelected.len),
+                    printVerticalSelected = _checkVerticalSelected(elementParent, _hoverSelected.len),
                     len = _hoverSelected.len ? _hoverSelected.len : 0,
                     i = 0;
 
@@ -214,7 +219,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
                                 _removeSelected(element);
 
-                                if (printSelected) {
+                                if (printHorizontalSelected) {
                                     for (i; i < len; i++) {
                                         let selected = $('.td' + elementNumber);
 
@@ -229,8 +234,9 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             break;
                         case 'vertical':
                             if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
-                                _removeSelected(element);
-                                // TODO: pending...
+                                if (printVerticalSelected) {
+                                    // TODO: pending ...
+                                }
                             }
                             break;
                     }
