@@ -124,6 +124,16 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                 }, (x, i) => 'tr' + (parseInt(elementParentNumber) + i)),
                                 tdClass = e.target.classList[0];
 
+                            _hoverSelected = {
+                                name: elementDataName,
+                                position: 'vertical',
+                                parent: trClasses,
+                                len: ships.getShipLength(elementDataName),
+                                number: elementNumber,
+                                selected: e.target,
+                                hover: true
+                            };
+
                             Array.from(trClasses).forEach((x) => {
                                 Array.from(tableObject[x].selected).forEach((d) => {
                                     if (d.classList.contains(tdClass) && d.classList.contains('selected')) {
