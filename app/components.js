@@ -240,7 +240,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                         trClasses = Array.from(trRange, (x) => 'tr' + x),
                                         notSelecteds = [];
 
-                                    Array.from(trClasses).forEach((x, i) => {
+                                    Array.from(trClasses).forEach((x) => {
                                         Array.from(table.childNodes).forEach((d) => {
                                             if (d.classList.contains(x) && !d.classList.contains('selected')) {
                                                 notSelecteds.push(x);
