@@ -200,6 +200,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             $(table).find('td').hover((e) => {
                 let element = e.currentTarget,
                     elementParent = e.currentTarget.parentNode,
+                    elementParentNumber = elementParent.getAttribute('data-number'),
                     elementNumber = parseInt(e.currentTarget.getAttribute('data-number')),
                     elementName = e.currentTarget.getAttribute('data-name') || null,
                     printHorizontalSelected = _checkHorizontalSelecteds(table, elementNumber, elementParent, _hoverSelected.len),
@@ -235,7 +236,29 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                         case 'vertical':
                             if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
                                 if (printVerticalSelected) {
-                                    // TODO: pending ...
+                                    let trRange = utils.range(parseInt(elementParentNumber), 10, 0),
+                                        trClasses = Array.from(trRange, (x) => 'tr' + x),
+                                        notSelecteds = [];
+
+                                    Array.from(trClasses).forEach((x, i) => {
+                                        Array.from(table.childNodes).forEach((d) => {
+                                            if (d.classList.contains(x) && !d.classList.contains('selected')) {
+                                                notSelecteds.push(x);
+                                            }
+                                        });
+                                    });
+                                    if (notSelecteds.length >= _hoverSelected.number) {
+                                        Array.from({
+                                            length: _hoverSelected.len
+                                        }, (x, i) => {
+                                            Array.from(table.childNodes).forEach((d) => {
+                                                if (d.classList.contains(notSelecteds[i])) {
+                                                    d.childNodes[elementNumber].className += ' selected';
+                                                    d.childNodes[elementNumber].setAttribute('data-name', _hoverSelected.name);
+                                                }
+                                            });
+                                        });
+                                    }
                                 }
                             }
                             break;
