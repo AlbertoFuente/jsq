@@ -40,7 +40,7 @@
     "karma-requirejs": "^0.2.2",
     "karma-sinon": "^1.0.4",
     "karma-spec-reporter": "0.0.20",
-    "sinon": "^1.16.1"
+    "sinon": "^1.17.2"
   },
   "dependencies": {
     "jquery": "^2.1.4",
