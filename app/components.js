@@ -136,9 +136,14 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
 
                             Array.from(trClasses).forEach((x) => {
                                 Array.from(tableObject[x].selected).forEach((d) => {
-                                    if (d.classList.contains(tdClass) && d.classList.contains('selected')) {
+                                    if (d.classList.contains(tdClass) && d.classList.contains('selected') && !d.classList.contains('hover')) {
                                         d.classList.remove('selected');
                                         d.removeAttribute('data-name');
+                                    } else if (d.classList.contains(tdClass) && d.classList.contains('selected') && d.classList.contains('hover')) {
+                                        _hoverSelected = {};
+                                        d.classList.remove('hover');
+                                    } else {
+                                        return;
                                     }
                                 });
                             });
@@ -254,7 +259,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                             length: _hoverSelected.len
                                         }, (x, i) => {
                                             Array.from(table.childNodes).forEach((d) => {
-                                                if (d.classList.contains(notSelecteds[i])) {
+                                                if (d.classList.contains(notSelecteds[i]) && !d.childNodes[elementNumber].classList.contains('selected')) {
                                                     d.childNodes[elementNumber].className += ' selected hover';
                                                     d.childNodes[elementNumber].setAttribute('data-name', _hoverSelected.name);
                                                 }
@@ -299,7 +304,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 menuGamer = new _MenuGamer();
 
             Object.keys(trs).forEach((x) => {
-                if (trs[x].childsShips.length === 0 && i < range.length) {
+                if (i < range.length) {
                     arr[x] = trs[x];
                     i++;
                 }
@@ -313,7 +318,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 });
                 menuGamer.removeElement(name);
             } else {
-                let message = 'Move your ships form place more.';
+                let message = 'Move your ships for place more.';
                 utils.message('green', message);
             }
         },
