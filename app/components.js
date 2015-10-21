@@ -235,6 +235,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             break;
                         case 'vertical':
                             if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
+                                _removeSelected(element);
+
                                 if (printVerticalSelected) {
                                     let trRange = utils.range(parseInt(elementParentNumber), 10, 0),
                                         trClasses = Array.from(trRange, (x) => 'tr' + x),
@@ -253,7 +255,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                         }, (x, i) => {
                                             Array.from(table.childNodes).forEach((d) => {
                                                 if (d.classList.contains(notSelecteds[i])) {
-                                                    d.childNodes[elementNumber].className += ' selected';
+                                                    d.childNodes[elementNumber].className += ' selected hover';
                                                     d.childNodes[elementNumber].setAttribute('data-name', _hoverSelected.name);
                                                 }
                                             });
