@@ -197,9 +197,28 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 return false;
             }
         },
-        _checkVerticalSelected = (elementParent, elementLen) => {
-            let parentNumber = (elementParent.classList[0] !== 'tr0') ? parseInt(elementParent.getAttribute('data-number')) : null;
-            return ((parentNumber + elementLen) <= 11) ? true : false;
+        _checkVerticalSelected = (elementParent, elementLen, element) => {
+            let parentNumber = (elementParent.classList[0] !== 'tr0') ? parseInt(elementParent.getAttribute('data-number')) : null,
+                printSpace = ((parentNumber + elementLen) <= 11) ? true : false,
+                elementClass = element.classList[0],
+                result = true;
+
+            if (printSpace) {
+                Array.from({
+                    length: elementLen
+                }, (x) => {
+                    let tr = consts.DOC.getElementsByClassName('tr' + parentNumber);
+                    Array.from(tr[0].childNodes).forEach((d) => {
+                        if (d.classList.contains(elementClass) && d.classList.contains('selected')) {
+                            result = false;
+                        }
+                    });
+                    parentNumber++;
+                });
+                return result;
+            } else {
+                return result;
+            }
         },
         _hoverShips = (table) => {
             $(table).find('td').hover((e) => {
@@ -209,7 +228,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     elementNumber = parseInt(e.currentTarget.getAttribute('data-number')),
                     elementName = e.currentTarget.getAttribute('data-name') || null,
                     printHorizontalSelected = _checkHorizontalSelecteds(table, elementNumber, elementParent, _hoverSelected.len),
-                    printVerticalSelected = _checkVerticalSelected(elementParent, _hoverSelected.len),
+                    printVerticalSelected = _checkVerticalSelected(elementParent, _hoverSelected.len, element),
                     len = _hoverSelected.len ? _hoverSelected.len : 0,
                     i = 0;
 
