@@ -206,7 +206,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             if (printSpace) {
                 Array.from({
                     length: elementLen
-                }, (x) => {
+                }, () => {
                     let tr = consts.DOC.getElementsByClassName('tr' + parentNumber);
                     Array.from(tr[0].childNodes).forEach((d) => {
                         if (d.classList.contains(elementClass) && d.classList.contains('selected')) {
