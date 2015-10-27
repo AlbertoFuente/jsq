@@ -198,7 +198,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             }
         },
         _checkVerticalSelected = (elementParent, elementLen, element) => {
-            let parentNumber = (elementParent.classList[0] !== 'tr0') ? parseInt(elementParent.getAttribute('data-number')) : null,
+            let parentNumber = (elementParent.classList[0] !== 'tr0') ? parseInt(elementParent.getAttribute('data-number')) : 0,
                 printSpace = ((parentNumber + elementLen) <= 11) ? true : false,
                 elementClass = element.classList[0],
                 result = true;
@@ -217,7 +217,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 });
                 return result;
             } else {
-                return result;
+                return false;
             }
         },
         _hoverShips = (table) => {
