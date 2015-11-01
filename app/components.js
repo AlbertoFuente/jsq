@@ -337,7 +337,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 }
             });
 
-            if (i === range.length) {
+            if (i === range.length && trs['tr1'].childsShips.length < 1) {
                 Object.keys(arr).forEach((d) => {
                     let arrChild = arr[d].childs[0];
                     arrChild.className += ' selected';
@@ -369,23 +369,34 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 d = 0,
                 arr = {},
                 firstChild = null,
-                menuGamer = new _MenuGamer();
+                menuGamer = new _MenuGamer(),
+                checkSpace = (num) => {
+                    if (trs['tr' + num].childsShips.length > 0) {
+                        while (i < range.length) {
+                            if (trs['tr' + num].childsShips[i].classList.contains('td' + (i + 1))) {
+                                return checkSpace(num + 1);
+                            } else {
+                                firstChild = 'tr' + num;
+                                arr['tr' + num] = trs['tr' + num];
+                            }
+                            i++;
+                        }
+                    } else {
+                        firstChild = 'tr' + num;
+                        arr['tr' + num] = trs['tr' + num];
+                    }
+                };
 
-            Object.keys(trs).forEach((x) => {
-                if (trs[x].childsShips.length === 0 && i < 1) {
-                    firstChild = x;
-                    arr[x] = trs[x];
-                    i++;
-                }
+            $.when(checkSpace(1)).then(() => {
+                Array.from(arr[firstChild].childs).forEach((j) => {
+                    if (d < range.length) {
+                        j.className += ' selected';
+                        j.setAttribute('data-name', name);
+                        d++;
+                    }
+                });
+                menuGamer.removeElement(name);
             });
-            Array.from(arr[firstChild].childs).forEach((j) => {
-                if (d < range.length) {
-                    j.className += ' selected';
-                    j.setAttribute('data-name', name);
-                    d++;
-                }
-            });
-            menuGamer.removeElement(name);
         },
         _horizontalShip = (num, name) => {
             let _table = consts.DOC.getElementsByClassName('panelGamerBoard'),
