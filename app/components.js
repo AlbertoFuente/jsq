@@ -304,7 +304,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             });
         },
         _shipSelected = {},
-        _positionSelected = null,
         _checkTds = (trChilds) => {
             let table = {};
 
@@ -441,7 +440,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 utils.message('red', message);
             }
             _shipSelected = {};
-            _positionSelected = null;
         };
 
     class _GameMenu {
@@ -609,10 +607,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             divSelect2.appendChild(selectPositionText);
             divSelect2.appendChild(this.selectShipPosition);
             this.menuGamer.appendChild(divSelect2);
-
-            this.selectShipPosition.onchange = (event) => {
-                _positionSelected = event.target.value;
-            };
 
             divSelect3.appendChild(placeButton);
             this.menuGamer.appendChild(divSelect3);
