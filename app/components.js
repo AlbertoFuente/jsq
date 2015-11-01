@@ -94,7 +94,16 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
 
                 Array.from(elementClass).forEach((x) => {
                     if (x === 'selected') {
-                        let selectedLen = tableObject[elementParent].selected.length,
+                        let selectedLen = (function(eName) {
+                                let arr = [];
+                                Array.from(tableObject[elementParent].selected).forEach((x) => {
+                                    let name = x.getAttribute('data-name');
+                                    if (name === eName) {
+                                        arr.push(x);
+                                    }
+                                });
+                                return arr.length;
+                            }(elementDataName)),
                             selecteds = tableObject[elementParent].selected;
 
                         if (elementDataName !== null && selectedLen > 1) {
