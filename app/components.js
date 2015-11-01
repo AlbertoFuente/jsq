@@ -611,14 +611,15 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             this.menuGamer.appendChild(divSelect2);
 
             this.selectShipPosition.onchange = (event) => {
-                _positionSelected = event.target.selectedOptions[0].value;
+                _positionSelected = event.target.value;
             };
 
             divSelect3.appendChild(placeButton);
             this.menuGamer.appendChild(divSelect3);
 
             placeButton.onclick = () => {
-                _placeShip(_shipSelected, _positionSelected);
+                let position = consts.DOC.getElementById('selectPosition');
+                _placeShip(_shipSelected, position.value);
             };
         }
         appendMenuGamer(parent) {
