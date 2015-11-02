@@ -341,12 +341,10 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             _changeVerticalBox(_resultTrs, _range, name);
         },
         _changeVerticalBox = (trs, range, name) => {
-            let arr = {},
-                control = [],
+            let control = [],
                 menuGamer = new _MenuGamer(),
                 checkSpace = (num) => {
                     let i = 0,
-                        parent = consts.DOC.getElementsByClassName('tr' + num)[0],
                         setControl = () => {
                             while (i < range.length) {
                                 if (trs['tr' + num].childsShips.length === 0) {
