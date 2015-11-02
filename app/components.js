@@ -325,30 +325,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             });
             return table;
         },
-        _changeVerticalBox = (trs, range, name) => {
-            let i = 0,
-                arr = {},
-                menuGamer = new _MenuGamer();
-
-            Object.keys(trs).forEach((x) => {
-                if (i < range.length) {
-                    arr[x] = trs[x];
-                    i++;
-                }
-            });
-
-            if (i === range.length && trs['tr1'].childsShips.length < 1) {
-                Object.keys(arr).forEach((d) => {
-                    let arrChild = arr[d].childs[0];
-                    arrChild.className += ' selected';
-                    arrChild.setAttribute('data-name', name);
-                });
-                menuGamer.removeElement(name);
-            } else {
-                let message = 'Move your ships for place more.';
-                utils.message('green', message);
-            }
-        },
         _verticalShip = (num, name) => {
             let _table = consts.DOC.getElementsByClassName('panelGamerBoard'),
                 _range = utils.range(1, parseFloat(num), 0),
@@ -363,6 +339,58 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             });
             _resultTrs = _checkTds(_trArr, _range);
             _changeVerticalBox(_resultTrs, _range, name);
+        },
+        _changeVerticalBox = (trs, range, name) => {
+            let arr = {},
+                control = [],
+                menuGamer = new _MenuGamer(),
+                checkSpace = (num) => {
+                    let i = 0,
+                        parent = consts.DOC.getElementsByClassName('tr' + num)[0],
+                        setControl = () => {
+                            while (i < range.length) {
+                                if (trs['tr' + num].childsShips.length === 0) {
+                                    control.push(num);
+                                } else {
+                                    if (trs['tr' + num].childsShips[0].classList.contains('td1')) {
+                                        return checkSpace(num + 1);
+                                    } else {
+                                        control.push(num);
+                                    }
+                                }
+                                if (num < 10) {
+                                    num++;
+                                } else {
+                                    let message = 'Move your ships for place more.';
+                                    utils.message('green', message);
+                                }
+                                i++;
+                            }
+                        };
+                    control = [];
+                    if (trs['tr' + num].childsShips.length > 0) {
+                        if (trs['tr' + num].childsShips[i].classList.contains('td1')) {
+                            return checkSpace(num + 1);
+                        } else {
+                            setControl();
+                        }
+                    } else {
+                        setControl();
+                    }
+                };
+            $.when(checkSpace(1)).then(() => {
+                if (control.length === range.length) {
+                    Array.from(control).forEach((d) => {
+                        let trsChild = trs['tr' + d].childs[0];
+                        trsChild.className += ' selected';
+                        trsChild.setAttribute('data-name', name);
+                    });
+                    menuGamer.removeElement(name);
+                } else {
+                    let message = 'Move your ships for place more.';
+                    utils.message('green', message);
+                }
+            });
         },
         _changeHorizontalBox = (trs, range, name) => {
             let i = 0,
