@@ -399,7 +399,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 checkSpace = (num) => {
                     if (trs['tr' + num].childsShips.length > 0) {
                         while (i < range.length) {
-                            if (trs['tr' + num].childsShips[i].classList.contains('td' + (i + 1))) {
+                            if (trs['tr' + num].childsShips[i] && trs['tr' + num].childsShips[i].classList.contains('td' + (i + 1))) {
                                 return checkSpace(num + 1);
                             } else {
                                 firstChild = 'tr' + num;
