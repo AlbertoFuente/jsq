@@ -55,6 +55,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             _hoverShips(table);
             return table;
         },
+        _canPlaceShip = true,
         _tableObject = (table) => {
             let tableObject = {};
 
@@ -107,8 +108,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             selecteds = tableObject[elementParent].selected;
 
                         if (elementDataName !== null && selectedLen > 1) {
-                            Array.from(selecteds).forEach((f) => {
-                                if (f.classList.contains('selected') && !f.classList.contains('hover') && f.hasAttribute('data-name') && f.attributes[3].value === elementDataName) {
+                            Array.from(selecteds).forEach((f, i) => {
+                                if (f.classList.contains('selected') && !f.classList.contains('hover') && f.hasAttribute('data-name') && f.attributes[3].value === elementDataName && _canPlaceShip) {
                                     _hoverSelected = {
                                         name: elementDataName,
                                         position: 'horizontal',
@@ -119,9 +120,14 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                         hover: true
                                     };
                                     f.classList.remove('selected');
+                                    f.removeAttribute('data-name');
+                                    if (i === selecteds.length) {
+                                        _canPlaceShip = false;
+                                    }
                                 } else if (f.classList.contains('selected') && f.classList.contains('hover')) {
                                     _hoverSelected = {};
                                     f.classList.remove('hover');
+                                    _canPlaceShip = true;
                                 } else {
                                     return;
                                 }
@@ -143,14 +149,15 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                 hover: true
                             };
 
-                            Array.from(trClasses).forEach((x) => {
+                            Array.from(trClasses).forEach((x, i) => {
                                 Array.from(tableObject[x].selected).forEach((d) => {
-                                    if (d.classList.contains(tdClass) && d.classList.contains('selected') && !d.classList.contains('hover')) {
+                                    if (d.classList.contains(tdClass) && d.classList.contains('selected') && !d.classList.contains('hover') && _canPlaceShip) {
                                         d.classList.remove('selected');
                                         d.removeAttribute('data-name');
                                     } else if (d.classList.contains(tdClass) && d.classList.contains('selected') && d.classList.contains('hover')) {
                                         _hoverSelected = {};
                                         d.classList.remove('hover');
+                                        _canPlaceShip = true;
                                     } else {
                                         return;
                                     }
@@ -263,6 +270,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                             elementNumber++;
                                         }
                                     }
+                                    _canPlaceShip = false;
                                 }
                             }
                             break;
@@ -293,6 +301,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                                 }
                                             });
                                         });
+                                        _canPlaceShip = false;
                                     }
                                 }
                             }
@@ -649,8 +658,10 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             this.menuGamer.appendChild(divSelect3);
 
             placeButton.onclick = () => {
-                let position = consts.DOC.getElementById('selectPosition');
-                _placeShip(_shipSelected, position.value);
+                if (_canPlaceShip) {
+                    let position = consts.DOC.getElementById('selectPosition');
+                    _placeShip(_shipSelected, position.value);
+                }
             };
         }
         appendMenuGamer(parent) {
