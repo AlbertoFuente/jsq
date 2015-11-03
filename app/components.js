@@ -375,14 +375,16 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             }
                         };
                     control = [];
-                    if (trs['tr' + num].childsShips.length > 0) {
-                        if (trs['tr' + num].childsShips[i].classList.contains('td1')) {
-                            return checkSpace(num + 1);
+                    if (num < 11) {
+                        if (trs['tr' + num].childsShips.length > 0) {
+                            if (trs['tr' + num].childsShips[i].classList.contains('td1')) {
+                                return checkSpace(num + 1);
+                            } else {
+                                setControl();
+                            }
                         } else {
                             setControl();
                         }
-                    } else {
-                        setControl();
                     }
                 };
             $.when(checkSpace(1)).then(() => {
