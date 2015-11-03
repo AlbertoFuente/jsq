@@ -149,7 +149,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                 hover: true
                             };
 
-                            Array.from(trClasses).forEach((x, i) => {
+                            Array.from(trClasses).forEach((x) => {
                                 Array.from(tableObject[x].selected).forEach((d) => {
                                     if (d.classList.contains(tdClass) && d.classList.contains('selected') && !d.classList.contains('hover') && _canPlaceShip) {
                                         d.classList.remove('selected');
@@ -658,9 +658,12 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             this.menuGamer.appendChild(divSelect3);
 
             placeButton.onclick = () => {
+                let position = consts.DOC.getElementById('selectPosition'),
+                    message = 'Place your ship before.';
                 if (_canPlaceShip) {
-                    let position = consts.DOC.getElementById('selectPosition');
                     _placeShip(_shipSelected, position.value);
+                } else {
+                    utils.message('red', message);
                 }
             };
         }
