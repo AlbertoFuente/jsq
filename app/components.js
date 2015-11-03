@@ -453,6 +453,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 result = {},
                 selectBox = new _MenuGamer(),
                 defaultPosition = (position !== null) ? position : 'horizontal',
+                noShips = '- NO SHIPS -',
                 defaultShip = () => {
                     let select = consts.DOC.getElementById('gamerSelect');
                     Object.keys(select.childNodes).forEach((x) => {
@@ -468,7 +469,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 },
                 shipSelected = (typeof ship === 'object' && Object.keys(ship).length !== 0) ? ship : defaultShip();
 
-            if (shipSelected.value && shipSelected.value !== '- NO SHIPS -' && defaultPosition) {
+            if (shipSelected.value && shipSelected.value !== noShips && defaultPosition) {
                 switch (defaultPosition) {
                     case 'vertical':
                         _verticalShip(shipSelected.boxes, shipSelected.name);
@@ -482,8 +483,9 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 utils.message('red', message);
             } else if (!shipSelected.value && defaultPosition) {
                 let message = 'There are no more ships to select.';
-                selectBox.insertHtml('- NO SHIPS -');
+                selectBox.insertHtml(noShips);
                 utils.message('red', message);
+                selectBox.disabledPanel();
             }
             _shipSelected = {};
         };
@@ -576,6 +578,14 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             this.menuGamer = consts.DOC.createElement('div');
             this.menuGamer.id = 'menuGamer';
             this.ships = new _Ships();
+            this.placeButton = consts.DOC.createElement('input');
+            this.placeButton.id = 'placeShipButton';
+            this.placeButton.type = 'button';
+            this.placeButton.value = 'PLACE';
+            this.selectMenuShips = consts.DOC.createElement('select');
+            this.selectMenuShips.id = 'gamerSelect';
+            this.selectShipPosition = consts.DOC.createElement('select');
+            this.selectShipPosition.id = 'selectPosition';
         }
         getMenuGamer() {
             return this.menuGamer;
@@ -591,6 +601,11 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 }
             });
         }
+        disabledPanel() {
+            consts.DOC.getElementById(this.selectMenuShips.id).setAttribute('disabled', 'disabled');
+            consts.DOC.getElementById(this.selectShipPosition.id).setAttribute('disabled', 'disabled');
+            consts.DOC.getElementById(this.placeButton.id).setAttribute('disabled', 'disabled');
+        }
         shipsMenu() {
             let ships = this.ships.ships,
                 selectTitle = consts.DOC.createElement('h3'),
@@ -598,12 +613,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 position = ['horizontal', 'vertical'],
                 divSelect1 = consts.DOC.createElement('div'),
                 divSelect2 = consts.DOC.createElement('div'),
-                divSelect3 = consts.DOC.createElement('div'),
-                placeButton = consts.DOC.createElement('input');
-
-            placeButton.id = 'placeShipButton';
-            placeButton.type = 'button';
-            placeButton.value = 'PLACE';
+                divSelect3 = consts.DOC.createElement('div');
 
             divSelect1.className = 'divSelect1';
             divSelect2.className = 'divSelect2';
@@ -611,9 +621,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
 
             selectTitle.className = 'selectShipsText';
             selectTitle.innerHTML = 'Place your ships:';
-
-            this.selectMenuShips = consts.DOC.createElement('select');
-            this.selectMenuShips.id = 'gamerSelect';
 
             Object.keys(ships).forEach((x) => {
                 let option = consts.DOC.createElement('option');
@@ -639,9 +646,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             selectPositionText.className = 'selectPositionText';
             selectPositionText.innerHTML = 'Ship Position:';
 
-            this.selectShipPosition = consts.DOC.createElement('select');
-            this.selectShipPosition.id = 'selectPosition';
-
             Array.from(position).forEach((x) => {
                 let option = consts.DOC.createElement('option');
                 option.value = x;
@@ -654,10 +658,10 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             divSelect2.appendChild(this.selectShipPosition);
             this.menuGamer.appendChild(divSelect2);
 
-            divSelect3.appendChild(placeButton);
+            divSelect3.appendChild(this.placeButton);
             this.menuGamer.appendChild(divSelect3);
 
-            placeButton.onclick = () => {
+            this.placeButton.onclick = () => {
                 let position = consts.DOC.getElementById('selectPosition'),
                     message = 'Place your ship before.';
                 if (_canPlaceShip) {
