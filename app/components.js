@@ -246,8 +246,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     elementName = e.currentTarget.getAttribute('data-name') || null,
                     printHorizontalSelected = _checkHorizontalSelecteds(table, elementNumber, elementParent, _hoverSelected.len),
                     printVerticalSelected = _checkVerticalSelected(elementParent, _hoverSelected.len, element),
-                    len = _hoverSelected.len ? _hoverSelected.len : 0,
-                    i = 0;
+                    len = _hoverSelected.len || 0;
 
                 if (elementName) {
                     utils.tooltip(element, elementName, true);
@@ -262,15 +261,16 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                 _removeSelected(element);
 
                                 if (printHorizontalSelected) {
-                                    for (i; i < len; i++) {
+                                    Array.from({
+                                        length: len
+                                    }, () => {
                                         let selected = $('.td' + elementNumber);
-
                                         if (selected.parent().hasClass(elementParent.className)) {
-                                            $('.' + elementParent.className).find(selected).addClass('selected hover');
-                                            $('.' + elementParent.className).find(selected).attr('data-name', _hoverSelected.name);
+                                            $(elementParent).find(selected).addClass('selected hover');
+                                            $(elementParent).find(selected).attr('data-name', _hoverSelected.name);
                                             elementNumber++;
                                         }
-                                    }
+                                    });
                                     _canPlaceShip = false;
                                 }
                             }
