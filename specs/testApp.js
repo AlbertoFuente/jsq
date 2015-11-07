@@ -61,20 +61,29 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
         });
 
         // test Class StartButtons
-        it('Test StartButtons Class [appendStartButton, appendLoadButton, appendOptionsButton, appendExitButton] methods', function() {
+        it('Test StartButtons Class [appendStartButton] method', function() {
             var gameContainer = consts.DOC.getElementById('gameMenu');
 
             this.startButtonsClass.appendStartButton(gameContainer);
             expect(gameContainer.childNodes.length).toBeGreaterThan(0);
             expect(gameContainer.childNodes[0].id).toBe('startButton');
+        });
+        it('Test StartButtons Class [appendLoadButton] method', function() {
+            var gameContainer = consts.DOC.getElementById('gameMenu');
 
             this.startButtonsClass.appendLoadButton(gameContainer);
             expect(gameContainer.childNodes.length).toBeGreaterThan(1);
             expect(gameContainer.childNodes[1].id).toBe('loadButton');
+        });
+        it('Test StartButtons Class [appendOptionsButton] method', function() {
+            var gameContainer = consts.DOC.getElementById('gameMenu');
 
             this.startButtonsClass.appendOptionsButton(gameContainer);
             expect(gameContainer.childNodes.length).toBeGreaterThan(2);
             expect(gameContainer.childNodes[2].id).toBe('optionsButton');
+        });
+        it('Test StartButtons Class [appendExitButton] method', function() {
+            var gameContainer = consts.DOC.getElementById('gameMenu');
 
             this.startButtonsClass.appendExitButton(gameContainer);
             expect(gameContainer.childNodes.length).toBeGreaterThan(3);
