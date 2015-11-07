@@ -1,7 +1,7 @@
 define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, buttons, utils) {
     'use strict';
 
-    let _createTable = () => {
+    let _createTable = (tableId) => {
             let table = consts.DOC.createElement('table'),
                 rows = 10,
                 columns = 10,
@@ -10,6 +10,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 lettersRange = utils.range('a', 'j', 0);
 
             table.className = 'panelGamerBoard';
+            table.id = tableId;
 
             Array.from(trRange).forEach((x) => {
                 let trElement = consts.DOC.createElement('tr');
@@ -694,7 +695,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             this._menuGamer = new _MenuGamer();
             this._menuGamer.appendMenuGamer(this.panelGamer);
 
-            this._table = _createTable();
+            this._table = _createTable('gamerBoard');
             this.panelGamer.appendChild(this._table);
         }
         getPanelGamer() {
@@ -705,13 +706,47 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         }
     }
 
+    class _MenuEnemy {
+        constructor() {
+            this.menuEnemy = consts.DOC.createElement('div');
+            this.menuEnemy.id = 'menuEnemy';
+        }
+        getMenuEnemy() {
+            return this.menuEnemy;
+        }
+        appendMenuEnemy(parent) {
+            parent.appendChild(this.menuEnemy);
+        }
+    }
+
+    class _PanelEnemy {
+        constructor() {
+            this.panelEnemy = consts.DOC.createElement('div');
+            this.panelEnemy.id = 'panelEnemy';
+
+            this._menuEnemy = new _MenuEnemy();
+            this._menuEnemy.appendMenuEnemy(this.panelEnemy);
+
+            this._table = _createTable('enemyBoard');
+            this.panelEnemy.appendChild(this._table);
+        }
+        getPanelEnemy() {
+            return this.panelEnemy;
+        }
+        appendPanelEnemy(parent) {
+            parent.appendChild(this.panelEnemy);
+        }
+    }
+
     return {
         GameMenu: _GameMenu,
         StartButtons: _StartButtons,
         GameContainer: _GameContainer,
         Ships: _Ships,
         MenuGamer: _MenuGamer,
+        MenuEnemy: _MenuEnemy,
         PanelGamer: _PanelGamer,
+        PanelEnemy: _PanelEnemy,
         createTable: _createTable
     };
 });
