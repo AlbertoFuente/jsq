@@ -5,11 +5,13 @@ define('events', ['components', 'consts', 'buttons', 'utils'], function(componen
         _start = () => {
             let gameContainerClass = new components.GameContainer(),
                 panelGamerClass = new components.PanelGamer(),
+                panelEnemyClass = new components.PanelEnemy(),
                 panelContainer = gameContainerClass.getGameContainer();
 
             utils.emptyContainer('parentContainer');
             gameContainerClass.appendGameContainer(consts.DOC.getElementById('parentContainer'));
             panelGamerClass.appendPanelGamer(panelContainer);
+            panelEnemyClass.appendPanelEnemy(panelContainer);
         },
         _save = () => {
             // TODO: pending...
