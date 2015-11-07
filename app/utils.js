@@ -127,6 +127,16 @@ define('utils', ['consts'], function(consts) {
             }
 
             parentContainer.appendChild(container);
+        },
+        _position = ['vertical', 'horizontal'],
+        _randomNumber = (min, max) => {
+            let numRange = _range(min, max, 0),
+                randomNum = Math.floor(Math.random() * numRange.length);
+            return numRange[randomNum];
+        },
+        _randomPosition = () => {
+            let _getPosition = Math.floor(Math.random() * _position.length);
+            return _position[_getPosition];
         };
 
     return {
@@ -134,6 +144,8 @@ define('utils', ['consts'], function(consts) {
         range: _range,
         message: _message,
         diff: _difference,
-        tooltip: _tooltip
+        tooltip: _tooltip,
+        randomNumber: _randomNumber,
+        randomPosition: _randomPosition
     };
 });
