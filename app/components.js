@@ -710,11 +710,47 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         constructor() {
             this.menuEnemy = consts.DOC.createElement('div');
             this.menuEnemy.id = 'menuEnemy';
+
+            this.panelShots = consts.DOC.createElement('div');
+            this.panelShots.className = 'panelShots';
+            this.shot = 0;
+            this.shots = consts.DOC.createElement('p');
+            this.shots.innerHTML = `${this.shot}`;
+
+            this.panelScore = consts.DOC.createElement('div');
+            this.panelScore.className = 'panelScore';
+            this.score = 0;
+            this.scores = consts.DOC.createElement('p');
+            this.scores.innerHTML = `${this.score}`;
+        }
+        appendPanelShots() {
+            let title = consts.DOC.createElement('h3');
+            title.innerHTML = 'Gamer Shots:';
+
+            this.panelShots.appendChild(title);
+            this.panelShots.appendChild(this.shots);
+            this.menuEnemy.appendChild(this.panelShots);
+        }
+        appendPanelScore() {
+            let title = consts.DOC.createElement('h3');
+            title.innerHTML = 'Gamer Score:';
+
+            this.panelScore.appendChild(title);
+            this.panelScore.appendChild(this.scores);
+            this.menuEnemy.appendChild(this.panelScore);
+        }
+        setShots() {
+            this.shot++;
+        }
+        setScore() {
+            this.score++;
         }
         getMenuEnemy() {
             return this.menuEnemy;
         }
         appendMenuEnemy(parent) {
+            this.appendPanelShots();
+            this.appendPanelScore();
             parent.appendChild(this.menuEnemy);
         }
     }
