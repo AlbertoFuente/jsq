@@ -184,6 +184,51 @@
                 }
             }
         }
+        #panelEnemy {
+            width: auto;
+            height: auto;
+            margin-left: auto;
+            margin-top: 20px;
+            margin-right: 20px;
+            padding: 10px;
+            right: 0;
+            position: absolute;
+            border: 1px solid white;
+            @include border-radius(4px);
+            #menuEnemy {
+                width: auto;
+                height: 60px;
+                margin-bottom: 10px;
+                background: #DCDCDC;
+                opacity: 0.8;
+                border: 1px solid white;
+                font-family:Arial;
+                @include border-radius(4px);
+            }
+            .panelGamerBoard {
+                td {
+                    width: 30px;
+                    height: 30px;
+                    display: table-cell;
+                    border: 1px solid white;
+                    cursor: pointer;
+                    background: #D46A6A;
+                    opacity: 0.6;
+                    p {
+                        font-family:Arial;
+                        width: auto;
+                        height: auto;
+                        margin-top: 0;
+                        margin-bottom: 0;
+                        text-align: center;
+                        color: white;
+                    }
+                }
+                .selected {
+                    background-color: black;
+                }
+            }
+        }
         #messageContainer {
             display: none;
             width: auto;
