@@ -567,12 +567,50 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     boxes: 2
                 }
             };
+            //this._enemyShips = {};
+            //this.enemyShips();
         }
         getShipName(ship) {
             return this.ships[ship].name;
         }
         getShipLength(ship) {
             return this.ships[ship].boxes;
+        }
+        enemyShips() {
+            let _ships = ['aircraftCarrier', 'battleship', 'submarine', 'destroyer', 'patrolBoat'],
+                _randomPosition = () => {
+                    return utils.randomPosition();
+                },
+                _randomNumber = () => {
+                    return utils.randomNumber(1, 10);
+                },
+                _controlPlaceShip = (shipLen, number) => {
+                    return ((shipLen + number) <= 10) ? true : false;
+                },
+                _setEnemyShips = () => {
+                    Array.from({
+                        length: _ships.length
+                    }, (x, i) => {
+                        let shipLen = (_ships[i]) ? this.ships[_ships[i]].boxes : null,
+                            position = _randomPosition(),
+                            number = _randomNumber(),
+                            canPlace = _controlPlaceShip(shipLen, number);
+
+                        if (canPlace) {
+                            switch (position) {
+                                case 'vertical':
+                                    // TODO: Pending...
+                                    break;
+                                case 'horizontal':
+                                    // TODO: Pending...
+                                    break;
+                            }
+                        } else {
+                            return _setEnemyShips();
+                        }
+                    });
+                };
+            _setEnemyShips();
         }
     }
 
