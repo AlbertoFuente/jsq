@@ -1,7 +1,7 @@
 define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app, buttons, consts, components, sinon) {
-    describe('Test app', function() {
-        'use strict';
+    'use strict';
 
+    describe('Test app', function() {
         beforeEach(function() {
             this.server = sinon.fakeServer.create();
             this.body = consts.DOC.body;
@@ -9,7 +9,9 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
             this.startButtonsClass = new components.StartButtons();
             this.gameContainerClass = new components.GameContainer();
             this.panelGamerClass = new components.PanelGamer();
+            this.panelEnemyClass = new components.PanelEnemy();
             this.menuGamer = new components.MenuGamer();
+            this.menuEnemy = new components.MenuEnemy();
             this.ships = new components.Ships();
 
             // create container
@@ -140,6 +142,23 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
             expect(container.childNodes[0].id).toBe('panelGamer');
         });
 
+        // test Class PanelEnemy
+        it('test PanelEnemy Class [getPanelEnemy] method', function() {
+            var panelEnemy = this.panelEnemyClass.getPanelEnemy(),
+                mockResponseId = 'panelEnemy';
+
+            expect(panelEnemy.tagName).toBe('DIV');
+            expect(panelEnemy.id).toBe(mockResponseId);
+        });
+        it('Test PanelEnemy Class [appendPanelEnemy] method', function() {
+            var container = consts.DOC.getElementById('gameContainer');
+
+            this.panelEnemyClass.appendPanelEnemy(container);
+
+            expect(container.childNodes.length).toBeGreaterThan(0);
+            expect(container.childNodes[1].id).toBe('panelEnemy');
+        });
+
         // test createTable method
         it('Test createTable method', function() {
             var panelGamer = this.panelGamerClass.getPanelGamer(),
@@ -158,16 +177,23 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
             expect(typeof getMenu).toBe('object');
         });
         it('Test MenuGamer Class [removeElement] method', function() {
-            var removeElem = this.menuGamer.removeElement('aircraftCarrier'),
-                gamerSlect = consts.DOC.getElementById('gamerSelect');
+            var gamerSlect = consts.DOC.getElementById('gamerSelect');
+            this.menuGamer.removeElement('aircraftCarrier');
 
             expect(gamerSlect.childNodes[0].value).toBe('Battleship');
         });
         it('Test MenuGamer Class [insertHtml] method', function() {
-            var insert = this.menuGamer.insertHtml('- NO SHIPS -'),
-                gamerSlect = consts.DOC.getElementById('gamerSelect');
+            var gamerSlect = consts.DOC.getElementById('gamerSelect');
+            this.menuGamer.insertHtml('- NO SHIPS -');
 
             expect(gamerSlect.childNodes[4].value).toBe('- NO SHIPS -');
+        });
+
+        // test MenuEnemy Class
+        it('Test MenuEnemy Class [getMenuEnemy] method', function() {
+            var getMenu = this.menuEnemy.getMenuEnemy();
+
+            expect(typeof getMenu).toBe('object');
         });
     });
 });
