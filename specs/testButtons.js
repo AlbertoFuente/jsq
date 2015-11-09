@@ -1,4 +1,5 @@
 define(['buttons'], function(buttons) {
+    'use strict';
     describe('Test Const Buttons', function() {
         // START
         it('Test START button', function() {

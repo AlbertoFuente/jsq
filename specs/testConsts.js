@@ -1,4 +1,5 @@
 define(['consts'], function(consts) {
+    'use strict';
     describe('Test Consts', function() {
         // DOC
         it('Test DOC const', function() {
