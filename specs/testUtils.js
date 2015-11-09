@@ -1,4 +1,5 @@
 define(['utils', 'consts'], function(utils, consts) {
+    'use strict';
     describe('Test Utils', function() {
 
         beforeEach(function() {
@@ -42,12 +43,12 @@ define(['utils', 'consts'], function(utils, consts) {
         // message
         it('Test message method', function() {
             // Green message
-            var messageGreen = utils.message('green', 'Green message'),
-                messageGreenContainer = consts.DOC.getElementById('messageContainer');
+            utils.message('green', 'Green message');
+            var messageGreenContainer = consts.DOC.getElementById('messageContainer');
             expect(messageGreenContainer.className).toBe('messageGreen showMessage');
             // Red message
-            var messageRed = utils.message('red', 'Red message'),
-                messageRedContainer = consts.DOC.getElementById('messageContainer');
+            utils.message('red', 'Red message');
+            var messageRedContainer = consts.DOC.getElementById('messageContainer');
             expect(messageRedContainer.className).toBe('messageRed showMessage');
             // remove messages
             messageGreenContainer.remove();
@@ -82,6 +83,20 @@ define(['utils', 'consts'], function(utils, consts) {
             consts.DOC.getElementById('shipTooltip').remove();
             // remove element
             element.remove();
+        });
+        // randomNumber
+        it('Test randomNumber method', function() {
+            let min = 1,
+                max = 5,
+                result = utils.randomNumber(min, max);
+            expect(result >= 1 && result <= 5).toBeTruthy();
+        });
+        // randomPosition
+        it('Test randomPosition method', function() {
+            let v = 'vertical',
+                h = 'horizontal',
+                result = utils.randomPosition();
+            expect(result === v || result === h).toBeTruthy();
         });
     });
 });
