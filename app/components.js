@@ -615,7 +615,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                         let shipLen = this.ships[_ships[i]].boxes,
                             position = _randomPosition(),
                             number = _randomNumber(),
-                            canPlace = _controlPlaceShip(shipLen, number),
                             placeControl = [],
                             setVertical = (number) => {
                                 let td = 'td' + _randomNumber(),
@@ -677,16 +676,21 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                     }
                                 });
                             };
-                        if (canPlace) {
-                            switch (position) {
-                                case 'vertical':
-                                    setVertical(number);
-                                    break;
-                                case 'horizontal':
-                                    setHorizontal(number);
-                                    break;
+                        (function canPlace(cP) {
+                            if (!cP) {
+                                number = _randomNumber();
+                                canPlace(_controlPlaceShip(shipLen, number));
+                            } else {
+                                switch (position) {
+                                    case 'vertical':
+                                        setVertical(number);
+                                        break;
+                                    case 'horizontal':
+                                        setHorizontal(number);
+                                        break;
+                                }
                             }
-                        }
+                        }(_controlPlaceShip(shipLen, number)));
                     });
                 };
             _setEnemyShips();
