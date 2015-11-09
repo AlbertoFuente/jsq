@@ -686,8 +686,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                     setHorizontal(number);
                                     break;
                             }
-                        } else {
-                            return _setEnemyShips();
                         }
                     });
                 };
