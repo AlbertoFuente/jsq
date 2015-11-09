@@ -567,8 +567,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     boxes: 2
                 }
             };
-            //this._enemyShips = {};
-            //this.enemyShips();
+            this._enemyShips = {};
+            this.enemyShips();
         }
         getShipName(ship) {
             return this.ships[ship].name;
@@ -587,19 +587,69 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 _controlPlaceShip = (shipLen, number) => {
                     return ((shipLen + number) <= 10) ? true : false;
                 },
+                _controlBoxes = (parent, child) => {
+                    if (this._enemyShips.length > 0) {
+                        Array.from(_ships).forEach((x) => {
+                            if (this._enemyShips[x]) {
+                                let trControl = this._emptyShips[x]['trParent'].findIndex(d => d === parent);
+                                if (trControl > -1) {
+                                    let tdControl = this._emptyShips[x]['tdChild'].findIndex(d => d === child);
+                                    if (tdControl > -1) {
+                                        return false;
+                                    } else {
+                                        return true;
+                                    }
+                                } else {
+                                    return true;
+                                }
+                            }
+                        });
+                    } else {
+                        return false;
+                    }
+                },
                 _setEnemyShips = () => {
                     Array.from({
                         length: _ships.length
                     }, (x, i) => {
-                        let shipLen = (_ships[i]) ? this.ships[_ships[i]].boxes : null,
+                        let shipLen = this.ships[_ships[i]].boxes,
                             position = _randomPosition(),
                             number = _randomNumber(),
-                            canPlace = _controlPlaceShip(shipLen, number);
-
+                            canPlace = _controlPlaceShip(shipLen, number),
+                            placeControl = [],
+                            trParent = 'tr' + number,
+                            setVertical = (number) => {
+                                let td = 'td' + _randomNumber(),
+                                    num = number,
+                                    j = 0,
+                                    control = () => {
+                                        let numRange = utils.range(number, number + shipLen, 0);
+                                        Array.from(numRange).forEach((x) => {
+                                            let result = _controlBoxes('tr' + x, td);
+                                            placeControl.push(result);
+                                        });
+                                    };
+                                this._enemyShips[_ships[i]] = {
+                                    'trParent': [],
+                                    'tdChild': td
+                                };
+                                $.when(control()).then(() => {
+                                    let control = placeControl.findIndex((x) => x === true);
+                                    if (control < 0) {
+                                        while (j < shipLen) {
+                                            this._enemyShips[_ships[i]]['trParent'].push('tr' + num);
+                                            j++;
+                                            num++;
+                                        }
+                                    } else {
+                                        setVertical(number + 1);
+                                    }
+                                });
+                            };
                         if (canPlace) {
                             switch (position) {
                                 case 'vertical':
-                                    // TODO: Pending...
+                                    setVertical(number);
                                     break;
                                 case 'horizontal':
                                     // TODO: Pending...
