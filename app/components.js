@@ -617,13 +617,13 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             number = _randomNumber(),
                             canPlace = _controlPlaceShip(shipLen, number),
                             placeControl = [],
-                            trParent = 'tr' + number,
                             setVertical = (number) => {
                                 let td = 'td' + _randomNumber(),
                                     num = number,
                                     j = 0,
                                     control = () => {
                                         let numRange = utils.range(number, number + shipLen, 0);
+                                        placeControl = [];
                                         Array.from(numRange).forEach((x) => {
                                             let result = _controlBoxes('tr' + x, td);
                                             placeControl.push(result);
@@ -631,7 +631,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                     };
                                 this._enemyShips[_ships[i]] = {
                                     'trParent': [],
-                                    'tdChild': td
+                                    'tdChild': td,
+                                    'position': 'vertical'
                                 };
                                 $.when(control()).then(() => {
                                     let control = placeControl.findIndex((x) => x === true);
@@ -645,6 +646,36 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                         setVertical(number + 1);
                                     }
                                 });
+                            },
+                            setHorizontal = (number) => {
+                                let trParent = 'tr' + _randomNumber(),
+                                    j = 0,
+                                    num = number,
+                                    control = () => {
+                                        let numRange = utils.range(number, number + shipLen, 0);
+                                        placeControl = [];
+                                        Array.from(numRange).forEach((x) => {
+                                            let result = _controlBoxes(trParent, 'td' + x);
+                                            placeControl.push(result);
+                                        });
+                                    };
+                                this._enemyShips[_ships[i]] = {
+                                    'trParent': trParent,
+                                    'tdChild': [],
+                                    'position': 'horizontal'
+                                };
+                                $.when(control()).then(() => {
+                                    let control = placeControl.findIndex((x) => x === true);
+                                    if (control < 0) {
+                                        while (j < shipLen) {
+                                            this._enemyShips[_ships[i]]['tdChild'].push('td' + num);
+                                            j++;
+                                            num++;
+                                        }
+                                    } else {
+                                        setHorizontal(number + 1);
+                                    }
+                                });
                             };
                         if (canPlace) {
                             switch (position) {
@@ -652,7 +683,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                     setVertical(number);
                                     break;
                                 case 'horizontal':
-                                    // TODO: Pending...
+                                    setHorizontal(number);
                                     break;
                             }
                         } else {
