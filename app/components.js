@@ -567,8 +567,9 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     boxes: 2
                 }
             };
-            this._enemyShips = {};
-            this.enemyShips();
+            if (!this._enemyShips) {
+                this._enemyShips = {};
+            }
         }
         getShipName(ship) {
             return this.ships[ship].name;
@@ -587,21 +588,40 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 _controlPlaceShip = (shipLen, number) => {
                     return ((shipLen + number) <= 10) ? true : false;
                 },
-                _controlBoxes = (parent, child) => {
-                    if (this._enemyShips.length > 0) {
+                _controlBoxes = (parent, child, position) => {
+                    if (Object.keys(this._enemyShips).length > 0) {
                         Array.from(_ships).forEach((x) => {
-                            if (this._enemyShips[x]) {
-                                let trControl = this._emptyShips[x]['trParent'].findIndex(d => d === parent);
-                                if (trControl > -1) {
-                                    let tdControl = this._emptyShips[x]['tdChild'].findIndex(d => d === child);
-                                    if (tdControl > -1) {
-                                        return false;
-                                    } else {
-                                        return true;
-                                    }
-                                } else {
-                                    return true;
+                            if (position) {
+                                switch (position) {
+                                    case 'horizontal':
+                                        let trControl = (this._enemyShips[x]) ? this._enemyShips[x]['trParent'].findIndex(d => d === parent) : null;
+                                        if (trControl && trControl > -1) {
+                                            let tdControl = this._enemyShips[x]['tdChild'].findIndex(d => d === child);
+                                            if (tdControl > -1) {
+                                                return false;
+                                            } else {
+                                                return true;
+                                            }
+                                        } else {
+                                            return false;
+                                        }
+                                        break;
+                                    case 'vertical':
+                                        let tdControl = (this._enemyShips[x]) ? this._enemyShips[x]['tdChild'].findIndex(d => d === child) : null;
+                                        if (tdControl && tdControl > -1) {
+                                            let trControl = this._enemyShips[x]['trParent'].findIndex(d => d === parent);
+                                            if (trControl > -1) {
+                                                return false;
+                                            } else {
+                                                return true;
+                                            }
+                                        } else {
+                                            return false;
+                                        }
+                                        break;
                                 }
+                            } else {
+                                return false;
                             }
                         });
                     } else {
@@ -616,6 +636,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             position = _randomPosition(),
                             number = _randomNumber(),
                             placeControl = [],
+                            self = this,
                             setVertical = (number) => {
                                 let td = 'td' + _randomNumber(),
                                     num = number,
@@ -624,26 +645,30 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                         let numRange = utils.range(number, number + shipLen, 0);
                                         placeControl = [];
                                         Array.from(numRange).forEach((x) => {
-                                            let result = _controlBoxes('tr' + x, td);
+                                            let result = _controlBoxes('tr' + x, td, position);
                                             placeControl.push(result);
                                         });
                                     };
                                 this._enemyShips[_ships[i]] = {
                                     'trParent': [],
-                                    'tdChild': td,
+                                    'tdChild': [td],
                                     'position': 'vertical'
                                 };
                                 $.when(control()).then(() => {
-                                    let control = placeControl.findIndex((x) => x === true);
-                                    if (control < 0) {
-                                        while (j < shipLen) {
-                                            this._enemyShips[_ships[i]]['trParent'].push('tr' + num);
-                                            j++;
-                                            num++;
+                                    (function vertical(placeControl) {
+                                        let control = placeControl.findIndex((x) => x === true);
+                                        if (control < 0) {
+                                            while (j < shipLen) {
+                                                self._enemyShips[_ships[i]]['trParent'].push('tr' + num);
+                                                j++;
+                                                num++;
+                                            }
+                                        } else {
+                                            td = 'td' + _randomNumber();
+                                            self._enemyShips[_ships[i]]['tdChilds'] = td;
+                                            $.when(control()).then(vertical(placeControl));
                                         }
-                                    } else {
-                                        setVertical(number + 1);
-                                    }
+                                    }(placeControl));
                                 });
                             },
                             setHorizontal = (number) => {
@@ -654,26 +679,30 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                         let numRange = utils.range(number, number + shipLen, 0);
                                         placeControl = [];
                                         Array.from(numRange).forEach((x) => {
-                                            let result = _controlBoxes(trParent, 'td' + x);
+                                            let result = _controlBoxes(trParent, 'td' + x, position);
                                             placeControl.push(result);
                                         });
                                     };
                                 this._enemyShips[_ships[i]] = {
-                                    'trParent': trParent,
+                                    'trParent': [trParent],
                                     'tdChild': [],
                                     'position': 'horizontal'
                                 };
                                 $.when(control()).then(() => {
-                                    let control = placeControl.findIndex((x) => x === true);
-                                    if (control < 0) {
-                                        while (j < shipLen) {
-                                            this._enemyShips[_ships[i]]['tdChild'].push('td' + num);
-                                            j++;
-                                            num++;
+                                    (function horizontal(placeControl) {
+                                        let control = placeControl.findIndex((x) => x === true);
+                                        if (control < 0) {
+                                            while (j < shipLen) {
+                                                self._enemyShips[_ships[i]]['tdChild'].push('td' + num);
+                                                j++;
+                                                num++;
+                                            }
+                                        } else {
+                                            trParent = 'tr' + _randomNumber();
+                                            self._enemyShips[_ships[i]]['trParent'] = trParent;
+                                            $.when(control()).then(horizontal(placeControl));
                                         }
-                                    } else {
-                                        setHorizontal(number + 1);
-                                    }
+                                    }(placeControl));
                                 });
                             };
                         (function canPlace(cP) {
@@ -886,6 +915,9 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
 
             this._table = _createTable('enemyBoard');
             this.panelEnemy.appendChild(this._table);
+
+            let ships = new _Ships();
+            ships.enemyShips();
         }
         getPanelEnemy() {
             return this.panelEnemy;
