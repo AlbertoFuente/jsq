@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "jasmine-node test-main.js"
+        "test": "jasmine-node --requireJsSetup test-main.js --runWithRequireJs specs/"
     },
     "repository": {
         "type": "git",
