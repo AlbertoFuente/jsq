@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "jasmine-node specs/*.js"
+        "test": "./node_modules/.bin/jasmine-node specs/"
     },
     "repository": {
         "type": "git",

@@ -4,6 +4,5 @@ node_js:
   - "4.0"
   - "0.12"
   - "0.11"
-before_script:
-  - npm install -g gulp
-script: gulp
+script:
+  npm test
