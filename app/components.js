@@ -589,6 +589,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     return ((shipLen + number) <= 10) ? true : false;
                 },
                 _controlBoxes = (parent, child, position) => {
+                    let result = false;
                     if (Object.keys(this._enemyShips).length > 0) {
                         Array.from(_ships).forEach((x) => {
                             if (position) {
@@ -598,12 +599,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                         if (trControl && trControl > -1) {
                                             let tdControl = this._enemyShips[x]['tdChild'].findIndex(d => d === child);
                                             if (tdControl > -1) {
-                                                return false;
-                                            } else {
-                                                return true;
+                                                result = true;
                                             }
-                                        } else {
-                                            return false;
                                         }
                                         break;
                                     case 'vertical':
@@ -611,22 +608,15 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                         if (tdControl && tdControl > -1) {
                                             let trControl = this._enemyShips[x]['trParent'].findIndex(d => d === parent);
                                             if (trControl > -1) {
-                                                return false;
-                                            } else {
-                                                return true;
+                                                result = true;
                                             }
-                                        } else {
-                                            return false;
                                         }
                                         break;
                                 }
-                            } else {
-                                return false;
                             }
                         });
-                    } else {
-                        return false;
                     }
+                    return result;
                 },
                 _setEnemyShips = () => {
                     Array.from({
