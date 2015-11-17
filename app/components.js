@@ -595,7 +595,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             if (position) {
                                 switch (position) {
                                     case 'horizontal':
-                                        let trControl = (this._enemyShips[x]) ? this._enemyShips[x]['trParent'].findIndex(d => d === parent) : null;
+                                        let trControl = (this._enemyShips[x] && this._enemyShips[x]['trParent']) ? this._enemyShips[x]['trParent'].findIndex(d => d === parent) : null;
                                         if (trControl && trControl > -1) {
                                             let tdControl = this._enemyShips[x]['tdChild'].findIndex(d => d === child);
                                             if (tdControl > -1) {
@@ -604,7 +604,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                         }
                                         break;
                                     case 'vertical':
-                                        let tdControl = (this._enemyShips[x]) ? this._enemyShips[x]['tdChild'].findIndex(d => d === child) : null;
+                                        let tdControl = (this._enemyShips[x] && this._enemyShips[x]['tdChild']) ? this._enemyShips[x]['tdChild'].findIndex(d => d === child) : null;
                                         if (tdControl && tdControl > -1) {
                                             let trControl = this._enemyShips[x]['trParent'].findIndex(d => d === parent);
                                             if (trControl > -1) {
