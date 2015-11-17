@@ -646,8 +646,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                 };
                                 $.when(control()).then(() => {
                                     (function vertical(placeControl) {
-                                        let control = placeControl.findIndex((x) => x === true);
-                                        if (control < 0) {
+                                        let pControl = placeControl.findIndex((x) => x === true);
+                                        if (pControl < 0) {
                                             while (j < shipLen) {
                                                 self._enemyShips[_ships[i]]['trParent'].push('tr' + num);
                                                 j++;
@@ -680,8 +680,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                 };
                                 $.when(control()).then(() => {
                                     (function horizontal(placeControl) {
-                                        let control = placeControl.findIndex((x) => x === true);
-                                        if (control < 0) {
+                                        let pControl = placeControl.findIndex((x) => x === true);
+                                        if (pControl < 0) {
                                             while (j < shipLen) {
                                                 self._enemyShips[_ships[i]]['tdChild'].push('td' + num);
                                                 j++;
