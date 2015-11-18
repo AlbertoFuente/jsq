@@ -12,11 +12,16 @@
             'buttons': 'buttons',
             'components': 'components',
             'events': 'events',
-            'app': 'app'
+            'app': 'app',
+            // Worker
+            'enemyWorker': 'workers/enemyWorker'
         },
         shim: {
             '$': {
                 exports: '$'
+            },
+            'enemyWorker': {
+                deps: ['utils']
             }
         },
         callback: function() {
