@@ -595,20 +595,24 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             if (position) {
                                 switch (position) {
                                     case 'horizontal':
-                                        let trControl = (this._enemyShips[x] && this._enemyShips[x]['trParent']) ? this._enemyShips[x]['trParent'].findIndex(d => d === parent) : null;
-                                        if (trControl && trControl > -1) {
-                                            let tdControl = this._enemyShips[x]['tdChild'].findIndex(d => d === child);
-                                            if (tdControl > -1) {
-                                                result = true;
+                                        if (this._enemyShips[x] && this._enemyShips[x].hasOwnProperty('trParent')) {
+                                            let trControl = this._enemyShips[x]['trParent'].findIndex(d => d === parent);
+                                            if (trControl && trControl > -1) {
+                                                let tdControl = this._enemyShips[x]['tdChild'].findIndex(d => d === child);
+                                                if (tdControl > -1) {
+                                                    result = true;
+                                                }
                                             }
                                         }
                                         break;
                                     case 'vertical':
-                                        let tdControl = (this._enemyShips[x] && this._enemyShips[x]['tdChild']) ? this._enemyShips[x]['tdChild'].findIndex(d => d === child) : null;
-                                        if (tdControl && tdControl > -1) {
-                                            let trControl = this._enemyShips[x]['trParent'].findIndex(d => d === parent);
-                                            if (trControl > -1) {
-                                                result = true;
+                                        if (this._enemyShips[x] && this._enemyShips[x].hasOwnProperty('tdChild')) {
+                                            let tdControl = this._enemyShips[x]['tdChild'].findIndex(d => d === child);
+                                            if (tdControl && tdControl > -1) {
+                                                let trControl = this._enemyShips[x]['trParent'].findIndex(d => d === parent);
+                                                if (trControl > -1) {
+                                                    result = true;
+                                                }
                                             }
                                         }
                                         break;
@@ -654,7 +658,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                                 num++;
                                             }
                                         } else {
-                                            td = 'td' + _randomNumber();
+                                            td = ['td' + _randomNumber()];
                                             self._enemyShips[_ships[i]]['tdChilds'] = td;
                                             $.when(control()).then(vertical(placeControl));
                                         }
@@ -688,7 +692,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                                 num++;
                                             }
                                         } else {
-                                            trParent = 'tr' + _randomNumber();
+                                            trParent = ['tr' + _randomNumber()];
                                             self._enemyShips[_ships[i]]['trParent'] = trParent;
                                             $.when(control()).then(horizontal(placeControl));
                                         }
