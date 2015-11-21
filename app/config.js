@@ -19,9 +19,6 @@
         shim: {
             '$': {
                 exports: '$'
-            },
-            'enemyWorker': {
-                deps: ['utils']
             }
         },
         callback: function() {
