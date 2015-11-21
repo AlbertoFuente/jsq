@@ -580,6 +580,9 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         setEnemyShips(data) {
             this._enemyShips = data;
         }
+        getEnemyShips() {
+            return this._enemyShips;
+        }
         enemyShips() {
             let enemyWorker = new Worker('./app/workers/enemyWorker.js'),
                 self = this;
@@ -594,7 +597,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                         self.setEnemyShips(e.data);
                         break;
                 }
-            }
+            };
         }
     }
 
