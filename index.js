@@ -41,9 +41,11 @@
 
     function getPaths(url) {
         let paths = {
+            // index
             '/': './index.html',
+            // styles
             '/css/styles.min.css': './css/styles.min.css',
-            '/node_modules/requirejs/require.js': './node_modules/requirejs/require.js',
+            // app
             '/app/config.js': './app/config.js',
             '/app/app.js': './app/app.js',
             '/app/utils.js': './app/utils.js',
@@ -51,11 +53,17 @@
             '/app/buttons.js': './app/buttons.js',
             '/app/events.js': './app/events.js',
             '/app/components.js': './app/components.js',
+            // Workers
+            '/app/workers/enemyWorker.js': './app/workers/enemyWorker.js',
+            // node modules
+            '/node_modules/requirejs/require.js': './node_modules/requirejs/require.js',
             '/node_modules/jquery/dist/jquery.min.js': './node_modules/jquery/dist/jquery.min.js',
             '/node_modules/jquery/dist/jquery.min.map': './node_modules/jquery/dist/jquery.min.map'
         };
-        // Uncomment the following line if you are loading the server with 'node index.js'
-        // Show per console if dependencies loaded correctly, this method does not work with gulp
+        /**
+         * Uncomment the following line if you are loading the server with 'node index.js'
+         * Show per console if dependencies loaded correctly, this method does not work with gulp
+         */
         // getDate(paths[url]);
         return (paths[url]) ? paths[url] : '';
     }
