@@ -1,9 +1,40 @@
-importScripts('../../node_modules/requirejs/require.js');
-
-require(['../utils.js'], function(utils) {
+(function() {
     'use strict';
 
-    let _ships = ['aircraftCarrier', 'battleship', 'submarine', 'destroyer', 'patrolBoat'],
+    let utils = {
+            range: (start, end, step) => {
+                let range = [],
+                    alp = 'abcdefghijklmnopqrstuvwxyz';
+
+                if (typeof start === 'number' && typeof end === 'number') {
+                    range[0] = start;
+                    step = step || 1;
+
+                    while (start + step <= end) {
+                        range[range.length] = start += step;
+                    }
+                } else {
+                    if (start === start.toUpperCase()) {
+                        end = end.toUpperCase();
+                        alp = alp.toUpperCase();
+                    }
+                    alp = alp.substring(alp.indexOf(start), alp.indexOf(end) + 1);
+                    range = alp.toUpperCase().split('');
+                }
+                return range;
+            },
+            position: ['vertical', 'horizontal'],
+            randomNumber: (min, max) => {
+                let numRange = utils.range(min, max, 0),
+                    randomNum = Math.floor(Math.random() * numRange.length);
+                return numRange[randomNum];
+            },
+            randomPosition: () => {
+                let _getPosition = Math.floor(Math.random() * utils.position.length);
+                return utils.position[_getPosition];
+            }
+        },
+        _ships = ['aircraftCarrier', 'battleship', 'submarine', 'destroyer', 'patrolBoat'],
         _randomPosition = () => {
             return utils.randomPosition();
         },
@@ -49,7 +80,6 @@ require(['../utils.js'], function(utils) {
         },
         _enemyShips = {},
         _setEnemyShips = (ships) => {
-            console.log(ships);
             Array.from({
                 length: _ships.length
             }, (x, i) => {
@@ -62,32 +92,34 @@ require(['../utils.js'], function(utils) {
                         let td = 'td' + _randomNumber(),
                             num = number,
                             j = 0,
-                            control = () => {
-                                let numRange = utils.range(number, number + shipLen, 0);
-                                placeControl = [];
-                                Array.from(numRange).forEach((x) => {
-                                    let result = _controlBoxes('tr' + x, td, position);
-                                    placeControl.push(result);
+                            prom = new Promise((resolve) => {
+                                resolve(() => {
+                                    let numRange = utils.range(number, number + shipLen, 0);
+                                    placeControl = [];
+                                    Array.from(numRange).forEach((x) => {
+                                        let result = _controlBoxes('tr' + x, td, position);
+                                        placeControl.push(result);
+                                    });
                                 });
-                            };
+                            });
                         _enemyShips[_ships[i]] = {
                             'trParent': [],
                             'tdChild': [td],
                             'position': 'vertical'
                         };
-                        $.when(control()).then(() => {
+                        prom.then(() => {
                             (function vertical(placeControl) {
                                 let pControl = placeControl.findIndex((x) => x === true);
                                 if (pControl < 0) {
                                     while (j < shipLen) {
-                                        self._enemyShips[_ships[i]]['trParent'].push('tr' + num);
+                                        _enemyShips[_ships[i]]['trParent'].push('tr' + num);
                                         j++;
                                         num++;
                                     }
                                 } else {
                                     td = ['td' + _randomNumber()];
-                                    self._enemyShips[_ships[i]]['tdChilds'] = td;
-                                    $.when(control()).then(vertical(placeControl));
+                                    _enemyShips[_ships[i]]['tdChilds'] = td;
+                                    prom.then(vertical(placeControl));
                                 }
                             }(placeControl));
                         });
@@ -96,32 +128,34 @@ require(['../utils.js'], function(utils) {
                         let trParent = 'tr' + _randomNumber(),
                             j = 0,
                             num = number,
-                            control = () => {
-                                let numRange = utils.range(number, number + shipLen, 0);
-                                placeControl = [];
-                                Array.from(numRange).forEach((x) => {
-                                    let result = _controlBoxes(trParent, 'td' + x, position);
-                                    placeControl.push(result);
+                            prom = new Promise((resolve) => {
+                                resolve(() => {
+                                    let numRange = utils.range(number, number + shipLen, 0);
+                                    placeControl = [];
+                                    Array.from(numRange).forEach((x) => {
+                                        let result = _controlBoxes(trParent, 'td' + x, position);
+                                        placeControl.push(result);
+                                    });
                                 });
-                            };
+                            });
                         _enemyShips[_ships[i]] = {
                             'trParent': [trParent],
                             'tdChild': [],
                             'position': 'horizontal'
                         };
-                        $.when(control()).then(() => {
+                        prom.then(() => {
                             (function horizontal(placeControl) {
                                 let pControl = placeControl.findIndex((x) => x === true);
                                 if (pControl < 0) {
                                     while (j < shipLen) {
-                                        self._enemyShips[_ships[i]]['tdChild'].push('td' + num);
+                                        _enemyShips[_ships[i]]['tdChild'].push('td' + num);
                                         j++;
                                         num++;
                                     }
                                 } else {
                                     trParent = ['tr' + _randomNumber()];
-                                    self._enemyShips[_ships[i]]['trParent'] = trParent;
-                                    $.when(control()).then(horizontal(placeControl));
+                                    _enemyShips[_ships[i]]['trParent'] = trParent;
+                                    prom.then(horizontal(placeControl));
                                 }
                             }(placeControl));
                         });
@@ -145,8 +179,13 @@ require(['../utils.js'], function(utils) {
             return _enemyShips;
         };
 
-    self.addEventListener('message', function(e) {
-        _setEnemyShips(e.data.ships);
-    }, false);
-
-});
+    postMessage('module loaded');
+    onmessage = function(e) {
+        let prom = new Promise((resolve) => {
+                resolve(_setEnemyShips(e.data.ships));
+            });
+        prom.then((data) => {
+            postMessage(data)
+        });
+    };
+}());
