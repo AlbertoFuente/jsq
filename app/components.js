@@ -353,42 +353,44 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         _changeVerticalBox = (trs, range, name) => {
             let control = [],
                 menuGamer = new _MenuGamer(),
-                checkSpace = (num) => {
-                    let i = 0,
-                        setControl = () => {
-                            while (i < range.length) {
-                                if (trs['tr' + num].childsShips.length === 0) {
-                                    control.push(num);
-                                } else {
-                                    if (trs['tr' + num].childsShips[0].classList.contains('td1')) {
-                                        return checkSpace(num + 1);
-                                    } else {
+                prom = new Promise((resolve) => {
+                    resolve(function checkSpace(num) {
+                        let i = 0,
+                            setControl = () => {
+                                while (i < range.length) {
+                                    if (trs['tr' + num].childsShips.length === 0) {
                                         control.push(num);
+                                    } else {
+                                        if (trs['tr' + num].childsShips[0].classList.contains('td1')) {
+                                            return checkSpace(num + 1);
+                                        } else {
+                                            control.push(num);
+                                        }
                                     }
+                                    if (num < 10) {
+                                        num++;
+                                    } else {
+                                        let message = 'Move your ships for place more.';
+                                        utils.message('green', message);
+                                    }
+                                    i++;
                                 }
-                                if (num < 10) {
-                                    num++;
+                            };
+                        control = [];
+                        if (num < 11) {
+                            if (trs['tr' + num].childsShips.length > 0) {
+                                if (trs['tr' + num].childsShips[i].classList.contains('td1')) {
+                                    return checkSpace(num + 1);
                                 } else {
-                                    let message = 'Move your ships for place more.';
-                                    utils.message('green', message);
+                                    setControl();
                                 }
-                                i++;
-                            }
-                        };
-                    control = [];
-                    if (num < 11) {
-                        if (trs['tr' + num].childsShips.length > 0) {
-                            if (trs['tr' + num].childsShips[i].classList.contains('td1')) {
-                                return checkSpace(num + 1);
                             } else {
                                 setControl();
                             }
-                        } else {
-                            setControl();
                         }
-                    }
-                };
-            $.when(checkSpace(1)).then(() => {
+                    }(1));
+                });
+            prom.then(() => {
                 if (control.length === range.length) {
                     Array.from(control).forEach((d) => {
                         let trsChild = trs['tr' + d].childs[0];
@@ -408,24 +410,26 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 arr = {},
                 firstChild = null,
                 menuGamer = new _MenuGamer(),
-                checkSpace = (num) => {
-                    if (trs['tr' + num].childsShips.length > 0) {
-                        while (i < range.length) {
-                            if (trs['tr' + num].childsShips[i] && trs['tr' + num].childsShips[i].classList.contains('td' + (i + 1))) {
-                                return checkSpace(num + 1);
-                            } else {
-                                firstChild = 'tr' + num;
-                                arr['tr' + num] = trs['tr' + num];
+                prom = new Promise((resolve) => {
+                    resolve(function checkSpace(num) {
+                        if (trs['tr' + num].childsShips.length > 0) {
+                            while (i < range.length) {
+                                if (trs['tr' + num].childsShips[i] && trs['tr' + num].childsShips[i].classList.contains('td' + (i + 1))) {
+                                    return checkSpace(num + 1);
+                                } else {
+                                    firstChild = 'tr' + num;
+                                    arr['tr' + num] = trs['tr' + num];
+                                }
+                                i++;
                             }
-                            i++;
+                        } else {
+                            firstChild = 'tr' + num;
+                            arr['tr' + num] = trs['tr' + num];
                         }
-                    } else {
-                        firstChild = 'tr' + num;
-                        arr['tr' + num] = trs['tr' + num];
-                    }
-                };
+                    }(1));
+                });
 
-            $.when(checkSpace(1)).then(() => {
+            prom.then(() => {
                 Array.from(arr[firstChild].childs).forEach((j) => {
                     if (d < range.length) {
                         j.className += ' selected';
