@@ -577,14 +577,24 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         getShipLength(ship) {
             return this.ships[ship].boxes;
         }
+        setEnemyShips(data) {
+            this._enemyShips = data;
+        }
         enemyShips() {
-            let enemyWorker = new Worker('app/workers/enemyWorker.js');
-            enemyWorker.addEventListener('message', function(e) {
-                if (e.data === 0) {
-                    this._enemyShips = e.data;
+            let enemyWorker = new Worker('./app/workers/enemyWorker.js'),
+                self = this;
+            enemyWorker.onmessage = function(e) {
+                switch (e.data) {
+                    case 'module loaded':
+                        enemyWorker.postMessage({
+                            'ships': self.ships
+                        });
+                        break;
+                    default:
+                        self.setEnemyShips(e.data);
+                        break;
                 }
-            });
-            enemyWorker.postMessage({'ships': this.ships});
+            }
         }
     }
 
