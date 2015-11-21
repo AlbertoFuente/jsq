@@ -182,8 +182,8 @@
     postMessage('module loaded');
     onmessage = function(e) {
         let prom = new Promise((resolve) => {
-                resolve(_setEnemyShips(e.data.ships));
-            });
+            resolve(_setEnemyShips(e.data.ships));
+        });
         prom.then((data) => {
             postMessage(data)
         });
