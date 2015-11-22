@@ -180,7 +180,7 @@
         };
 
     postMessage('module loaded');
-    onmessage = function(e) {
+    onmessage = (e) => {
         let prom = new Promise((resolve) => {
             resolve(_setEnemyShips(e.data.ships));
         });
