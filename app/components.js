@@ -590,7 +590,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         enemyShips() {
             let enemyWorker = new Worker('./app/workers/enemyWorker.js'),
                 self = this;
-            enemyWorker.onmessage = function(e) {
+            enemyWorker.onmessage = (e) => {
                 switch (e.data) {
                     case 'module loaded':
                         enemyWorker.postMessage({
