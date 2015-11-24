@@ -118,7 +118,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                         len: ships.getShipLength(elementDataName),
                                         number: elementNumber,
                                         selected: e.target,
-                                        hover: true
+                                        hover: true,
+                                        board: table.id
                                     };
                                     f.classList.remove('selected');
                                     f.removeAttribute('data-name');
@@ -147,7 +148,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                 len: ships.getShipLength(elementDataName),
                                 number: elementNumber,
                                 selected: e.target,
-                                hover: true
+                                hover: true,
+                                board: table.id
                             };
 
                             Array.from(trClasses).forEach((x) => {
@@ -254,7 +256,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     utils.tooltip(element, null, false);
                 }
 
-                if (_hoverSelected.position) {
+                if (_hoverSelected.position && _hoverSelected.board === table.id) {
                     switch (_hoverSelected.position) {
                         case 'horizontal':
                             if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
