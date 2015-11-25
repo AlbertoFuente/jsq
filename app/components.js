@@ -495,6 +495,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             if (select.options.length === 1) {
                 selectBox.insertHtml(noShips);
                 selectBox.disabledPanel();
+                selectBox.showStartButton();
             }
 
             _shipSelected = {};
@@ -612,6 +613,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         constructor() {
             this.menuGamer = consts.DOC.createElement('div');
             this.menuGamer.id = 'menuGamer';
+            this.gameContainer = consts.DOC.getElementById('gameContainer');
             this.ships = new _Ships();
             this.placeButton = consts.DOC.createElement('input');
             this.placeButton.id = 'placeShipButton';
@@ -621,6 +623,10 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             this.selectMenuShips.id = 'gamerSelect';
             this.selectShipPosition = consts.DOC.createElement('select');
             this.selectShipPosition.id = 'selectPosition';
+            this.startButton = consts.DOC.createElement('input');
+            this.startButton.id = 'startGameButton';
+            this.startButton.value = 'START';
+            this.startButton.type = 'button';
         }
         getMenuGamer() {
             return this.menuGamer;
@@ -640,6 +646,12 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             consts.DOC.getElementById(this.selectMenuShips.id).setAttribute('disabled', 'disabled');
             consts.DOC.getElementById(this.selectShipPosition.id).setAttribute('disabled', 'disabled');
             consts.DOC.getElementById(this.placeButton.id).setAttribute('disabled', 'disabled');
+        }
+        showStartButton() {
+            this.gameContainer.appendChild(this.startButton);
+            this.startButton.onclick = () => {
+                this.startButton.setAttribute('disabled', 'disabled');
+            };
         }
         shipsMenu() {
             let ships = this.ships.ships,
