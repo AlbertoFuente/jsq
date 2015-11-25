@@ -22,7 +22,8 @@ require.config({
         'buttons': 'app/buttons',
         'components': 'app/components',
         'events': 'app/events',
-        'app': 'app/app'
+        'app': 'app/app',
+        'enemyWorker': 'workers/enemyWorker'
     },
     shim: {
         '$': {
