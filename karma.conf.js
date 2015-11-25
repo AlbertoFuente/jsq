@@ -22,6 +22,9 @@ module.exports = function(config) {
                 pattern: 'app/*.js',
                 included: false
             }, {
+                pattern: 'app/workers/*.js',
+                included: false
+            }, {
                 pattern: 'node_modules/jquery/dist/*.min.js',
                 included: false
             }
