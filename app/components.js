@@ -463,8 +463,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 selectBox = new _MenuGamer(),
                 defaultPosition = (position !== null) ? position : 'horizontal',
                 noShips = '- NO SHIPS -',
+                select = consts.DOC.getElementById('gamerSelect'),
                 defaultShip = () => {
-                    let select = consts.DOC.getElementById('gamerSelect');
                     Object.keys(select.childNodes).forEach((x) => {
                         if (select.hasOwnProperty(x) && num < 1) {
                             let selected = select.childNodes[x];
@@ -490,12 +490,13 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             } else if (shipSelected.value && !defaultPosition) {
                 let message = 'You must choose one ship and the position you want to place it.';
                 utils.message('red', message);
-            } else if (!shipSelected.value && defaultPosition) {
-                let message = 'There are no more ships to select.';
+            }
+
+            if (select.options.length === 1) {
                 selectBox.insertHtml(noShips);
-                utils.message('red', message);
                 selectBox.disabledPanel();
             }
+
             _shipSelected = {};
         };
 
