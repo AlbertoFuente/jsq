@@ -102,6 +102,16 @@
         margin: 20px 20px 20px 20px;
         border: 1px solid white;
         @include border-radius(6px);
+        #startGameButton {
+            position: absolute;
+            top: auto;
+            left: auto;
+            right: 20px;
+            bottom: 20px;
+            width: 200px;
+            height: 100px;
+            font-size: 20px;
+        }
         #panelGamer {
             width: auto;
             height: auto;
