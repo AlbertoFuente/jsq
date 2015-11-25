@@ -605,8 +605,10 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             return this._enemyShips;
         }
         enemyShips() {
-            let enemyWorker = new Worker('./app/workers/enemyWorker.js'),
+            let karmaControl = (window.__karma__) ? '/base/' : './',
+                enemyWorker = new Worker(karmaControl + 'app/workers/enemyWorker.js'),
                 self = this;
+
             enemyWorker.onmessage = (e) => {
                 switch (e.data) {
                     case 'module loaded':
