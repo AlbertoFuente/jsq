@@ -7,7 +7,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 columns = 10,
                 trRange = utils.range(0, rows, 0),
                 tdRange = utils.range(0, columns, 0),
-                lettersRange = utils.range('a', 'j', 0);
+                lettersRange = utils.range('a', 'j', 0),
+                control = true;
 
             table.className = 'panelGamerBoard';
             table.id = tableId;
@@ -52,8 +53,12 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
 
                 table.appendChild(trElement);
             });
-            _moveShips(table);
-            _hoverShips(table);
+
+            if (!_canPlaceShip) {
+                control = false;
+            }
+            _moveShips(table, control);
+            _hoverShips(table, control);
             return table;
         },
         _canPlaceShip = true,
@@ -84,94 +89,98 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             return tableObject;
         },
         _hoverSelected = {},
-        _moveShips = (table) => {
-            table.onclick = (e) => {
-                let tableObject = _tableObject(table),
-                    elementClass = e.target.classList,
-                    elementDataName = e.target.getAttribute('data-name') || null,
-                    elementParent = e.target.parentNode.className,
-                    elementParentNumber = e.target.parentNode.getAttribute('data-number'),
-                    elementNumber = e.target.getAttribute('data-number'),
-                    ships = new _Ships();
+        _moveShips = (table, control) => {
+            if (control) {
+                table.onclick = (e) => {
+                    let tableObject = _tableObject(table),
+                        elementClass = e.target.classList,
+                        elementDataName = e.target.getAttribute('data-name') || null,
+                        elementParent = e.target.parentNode.className,
+                        elementParentNumber = e.target.parentNode.getAttribute('data-number'),
+                        elementNumber = e.target.getAttribute('data-number'),
+                        ships = new _Ships();
 
-                Array.from(elementClass).forEach((x) => {
-                    if (x === 'selected') {
-                        let selectedLen = (function(eName) {
-                                let arr = [];
-                                Array.from(tableObject[elementParent].selected).forEach((x) => {
-                                    let name = x.getAttribute('data-name');
-                                    if (name === eName) {
-                                        arr.push(x);
-                                    }
-                                });
-                                return arr.length;
-                            }(elementDataName)),
-                            selecteds = tableObject[elementParent].selected;
+                    Array.from(elementClass).forEach((x) => {
+                        if (x === 'selected') {
+                            let selectedLen = (function(eName) {
+                                    let arr = [];
+                                    Array.from(tableObject[elementParent].selected).forEach((x) => {
+                                        let name = x.getAttribute('data-name');
+                                        if (name === eName) {
+                                            arr.push(x);
+                                        }
+                                    });
+                                    return arr.length;
+                                }(elementDataName)),
+                                selecteds = tableObject[elementParent].selected;
 
-                        if (elementDataName !== null && selectedLen > 1) {
-                            Array.from(selecteds).forEach((f, i) => {
-                                if (f.classList.contains('selected') && !f.classList.contains('hover') && f.hasAttribute('data-name') && f.attributes[3].value === elementDataName && _canPlaceShip) {
-                                    _hoverSelected = {
-                                        name: elementDataName,
-                                        position: 'horizontal',
-                                        parent: elementParent,
-                                        len: ships.getShipLength(elementDataName),
-                                        number: elementNumber,
-                                        selected: e.target,
-                                        hover: true,
-                                        board: table.id
-                                    };
-                                    f.classList.remove('selected');
-                                    f.removeAttribute('data-name');
-                                    if (i === selecteds.length) {
-                                        _canPlaceShip = false;
-                                    }
-                                } else if (f.classList.contains('selected') && f.classList.contains('hover')) {
-                                    _hoverSelected = {};
-                                    f.classList.remove('hover');
-                                    _canPlaceShip = true;
-                                } else {
-                                    return;
-                                }
-                            });
-                        } else if (elementDataName !== null && selectedLen === 1) {
-                            let shipLen = ships.getShipLength(elementDataName),
-                                trClasses = Array.from({
-                                    length: shipLen
-                                }, (x, i) => 'tr' + (parseInt(elementParentNumber) + i)),
-                                tdClass = e.target.classList[0];
-
-                            _hoverSelected = {
-                                name: elementDataName,
-                                position: 'vertical',
-                                parent: elementParent,
-                                len: ships.getShipLength(elementDataName),
-                                number: elementNumber,
-                                selected: e.target,
-                                hover: true,
-                                board: table.id
-                            };
-
-                            Array.from(trClasses).forEach((x) => {
-                                Array.from(tableObject[x].selected).forEach((d) => {
-                                    if (d.classList.contains(tdClass) && d.classList.contains('selected') && !d.classList.contains('hover') && _canPlaceShip) {
-                                        d.classList.remove('selected');
-                                        d.removeAttribute('data-name');
-                                    } else if (d.classList.contains(tdClass) && d.classList.contains('selected') && d.classList.contains('hover')) {
+                            if (elementDataName !== null && selectedLen > 1) {
+                                Array.from(selecteds).forEach((f, i) => {
+                                    if (f.classList.contains('selected') && !f.classList.contains('hover') && f.hasAttribute('data-name') && f.attributes[3].value === elementDataName && _canPlaceShip) {
+                                        _hoverSelected = {
+                                            name: elementDataName,
+                                            position: 'horizontal',
+                                            parent: elementParent,
+                                            len: ships.getShipLength(elementDataName),
+                                            number: elementNumber,
+                                            selected: e.target,
+                                            hover: true,
+                                            board: table.id
+                                        };
+                                        f.classList.remove('selected');
+                                        f.removeAttribute('data-name');
+                                        if (i === selecteds.length) {
+                                            _canPlaceShip = false;
+                                        }
+                                    } else if (f.classList.contains('selected') && f.classList.contains('hover')) {
                                         _hoverSelected = {};
-                                        d.classList.remove('hover');
+                                        f.classList.remove('hover');
                                         _canPlaceShip = true;
                                     } else {
                                         return;
                                     }
                                 });
-                            });
+                            } else if (elementDataName !== null && selectedLen === 1) {
+                                let shipLen = ships.getShipLength(elementDataName),
+                                    trClasses = Array.from({
+                                        length: shipLen
+                                    }, (x, i) => 'tr' + (parseInt(elementParentNumber) + i)),
+                                    tdClass = e.target.classList[0];
+
+                                _hoverSelected = {
+                                    name: elementDataName,
+                                    position: 'vertical',
+                                    parent: elementParent,
+                                    len: ships.getShipLength(elementDataName),
+                                    number: elementNumber,
+                                    selected: e.target,
+                                    hover: true,
+                                    board: table.id
+                                };
+
+                                Array.from(trClasses).forEach((x) => {
+                                    Array.from(tableObject[x].selected).forEach((d) => {
+                                        if (d.classList.contains(tdClass) && d.classList.contains('selected') && !d.classList.contains('hover') && _canPlaceShip) {
+                                            d.classList.remove('selected');
+                                            d.removeAttribute('data-name');
+                                        } else if (d.classList.contains(tdClass) && d.classList.contains('selected') && d.classList.contains('hover')) {
+                                            _hoverSelected = {};
+                                            d.classList.remove('hover');
+                                            _canPlaceShip = true;
+                                        } else {
+                                            return;
+                                        }
+                                    });
+                                });
+                            }
+                        } else {
+                            return;
                         }
-                    } else {
-                        return;
-                    }
-                });
-            };
+                    });
+                };
+            } else {
+                return false;
+            }
         },
         _removeSelected = (element) => {
             let table = consts.DOC.getElementsByClassName('panelGamerBoard');
@@ -239,81 +248,85 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 return false;
             }
         },
-        _hoverShips = (table) => {
-            $(table).find('td').hover((e) => {
-                let element = e.currentTarget,
-                    elementParent = e.currentTarget.parentNode,
-                    elementParentNumber = elementParent.getAttribute('data-number'),
-                    elementNumber = parseInt(e.currentTarget.getAttribute('data-number')),
-                    elementName = e.currentTarget.getAttribute('data-name') || null,
-                    printHorizontalSelected = _checkHorizontalSelecteds(table, elementNumber, elementParent, _hoverSelected.len),
-                    printVerticalSelected = _checkVerticalSelected(elementParent, _hoverSelected.len, element),
-                    len = _hoverSelected.len || 0;
+        _hoverShips = (table, control) => {
+            if (control) {
+                $(table).find('td').hover((e) => {
+                    let element = e.currentTarget,
+                        elementParent = e.currentTarget.parentNode,
+                        elementParentNumber = elementParent.getAttribute('data-number'),
+                        elementNumber = parseInt(e.currentTarget.getAttribute('data-number')),
+                        elementName = e.currentTarget.getAttribute('data-name') || null,
+                        printHorizontalSelected = _checkHorizontalSelecteds(table, elementNumber, elementParent, _hoverSelected.len),
+                        printVerticalSelected = _checkVerticalSelected(elementParent, _hoverSelected.len, element),
+                        len = _hoverSelected.len || 0;
 
-                if (elementName) {
-                    utils.tooltip(element, elementName, true);
-                } else {
-                    utils.tooltip(element, null, false);
-                }
+                    if (elementName) {
+                        utils.tooltip(element, elementName, true);
+                    } else {
+                        utils.tooltip(element, null, false);
+                    }
 
-                if (_hoverSelected.position && _hoverSelected.board === table.id) {
-                    switch (_hoverSelected.position) {
-                        case 'horizontal':
-                            if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
-                                _removeSelected(element);
+                    if (_hoverSelected.position && _hoverSelected.board === table.id) {
+                        switch (_hoverSelected.position) {
+                            case 'horizontal':
+                                if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
+                                    _removeSelected(element);
 
-                                if (printHorizontalSelected) {
-                                    Array.from({
-                                        length: len
-                                    }, () => {
-                                        let selected = $('.td' + elementNumber);
-                                        if (selected.parent().hasClass(elementParent.className)) {
-                                            $(elementParent).find(selected).addClass('selected hover');
-                                            $(elementParent).find(selected).attr('data-name', _hoverSelected.name);
-                                            elementNumber++;
-                                        }
-                                    });
-                                    _canPlaceShip = false;
-                                }
-                            }
-                            break;
-                        case 'vertical':
-                            if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
-                                _removeSelected(element);
-
-                                if (printVerticalSelected) {
-                                    let trRange = utils.range(parseInt(elementParentNumber), 10, 0),
-                                        trClasses = Array.from(trRange, (x) => 'tr' + x),
-                                        notSelecteds = [];
-
-                                    Array.from(trClasses).forEach((x) => {
-                                        Array.from(table.childNodes).forEach((d) => {
-                                            if (d.classList.contains(x) && !d.classList.contains('selected')) {
-                                                notSelecteds.push(x);
-                                            }
-                                        });
-                                    });
-                                    if (notSelecteds.length >= _hoverSelected.number) {
+                                    if (printHorizontalSelected) {
                                         Array.from({
-                                            length: _hoverSelected.len
-                                        }, (x, i) => {
-                                            Array.from(table.childNodes).forEach((d) => {
-                                                if (d.classList.contains(notSelecteds[i]) && !d.childNodes[elementNumber].classList.contains('selected')) {
-                                                    d.childNodes[elementNumber].className += ' selected hover';
-                                                    d.childNodes[elementNumber].setAttribute('data-name', _hoverSelected.name);
-                                                }
-                                            });
+                                            length: len
+                                        }, () => {
+                                            let selected = $('.td' + elementNumber);
+                                            if (selected.parent().hasClass(elementParent.className)) {
+                                                $(elementParent).find(selected).addClass('selected hover');
+                                                $(elementParent).find(selected).attr('data-name', _hoverSelected.name);
+                                                elementNumber++;
+                                            }
                                         });
                                         _canPlaceShip = false;
                                     }
                                 }
-                            }
-                            break;
+                                break;
+                            case 'vertical':
+                                if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
+                                    _removeSelected(element);
+
+                                    if (printVerticalSelected) {
+                                        let trRange = utils.range(parseInt(elementParentNumber), 10, 0),
+                                            trClasses = Array.from(trRange, (x) => 'tr' + x),
+                                            notSelecteds = [];
+
+                                        Array.from(trClasses).forEach((x) => {
+                                            Array.from(table.childNodes).forEach((d) => {
+                                                if (d.classList.contains(x) && !d.classList.contains('selected')) {
+                                                    notSelecteds.push(x);
+                                                }
+                                            });
+                                        });
+                                        if (notSelecteds.length >= _hoverSelected.number) {
+                                            Array.from({
+                                                length: _hoverSelected.len
+                                            }, (x, i) => {
+                                                Array.from(table.childNodes).forEach((d) => {
+                                                    if (d.classList.contains(notSelecteds[i]) && !d.childNodes[elementNumber].classList.contains('selected')) {
+                                                        d.childNodes[elementNumber].className += ' selected hover';
+                                                        d.childNodes[elementNumber].setAttribute('data-name', _hoverSelected.name);
+                                                    }
+                                                });
+                                            });
+                                            _canPlaceShip = false;
+                                        }
+                                    }
+                                }
+                                break;
+                        }
+                    } else {
+                        return;
                     }
-                } else {
-                    return;
-                }
-            });
+                });
+            } else {
+                return false;
+            }
         },
         _shipSelected = {},
         _checkTds = (trChilds) => {
@@ -647,10 +660,14 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             consts.DOC.getElementById(this.selectShipPosition.id).setAttribute('disabled', 'disabled');
             consts.DOC.getElementById(this.placeButton.id).setAttribute('disabled', 'disabled');
         }
+        disableHoverShips() {
+            _canPlaceShip = false;
+        }
         showStartButton() {
             this.gameContainer.appendChild(this.startButton);
             this.startButton.onclick = () => {
                 this.startButton.setAttribute('disabled', 'disabled');
+                this.disableHoverShips();
             };
         }
         shipsMenu() {
