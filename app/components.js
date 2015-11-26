@@ -59,6 +59,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         },
         _gameRunning = false,
         _canPlaceShip = true,
+        _enemyShips = {},
         _tableObject = (table) => {
             let tableObject = {};
 
@@ -174,6 +175,9 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     }
                 });
             };
+        },
+        _findEnemyShips = (e, enemyShips) => {
+            // TODO: pending...
         },
         _removeSelected = (element) => {
             let table = consts.DOC.getElementsByClassName('panelGamerBoard');
@@ -577,9 +581,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     boxes: 2
                 }
             };
-            if (!this._enemyShips) {
-                this._enemyShips = {};
-            }
         }
         getShipName(ship) {
             return this.ships[ship].name;
@@ -588,10 +589,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             return this.ships[ship].boxes;
         }
         setEnemyShips(data) {
-            this._enemyShips = data;
-        }
-        getEnemyShips() {
-            return this._enemyShips;
+            _enemyShips = data;
         }
         enemyShips() {
             let karmaControl = (window.__karma__) ? '/base/' : './',
@@ -651,6 +649,18 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             consts.DOC.getElementById(this.selectShipPosition.id).setAttribute('disabled', 'disabled');
             consts.DOC.getElementById(this.placeButton.id).setAttribute('disabled', 'disabled');
         }
+        activeEnemyBoard() {
+            let table = consts.DOC.getElementById('enemyBoard');
+
+            table.onclick = (e) => {
+                if (Object.keys(_enemyShips).length > 0) {
+                    _findEnemyShips(e, _enemyShips);
+                } else {
+                    let message = 'There have been some problems, please refresh the game.';
+                    utils.message('red', message);
+                }
+            };
+        }
         disableHoverShips() {
             _gameRunning = true;
         }
@@ -659,6 +669,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             this.startButton.onclick = () => {
                 this.startButton.setAttribute('disabled', 'disabled');
                 this.disableHoverShips();
+                this.activeEnemyBoard();
             };
         }
         shipsMenu() {
