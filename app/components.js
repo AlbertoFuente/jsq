@@ -177,7 +177,30 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             };
         },
         _findEnemyShips = (e, enemyShips) => {
-            // TODO: pending...
+            let elementClass = e.srcElement.className,
+                elementParentClass = e.srcElement.parentNode.className;
+
+            if (elementClass && elementParentClass) {
+                if (elementClass !== 'panelGamerBoard' && elementClass !== 'td0' && elementParentClass !== 'tr0') {
+                    let control = -1;
+                    Object.keys(enemyShips).forEach((x) => {
+                        let findParent = enemyShips[x].trParent.findIndex(d => d === elementParentClass),
+                            findChild = (findParent > -1) ? enemyShips[x].tdChild.findIndex(c => c === elementClass) : -1;
+
+                        if (findChild > -1) {
+                            control = 1;
+                        } else {
+                            return false;
+                        }
+                    });
+
+                    if (control > -1) {
+                        e.srcElement.className += ' touch';
+                    } else {
+                        e.srcElement.className += ' water';
+                    }
+                }
+            }
         },
         _removeSelected = (element) => {
             let table = consts.DOC.getElementsByClassName('panelGamerBoard');
