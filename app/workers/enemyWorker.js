@@ -89,27 +89,26 @@
                     placeControl = [],
                     self = this,
                     setVertical = (number) => {
-                        let td = 'td' + _randomNumber(),
+                        let td = ['td' + _randomNumber()],
                             num = number,
                             j = 0,
                             prom = new Promise((resolve) => {
-                                resolve(() => {
-                                    let numRange = utils.range(number, number + shipLen, 0);
-                                    placeControl = [];
-                                    Array.from(numRange).forEach((x) => {
-                                        let result = _controlBoxes('tr' + x, td, position);
-                                        placeControl.push(result);
-                                    });
+                                let numRange = utils.range(number, number + shipLen, 0);
+                                placeControl = [];
+                                Array.from(numRange).forEach((x) => {
+                                    let result = _controlBoxes('tr' + x, td, position);
+                                    placeControl.push(result);
                                 });
+                                resolve(placeControl);
                             });
                         _enemyShips[_ships[i]] = {
                             'trParent': [],
-                            'tdChild': [td],
+                            'tdChild': td,
                             'position': 'vertical'
                         };
-                        prom.then(() => {
-                            (function vertical(placeControl) {
-                                let pControl = placeControl.findIndex((x) => x === true);
+                        prom.then((result) => {
+                            (function vertical(result) {
+                                let pControl = result.findIndex((x) => x === true);
                                 if (pControl < 0) {
                                     while (j < shipLen) {
                                         _enemyShips[_ships[i]]['trParent'].push('tr' + num);
@@ -119,33 +118,31 @@
                                 } else {
                                     td = ['td' + _randomNumber()];
                                     _enemyShips[_ships[i]]['tdChilds'] = td;
-                                    prom.then(vertical(placeControl));
+                                    prom.then(vertical(result));
                                 }
-                            }(placeControl));
+                            }(result));
                         });
                     },
                     setHorizontal = (number) => {
-                        let trParent = 'tr' + _randomNumber(),
+                        let trParent = ['tr' + _randomNumber()],
                             j = 0,
                             num = number,
                             prom = new Promise((resolve) => {
-                                resolve(() => {
-                                    let numRange = utils.range(number, number + shipLen, 0);
-                                    placeControl = [];
-                                    Array.from(numRange).forEach((x) => {
-                                        let result = _controlBoxes(trParent, 'td' + x, position);
-                                        placeControl.push(result);
-                                    });
+                                let numRange = utils.range(number, number + shipLen, 0);
+                                Array.from(numRange).forEach((x) => {
+                                    let result = _controlBoxes(trParent, 'td' + x, position);
+                                    placeControl.push(result);
                                 });
+                                resolve(placeControl);
                             });
                         _enemyShips[_ships[i]] = {
-                            'trParent': [trParent],
+                            'trParent': trParent,
                             'tdChild': [],
                             'position': 'horizontal'
                         };
-                        prom.then(() => {
-                            (function horizontal(placeControl) {
-                                let pControl = placeControl.findIndex((x) => x === true);
+                        prom.then((result) => {
+                            (function horizontal(result) {
+                                let pControl = result.findIndex((x) => x === true);
                                 if (pControl < 0) {
                                     while (j < shipLen) {
                                         _enemyShips[_ships[i]]['tdChild'].push('td' + num);
@@ -155,9 +152,9 @@
                                 } else {
                                     trParent = ['tr' + _randomNumber()];
                                     _enemyShips[_ships[i]]['trParent'] = trParent;
-                                    prom.then(horizontal(placeControl));
+                                    prom.then(horizontal(result));
                                 }
-                            }(placeControl));
+                            }(result));
                         });
                     };
                 (function canPlace(cP) {
