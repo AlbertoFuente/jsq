@@ -182,12 +182,14 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
 
             if (elementClass && elementParentClass) {
                 if (elementClass !== 'panelGamerBoard' && elementClass !== 'td0' && elementParentClass !== 'tr0') {
-                    let control = -1;
+                    let control = -1,
+                        shipName = null;
                     Object.keys(enemyShips).forEach((x) => {
                         let findParent = enemyShips[x].trParent.findIndex(d => d === elementParentClass),
                             findChild = (findParent > -1) ? enemyShips[x].tdChild.findIndex(c => c === elementClass) : -1;
 
                         if (findChild > -1) {
+                            shipName = x;
                             control = 1;
                         } else {
                             return false;
@@ -196,6 +198,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
 
                     if (control > -1) {
                         e.srcElement.className += ' touch';
+                        e.srcElement.setAttribute('name', shipName);
                     } else {
                         e.srcElement.className += ' water';
                     }
