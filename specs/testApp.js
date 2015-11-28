@@ -5,14 +5,16 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
         beforeEach(function() {
             this.server = sinon.fakeServer.create();
             this.body = consts.DOC.body;
-            this.gameMenuClass = new components.GameMenu();
-            this.startButtonsClass = new components.StartButtons();
-            this.gameContainerClass = new components.GameContainer();
-            this.panelGamerClass = new components.PanelGamer();
-            this.panelEnemyClass = new components.PanelEnemy();
-            this.menuGamer = new components.MenuGamer();
-            this.menuEnemy = new components.MenuEnemy();
-            this.ships = new components.Ships();
+            this.app = Object.create({
+                gameMenuClass: new components.GameMenu(),
+                startButtonsClass: new components.StartButtons(),
+                gameContainerClass: new components.GameContainer(),
+                panelGamerClass: new components.PanelGamer(),
+                panelEnemyClass: new components.PanelEnemy(),
+                menuGamer: new components.MenuGamer(),
+                menuEnemy: new components.MenuEnemy(),
+                ships: new components.Ships(),
+            });
 
             // create container
             var container = consts.DOC.createElement('div');
@@ -24,6 +26,8 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
 
         afterEach(function() {
             this.server.restore();
+            this.app = null;
+            this.body = null;
         });
 
         // test init method
@@ -40,20 +44,20 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
         it('Test GameMenu Class [appendMenu] method', function() {
             var container = consts.DOC.getElementById('parentContainer');
 
-            this.gameMenuClass.appendMenu(container);
+            this.app.gameMenuClass.appendMenu(container);
 
             expect(container.childNodes.length).toBeGreaterThan(0);
             expect(container.childNodes[0].id).toBe('gameMenu');
         });
         it('Test Gamemenu Class [getGameMenu] method', function() {
-            var getGameMenu = this.gameMenuClass.getGameMenu(),
+            var getGameMenu = this.app.gameMenuClass.getGameMenu(),
                 mockResponse = '<div id="gameMenu"></div>';
 
             expect(getGameMenu.tagName).toBe('DIV');
             expect(getGameMenu.outerHTML).toBe(mockResponse);
         });
         it('Test GameMenu Class [getParent] method', function() {
-            var getParent = this.gameMenuClass.getParent(),
+            var getParent = this.app.gameMenuClass.getParent(),
                 mockResponse = '<div id="parentContainer"><div id="gameMenu"></div></div>';
 
             expect(getParent.tagName).toBe('DIV');
@@ -64,35 +68,35 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
         it('Test StartButtons Class [appendStartButton] method', function() {
             var gameContainer = consts.DOC.getElementById('gameMenu');
 
-            this.startButtonsClass.appendStartButton(gameContainer);
+            this.app.startButtonsClass.appendStartButton(gameContainer);
             expect(gameContainer.childNodes.length).toBeGreaterThan(0);
             expect(gameContainer.childNodes[0].id).toBe('startButton');
         });
         it('Test StartButtons Class [appendLoadButton] method', function() {
             var gameContainer = consts.DOC.getElementById('gameMenu');
 
-            this.startButtonsClass.appendLoadButton(gameContainer);
+            this.app.startButtonsClass.appendLoadButton(gameContainer);
             expect(gameContainer.childNodes.length).toBeGreaterThan(1);
             expect(gameContainer.childNodes[1].id).toBe('loadButton');
         });
         it('Test StartButtons Class [appendOptionsButton] method', function() {
             var gameContainer = consts.DOC.getElementById('gameMenu');
 
-            this.startButtonsClass.appendOptionsButton(gameContainer);
+            this.app.startButtonsClass.appendOptionsButton(gameContainer);
             expect(gameContainer.childNodes.length).toBeGreaterThan(2);
             expect(gameContainer.childNodes[2].id).toBe('optionsButton');
         });
         it('Test StartButtons Class [appendExitButton] method', function() {
             var gameContainer = consts.DOC.getElementById('gameMenu');
 
-            this.startButtonsClass.appendExitButton(gameContainer);
+            this.app.startButtonsClass.appendExitButton(gameContainer);
             expect(gameContainer.childNodes.length).toBeGreaterThan(3);
             expect(gameContainer.childNodes[3].id).toBe('exitButton');
         });
 
         // test Class GameContainer
         it('Test GameContainer Class [getGameContainer] method', function() {
-            var getGameContainer = this.gameContainerClass.getGameContainer(),
+            var getGameContainer = this.app.gameContainerClass.getGameContainer(),
                 mockResponse = '<div id="gameContainer"></div>';
 
             expect(getGameContainer.tagName).toBe('DIV');
@@ -101,7 +105,7 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
         it('Test GameContainer Class [appendGameContainer] method', function() {
             var container = consts.DOC.getElementById('parentContainer');
 
-            this.gameContainerClass.appendGameContainer(container);
+            this.app.gameContainerClass.appendGameContainer(container);
 
             expect(container.childNodes.length).toBeGreaterThan(0);
             expect(container.childNodes[0].id).toBe('gameMenu');
@@ -109,7 +113,7 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
 
         // test Class Ships
         it('Test Ships Class get ships object', function() {
-            var ships = this.ships.ships;
+            var ships = this.app.ships.ships;
 
             expect(typeof ships).toBe('object');
             expect(ships['aircraftCarrier'].name).toBe('Aircraft Carrier');
@@ -124,19 +128,19 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
             expect(ships['patrolBoat'].boxes).toBe(2);
         });
         it('Test Ships Class [getShipName] method', function() {
-            var getShip = this.ships.getShipName('battleship');
+            var getShip = this.app.ships.getShipName('battleship');
 
             expect(getShip).toBe('Battleship');
         });
         it('Test Ships Class [getShipLength] method', function() {
-            var getShipLen = this.ships.getShipLength('aircraftCarrier');
+            var getShipLen = this.app.ships.getShipLength('aircraftCarrier');
 
             expect(getShipLen).toBe(5);
         });
 
         // test Class PanelGamer
         it('Test PanelGamer Class [getPanelGamer] method', function() {
-            var panelGamer = this.panelGamerClass.getPanelGamer(),
+            var panelGamer = this.app.panelGamerClass.getPanelGamer(),
                 mockResponseId = 'panelGamer';
 
             expect(panelGamer.tagName).toBe('DIV');
@@ -145,7 +149,7 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
         it('Test panelGamer Class [appendPanelGamer] method', function() {
             var container = consts.DOC.getElementById('gameContainer');
 
-            this.panelGamerClass.appendPanelGamer(container);
+            this.app.panelGamerClass.appendPanelGamer(container);
 
             expect(container.childNodes.length).toBeGreaterThan(0);
             expect(container.childNodes[0].id).toBe('panelGamer');
@@ -153,7 +157,7 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
 
         // test Class PanelEnemy
         it('test PanelEnemy Class [getPanelEnemy] method', function() {
-            var panelEnemy = this.panelEnemyClass.getPanelEnemy(),
+            var panelEnemy = this.app.panelEnemyClass.getPanelEnemy(),
                 mockResponseId = 'panelEnemy';
 
             expect(panelEnemy.tagName).toBe('DIV');
@@ -162,7 +166,7 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
         it('Test PanelEnemy Class [appendPanelEnemy] method', function() {
             var container = consts.DOC.getElementById('gameContainer');
 
-            this.panelEnemyClass.appendPanelEnemy(container);
+            this.app.panelEnemyClass.appendPanelEnemy(container);
 
             expect(container.childNodes.length).toBeGreaterThan(0);
             expect(container.childNodes[1].id).toBe('panelEnemy');
@@ -170,7 +174,7 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
 
         // test createTable method
         it('Test createTable method', function() {
-            var panelGamer = this.panelGamerClass.getPanelGamer(),
+            var panelGamer = this.app.panelGamerClass.getPanelGamer(),
                 table = components.createTable(panelGamer);
 
             panelGamer.appendChild(table);
@@ -181,26 +185,26 @@ define(['$', 'app', 'buttons', 'consts', 'components', 'sinon'], function($, app
 
         // test MenuGamer Class
         it('Test MenuGamer Class [getMenuGamer] method', function() {
-            var getMenu = this.menuGamer.getMenuGamer();
+            var getMenu = this.app.menuGamer.getMenuGamer();
 
             expect(typeof getMenu).toBe('object');
         });
         it('Test MenuGamer Class [removeElement] method', function() {
             var gamerSlect = consts.DOC.getElementById('gamerSelect');
-            this.menuGamer.removeElement('aircraftCarrier');
+            this.app.menuGamer.removeElement('aircraftCarrier');
 
             expect(gamerSlect.childNodes[0].value).toBe('Battleship');
         });
         it('Test MenuGamer Class [insertHtml] method', function() {
             var gamerSlect = consts.DOC.getElementById('gamerSelect');
-            this.menuGamer.insertHtml('- NO SHIPS -');
+            this.app.menuGamer.insertHtml('- NO SHIPS -');
 
             expect(gamerSlect.childNodes[4].value).toBe('- NO SHIPS -');
         });
 
         // test MenuEnemy Class
         it('Test MenuEnemy Class [getMenuEnemy] method', function() {
-            var getMenu = this.menuEnemy.getMenuEnemy();
+            var getMenu = this.app.menuEnemy.getMenuEnemy();
 
             expect(typeof getMenu).toBe('object');
         });
