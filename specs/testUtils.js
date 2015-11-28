@@ -4,18 +4,20 @@ define(['utils', 'consts'], function(utils, consts) {
 
         beforeEach(function() {
             this.body = consts.DOC.body;
+            this.utils = Object.create({
+                container: consts.DOC.createElement('div'),
+                gameContainer: consts.DOC.createElement('div')
+            });
 
-            // create container
-            this.container = consts.DOC.createElement('div');
-            this.gameContainer = consts.DOC.createElement('div');
-            this.container.id = 'parentContainer';
-            this.gameContainer.id = 'gameContainer';
+            this.utils.container.id = 'parentContainer';
+            this.utils.gameContainer.id = 'gameContainer';
             // append to body
-            this.container.appendChild(this.gameContainer);
-            this.body.appendChild(this.container);
+            this.utils.container.appendChild(this.utils.gameContainer);
+            this.body.appendChild(this.utils.container);
         });
         afterEach(function() {
-            this.container.remove();
+            this.body = null;
+            this.utils = null;
         });
 
         // emptyContainer
@@ -23,13 +25,13 @@ define(['utils', 'consts'], function(utils, consts) {
             var subDiv = consts.DOC.createElement('div');
 
             subDiv.id = 'gameMenu';
-            this.container.appendChild(subDiv);
+            this.utils.container.appendChild(subDiv);
 
-            expect(this.container.childNodes.length).toBeGreaterThan(0);
-            expect(this.container.childNodes[1].id).toBe('gameMenu');
+            expect(this.utils.container.childNodes.length).toBeGreaterThan(0);
+            expect(this.utils.container.childNodes[1].id).toBe('gameMenu');
 
             utils.emptyContainer('parentContainer');
-            expect(this.container.childNodes.length).toBeLessThan(1);
+            expect(this.utils.container.childNodes.length).toBeLessThan(1);
             // remove subDiv
             subDiv.remove();
         });
@@ -71,7 +73,7 @@ define(['utils', 'consts'], function(utils, consts) {
             element.setAttribute('data-name', 'Battleship');
             elementName = element.getAttribute('data-name');
 
-            this.gameContainer.appendChild(element);
+            this.utils.gameContainer.appendChild(element);
             // show tooltip
             utils.tooltip(element, elementName, true);
             expect(consts.DOC.getElementById('shipTooltip')).toBeDefined();
