@@ -60,6 +60,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         _gameRunning = false,
         _canPlaceShip = true,
         _enemyShips = {},
+        _score = 0,
+        _shots = 0,
         _tableObject = (table) => {
             let tableObject = {};
 
@@ -178,7 +180,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         },
         _findEnemyShips = (e, enemyShips) => {
             let elementClass = e.srcElement.className,
-                elementParentClass = e.srcElement.parentNode.className;
+                elementParentClass = e.srcElement.parentNode.className,
+                menuEnemy = new _MenuEnemy();
 
             if (elementClass && elementParentClass) {
                 if (elementClass !== 'panelGamerBoard' && elementClass !== 'td0' && elementParentClass !== 'tr0') {
@@ -199,8 +202,10 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     if (control > -1) {
                         e.srcElement.className += ' touch';
                         e.srcElement.setAttribute('name', shipName);
+                        menuEnemy.setScore();
                     } else {
                         e.srcElement.className += ' water';
+                        menuEnemy.setShots();
                     }
                 }
             }
@@ -802,15 +807,15 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
 
             this.panelShots = consts.DOC.createElement('div');
             this.panelShots.className = 'panelShots';
-            this.shot = 0;
             this.shots = consts.DOC.createElement('p');
-            this.shots.innerHTML = `${this.shot}`;
+            this.shots.id = 'enemyShots';
+            this.shots.innerHTML = `${_shots}`;
 
             this.panelScore = consts.DOC.createElement('div');
             this.panelScore.className = 'panelScore';
-            this.score = 0;
             this.scores = consts.DOC.createElement('p');
-            this.scores.innerHTML = `${this.score}`;
+            this.scores.id = 'enemyScores';
+            this.scores.innerHTML = `${_score}`;
         }
         appendPanelShots() {
             let title = consts.DOC.createElement('h3');
@@ -828,11 +833,21 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             this.panelScore.appendChild(this.scores);
             this.menuEnemy.appendChild(this.panelScore);
         }
+        updateShots(shots) {
+            let _shots = consts.DOC.getElementById('enemyShots');
+            _shots.innerHTML = shots;
+        }
+        updateScore(score) {
+            let _score = consts.DOC.getElementById('enemyScores');
+            _score.innerHTML = score;
+        }
         setShots() {
-            this.shot++;
+            _shots = _shots + 10;
+            this.updateShots(_shots);
         }
         setScore() {
-            this.score++;
+            _score = _score + 10;
+            this.updateScore(_score);
         }
         getMenuEnemy() {
             return this.menuEnemy;
