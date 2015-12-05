@@ -4,18 +4,38 @@
     let _randomShot = () => {
             return Math.floor(Math.random() * (10 - 1) + 1);
         },
-        _setBoxParent = () => {
-            let num = _randomShot();
+        _setBoxParent = (parent) => {
+            if (!parent) {
+                let num = _randomShot(),
+                    prefix = 'tr';
+                return prefix + num;
+            } else {
+                // TODO: pending...
+            }
         },
-        _setBox = () => {
-            let num = _randomShot();
+        _setBox = (box) => {
+            if (!parent) {
+                let num = _randomShot(),
+                    prefix = 'td';
+                return prefix + num;
+            } else {
+                // TODO: pending...
+            }
         },
         _handleShots = (arg) => {
+            let parent = null,
+                box = null;
             if (arg === 'empty') {
-                _setBoxParent();
-                _setBox();
+                parent = _setBoxParent();
+                box = _setBox();
             } else {
-                console.log(arguments);
+                parent = _setBoxParent(arg.parent);
+                box = _setBox(arg.box);
+            }
+
+            return {
+                parent: parent,
+                box: box
             }
         };
 
@@ -26,7 +46,12 @@
                 _handleShots('empty');
                 break;
             default:
-                _handleShots(e.data);
+                let prom = new Promise((resolve) => {
+                    resolve(_handleShots(JSON.parse(e.data)));
+                });
+                prom.then((result) => {
+                    postMessage(JSON.stringify(result));
+                });
                 break;
         }
     };
