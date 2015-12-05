@@ -708,7 +708,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                         enemyShotsUserShipsWorker.onmessage = (e) => {
                             switch (e.data) {
                                 case 'module loaded':
-                                    // TODO: Pending...
                                     enemyShotsUserShipsWorker.postMessage('response');
                                     break;
                                 default:
