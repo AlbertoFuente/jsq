@@ -691,6 +691,24 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 gameShots = {
                     user: 0,
                     enemy: 0
+                },
+                findBox = (boxObj) => {
+                    let table = consts.DOC.getElementById('gamerBoard');
+                    Array.from(table.childNodes).forEach((x) => {
+                        if (x.classList.contains(boxObj.parent)) {
+                            Array.from(x.childNodes).forEach((d) => {
+                                if (d.classList.contains(boxObj.box) && d.classList.contains('selected')) {
+                                    d.className += ' water';
+                                    boxObj.shooted = false;
+                                } else {
+                                    d.className += ' shot';
+                                    gameShots.user = gameShots.user + 10;
+                                    boxObj.shooted = true;
+                                }
+                            });
+                        }
+                    });
+                    return boxObj;
                 };
 
             table.onclick = (e) => {
@@ -711,7 +729,12 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                     enemyShotsUserShipsWorker.postMessage('response');
                                     break;
                                 default:
-                                    // TODO: Pending...
+                                    let objProm = new Promise((resolve) => {
+                                        resolve(findBox(JSON.parse(e.data)));
+                                    });
+                                    objProm.then((res) => {
+                                        enemyShotsUserShipsWorker.postMessage(JSON.stringify(res));
+                                    });
                                     break;
                             }
                         };
