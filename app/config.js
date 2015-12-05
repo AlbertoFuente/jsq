@@ -14,7 +14,8 @@
             'events': 'events',
             'app': 'app',
             // Worker
-            'enemyWorker': 'workers/enemyWorker'
+            'enemyWorker': 'workers/enemyWorker',
+            'userEnemyShots': 'workers/userEnemyShots'
         },
         shim: {
             '$': {
