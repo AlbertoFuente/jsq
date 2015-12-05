@@ -41,7 +41,9 @@
 
             return {
                 parent: parent,
-                box: box
+                box: box,
+                tr: [],
+                td: []
             }
         };
 
@@ -50,7 +52,7 @@
         switch (e.data) {
             case 'response':
                 let emptyProm = new Promise((resolve) => {
-                    resolve(_handleShots('empty'));
+                    resolve(_handleShots('response'));
                 });
                 emptyProm.then((result) => {
                     postMessage(JSON.stringify(result));
