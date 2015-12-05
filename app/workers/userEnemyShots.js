@@ -5,22 +5,28 @@
             return Math.floor(Math.random() * (10 - 1) + 1);
         },
         _setBoxParent = (parent) => {
+            let num = null,
+                prefix = null;
             if (!parent) {
-                let num = _randomShot(),
-                    prefix = 'tr';
-                return prefix + num;
+                num = _randomShot();
+                prefix = 'tr';
             } else {
                 // TODO: pending...
             }
+
+            return prefix + num;
         },
         _setBox = (box) => {
-            if (!parent) {
-                let num = _randomShot(),
-                    prefix = 'td';
-                return prefix + num;
+            let num = null,
+                prefix = null;
+            if (!box) {
+                num = _randomShot();
+                prefix = 'td';
             } else {
                 // TODO: pending...
             }
+
+            return prefix + num;
         },
         _handleShots = (arg) => {
             let parent = null,
@@ -43,13 +49,18 @@
     onmessage = (e) => {
         switch (e.data) {
             case 'response':
-                _handleShots('empty');
+                let emptyProm = new Promise((resolve) => {
+                    resolve(_handleShots('empty'));
+                });
+                emptyProm.then((result) => {
+                    postMessage(JSON.stringify(result));
+                });
                 break;
             default:
-                let prom = new Promise((resolve) => {
+                let objProm = new Promise((resolve) => {
                     resolve(_handleShots(JSON.parse(e.data)));
                 });
-                prom.then((result) => {
+                objProm.then((result) => {
                     postMessage(JSON.stringify(result));
                 });
                 break;
