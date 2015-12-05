@@ -692,22 +692,29 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     user: 0,
                     enemy: 0
                 },
+                responseObj = {},
                 findBox = (boxObj) => {
                     let table = consts.DOC.getElementById('gamerBoard');
                     Array.from(table.childNodes).forEach((x) => {
                         if (x.classList.contains(boxObj.parent)) {
+                            boxObj['tr'].push(boxObj.parent);
                             Array.from(x.childNodes).forEach((d) => {
                                 if (d.classList.contains(boxObj.box) && d.classList.contains('selected')) {
-                                    d.className += ' water';
-                                    boxObj.shooted = false;
-                                } else {
                                     d.className += ' shot';
+                                    boxObj.shooted = false;
+                                    boxObj['td'].push(boxObj.box);
+                                } else if (d.classList.contains(boxObj.box)) {
+                                    d.className += ' water';
                                     gameShots.user = gameShots.user + 10;
                                     boxObj.shooted = true;
+                                    boxObj['td'].push(boxObj.box);
+                                } else {
+                                    return false;
                                 }
                             });
                         }
                     });
+                    responseObj = boxObj;
                     return boxObj;
                 };
 
@@ -719,6 +726,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     let prom = new Promise((resolve) => {
                         resolve(_findEnemyShips(e, _enemyShips));
                     });
+
                     prom.then((response) => {
                         if (response.control > 0) {
                             gameShots.enemy = gameShots.enemy + 10;
@@ -726,15 +734,14 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                         enemyShotsUserShipsWorker.onmessage = (e) => {
                             switch (e.data) {
                                 case 'module loaded':
-                                    enemyShotsUserShipsWorker.postMessage('response');
+                                    if (responseObj.hasOwnProperty('tr')) {
+                                        enemyShotsUserShipsWorker.postMessage(responseObj);
+                                    } else {
+                                        enemyShotsUserShipsWorker.postMessage('response');
+                                    }
                                     break;
                                 default:
-                                    let objProm = new Promise((resolve) => {
-                                        resolve(findBox(JSON.parse(e.data)));
-                                    });
-                                    objProm.then((res) => {
-                                        enemyShotsUserShipsWorker.postMessage(JSON.stringify(res));
-                                    });
+                                    findBox(JSON.parse(e.data));
                                     break;
                             }
                         };
