@@ -181,12 +181,12 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         _findEnemyShips = (e, enemyShips) => {
             let elementClass = e.srcElement.className,
                 elementParentClass = e.srcElement.parentNode.className,
-                menuEnemy = new _MenuEnemy();
+                menuEnemy = new _MenuEnemy(),
+                control = -1;
 
             if (elementClass && elementParentClass) {
                 if (elementClass !== 'panelGamerBoard' && elementClass !== 'td0' && elementParentClass !== 'tr0') {
-                    let control = -1,
-                        shipName = null;
+                    let shipName = null;
                     Object.keys(enemyShips).forEach((x) => {
                         let findParent = enemyShips[x].trParent.findIndex(d => d === elementParentClass),
                             findChild = (findParent > -1) ? enemyShips[x].tdChild.findIndex(c => c === elementClass) : -1;
@@ -209,6 +209,11 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     }
                 }
             }
+            return {
+                control: control,
+                element: elementClass,
+                parent: elementParentClass
+            };
         },
         _removeSelected = (element) => {
             let table = consts.DOC.getElementsByClassName('panelGamerBoard');
@@ -681,7 +686,12 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             consts.DOC.getElementById(this.placeButton.id).setAttribute('disabled', 'disabled');
         }
         activeEnemyBoard() {
-            let table = consts.DOC.getElementById('enemyBoard');
+            let table = consts.DOC.getElementById('enemyBoard'),
+                maxShots = 170,
+                gameShots = {
+                    user: 0,
+                    enemy: 0
+                };
 
             table.onclick = (e) => {
                 let karmaControl = (window.__karma__) ? '/base/' : './',
@@ -691,7 +701,10 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     let prom = new Promise((resolve) => {
                         resolve(_findEnemyShips(e, _enemyShips));
                     });
-                    prom.then(() => {
+                    prom.then((response) => {
+                        if (response.control > 0) {
+                            gameShots.enemy = gameShots.enemy + 10;
+                        }
                         enemyShotsUserShipsWorker.onmessage = (e) => {
                             switch (e.data) {
                                 case 'module loaded':
