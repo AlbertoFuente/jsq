@@ -684,8 +684,30 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
             let table = consts.DOC.getElementById('enemyBoard');
 
             table.onclick = (e) => {
+                let karmaControl = (window.__karma__) ? '/base/' : './',
+                    enemyShotsUserShipsWorker = new Worker(karmaControl + 'app/workers/userEnemyShots.js');
+
                 if (Object.keys(_enemyShips).length > 0) {
-                    _findEnemyShips(e, _enemyShips);
+                    let prom = new Promise((resolve) => {
+                        resolve(_findEnemyShips(e, _enemyShips));
+                    });
+                    prom.then(() => {
+                        enemyShotsUserShipsWorker.onmessage = (e) => {
+                            switch (e.data) {
+                                case 'module loaded':
+                                    // TODO: Pending...
+                                    enemyShotsUserShipsWorker.postMessage('response');
+                                    break;
+                                default:
+                                    // TODO: Pending...
+                                    break;
+                            }
+                        };
+                        enemyShotsUserShipsWorker.onerror = () => {
+                            let message = 'There have been some problems, please refresh the game.';
+                            utils.message('red', message);
+                        };
+                    });
                 } else {
                     let message = 'There have been some problems, please refresh the game.';
                     utils.message('red', message);
