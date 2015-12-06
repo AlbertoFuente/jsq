@@ -4,53 +4,87 @@
     let _randomShot = () => {
             return Math.floor(Math.random() * (10 - 1) + 1);
         },
-        _setBoxParent = (parent) => {
-            let num = null,
-                prefix = null;
-            if (!parent) {
-                num = _randomShot();
-                prefix = 'tr';
-            } else {
-                // TODO: pending...
-            }
-
-            return prefix + num;
+        _responseObj = {
+            parent: null,
+            box: null,
+            tr: [],
+            td: [],
+            shooted: false
         },
-        _setBox = (box) => {
-            let num = null,
-                prefix = null;
-            if (!box) {
-                num = _randomShot();
-                prefix = 'td';
-            } else {
-                // TODO: pending...
-            }
+        _prefixes = ['tr', 'td'],
+        _setResponseObj = (obj) => {
+            let trPrefix = _prefixes[0],
+                tdPrefix = _prefixes[1];
 
-            return prefix + num;
+            if (obj === 'response') {
+                _responseObj.parent = trPrefix + _randomShot();
+                _responseObj.box = tdPrefix + _randomShot();
+                return _responseObj;
+            } else {
+                if (obj.shooted) {
+                    let shootedProm = new Promise((resolve) => {
+                        resolve(_setUnShootedBox(obj));
+                    });
+                    shootedProm.then((result) => {
+                        obj = result;
+                    });
+                    return obj;
+                } else {
+                    let unShootedProm = new Promise((resolve) => {
+                        resolve(_setUnShootedBox(obj));
+                    });
+                    unShootedProm.then((result) => {
+                        obj = result;
+                    });
+                    return obj;
+                }
+            }
+        },
+        _setShootedBox = (obj) => {
+            // TODO: pending...
+        },
+        _setUnShootedBox = (obj) => {
+            let randomParent = () => {
+                    return _prefixes[0] + _randomShot();
+                },
+                randomBox = () => {
+                    return _prefixes[1] + _randomShot();
+                };
+
+            return (function checkShooted() {
+                let tr = randomParent(),
+                    td = randomBox();
+
+                if (obj.tr.findIndex(x => x === tr) < 0) {
+                    obj.parent = tr;
+                    obj.box = td;
+                } else {
+                    let trKeys = Array.from(obj.tr, (x, i) => (x === tr) ? i : -1);
+
+                    Array.from(trKeys).forEach((x) => {
+                        if (x !== -1) {
+                            if (obj.td[x] !== td) {
+                                obj.parent = tr;
+                                obj.box = td;
+                            } else {
+                                checkShooted();
+                            }
+                        }
+                    });
+                }
+                return obj;
+            }());
         },
         _handleShots = (arg) => {
-            let parent = null,
-                box = null;
-            if (arg === 'empty') {
-                parent = _setBoxParent();
-                box = _setBox();
-            } else {
-                parent = _setBoxParent(arg.parent);
-                box = _setBox(arg.box);
-            }
-
-            return {
-                parent: parent,
-                box: box,
-                tr: [],
-                td: []
-            }
+            let result = _setResponseObj(arg);
+            return result;
         };
 
     postMessage('module loaded');
     onmessage = (e) => {
         switch (e.data) {
             case 'response':
+                console.log('1: ' + e.data);
                 let emptyProm = new Promise((resolve) => {
                     resolve(_handleShots('response'));
                 });
@@ -59,6 +93,7 @@
                 });
                 break;
             default:
+                console.log('2: ' + e.data);
                 let objProm = new Promise((resolve) => {
                     resolve(_handleShots(JSON.parse(e.data)));
                 });
