@@ -23,7 +23,7 @@
             } else {
                 if (obj.shooted) {
                     let shootedProm = new Promise((resolve) => {
-                        resolve(_setUnShootedBox(obj));
+                        resolve(_setShootedBox(obj));
                     });
                     shootedProm.then((result) => {
                         obj = result;
@@ -41,7 +41,93 @@
             }
         },
         _setShootedBox = (obj) => {
-            // TODO: pending...
+            let trNum = obj.parent.slice(2, 3),
+                tdNum = obj.box.slice(2, 3),
+                directions = ['top', 'bottom', 'left', 'right'],
+                result = null;
+
+            directions[Symbol.iterator] = function() {
+                return {
+                    next: function() {
+                        if (this._top) {
+                            let newNum = ((trNum - 1) > 0) ? trNum - 1 : null,
+                                newTr = (newNum) ? _prefixes[0] + newNum : null,
+                                self = this;
+                            if (newTr) {
+                                let trKeys = Array.from(obj.tr, (x, i) => (x === newTr) ? i : -1),
+                                    newTd = null,
+                                    resObj = Array.from(trKeys).forEach((x) => {
+                                        if (x !== -1) {
+                                            if (obj.td[x] !== obj.box) {
+                                                return obj.box = newTd;
+                                            } else {
+                                                return obj.box = false;
+                                            }
+                                        }
+                                    });
+                            }
+                            this._top = false;
+                            return {
+                                value: {
+                                    'tr': newTr,
+                                    'td': obj.box
+                                },
+                                done: false
+                            };
+                        } else if (this._bottom) {
+                            let newNum = ((trNum - 1) > 0) ? trNum + 1 : null,
+                                newTr = (newNum) ? _prefixes[0] + newNum : null,
+                                self = this;
+                            if (newTr) {
+                                let trKeys = Array.from(obj.tr, (x, i) => (x === newTr) ? i : -1),
+                                    newTd = null,
+                                    resObj = Array.from(trKeys).forEach((x) => {
+                                        if (x !== -1) {
+                                            if (obj.td[x] !== obj.box) {
+                                                return obj.box = newTd;
+                                            } else {
+                                                return obj.box = false;
+                                            }
+                                        }
+                                    });
+                            }
+                            this._top = false;
+                            return {
+                                value: {
+                                    'tr': newTr,
+                                    'td': obj.box
+                                },
+                                done: false
+                            };
+                        } else if (this._left) {
+                            // TODO: pending...
+                        } else if (this._right) {
+                            // TODO: pending...
+                        } else {
+                            return {
+                                done: true
+                            };
+                        }
+                    },
+                    _top: true,
+                    _bottom: true,
+                    _left: true,
+                    _right: true
+                };
+            };
+            result = directions[Symbol.iterator]();
+
+            if (obj.shooted) {
+                (function nextBox() {
+                    let objResult = result.next();
+                    if (!objResult.done && objResult.value['td'] !== false) {
+                        obj.parent = objResult.value['tr'];
+                        obj.box = objResult.value['td'];
+                    } else {
+                        nextBox();
+                    }
+                }());
+            }
         },
         _setUnShootedBox = (obj) => {
             let randomParent = () => {
@@ -76,15 +162,13 @@
             }());
         },
         _handleShots = (arg) => {
-            let result = _setResponseObj(arg);
-            return result;
+            return _setResponseObj(arg);
         };
 
     postMessage('module loaded');
     onmessage = (e) => {
         switch (e.data) {
             case 'response':
-                console.log('1: ' + e.data);
                 let emptyProm = new Promise((resolve) => {
                     resolve(_handleShots('response'));
                 });
@@ -93,7 +177,6 @@
                 });
                 break;
             default:
-                console.log('2: ' + e.data);
                 let objProm = new Promise((resolve) => {
                     resolve(_handleShots(JSON.parse(e.data)));
                 });
