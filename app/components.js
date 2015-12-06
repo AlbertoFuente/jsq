@@ -692,7 +692,13 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     user: 0,
                     enemy: 0
                 },
-                responseObj = {},
+                responseObj = {
+                    parent: null,
+                    box: null,
+                    tr: [],
+                    td: [],
+                    shooted: false
+                },
                 findBox = (boxObj) => {
                     let table = consts.DOC.getElementById('gamerBoard');
                     Array.from(table.childNodes).forEach((x) => {
@@ -701,12 +707,12 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             Array.from(x.childNodes).forEach((d) => {
                                 if (d.classList.contains(boxObj.box) && d.classList.contains('selected')) {
                                     d.className += ' shot';
-                                    boxObj.shooted = false;
+                                    boxObj.shooted = true;
                                     boxObj['td'].push(boxObj.box);
                                 } else if (d.classList.contains(boxObj.box)) {
                                     d.className += ' water';
                                     gameShots.user = gameShots.user + 10;
-                                    boxObj.shooted = true;
+                                    boxObj.shooted = false;
                                     boxObj['td'].push(boxObj.box);
                                 } else {
                                     return false;
@@ -734,8 +740,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                         enemyShotsUserShipsWorker.onmessage = (e) => {
                             switch (e.data) {
                                 case 'module loaded':
-                                    if (responseObj.hasOwnProperty('tr')) {
-                                        enemyShotsUserShipsWorker.postMessage(responseObj);
+                                    if (responseObj['parent']) {
+                                        enemyShotsUserShipsWorker.postMessage(JSON.stringify(responseObj));
                                     } else {
                                         enemyShotsUserShipsWorker.postMessage('response');
                                     }
