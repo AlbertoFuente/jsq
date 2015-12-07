@@ -50,103 +50,78 @@
                     box: [],
                     direction: null,
                     prev: 0
+                },
+                getTopBottomPosition = function(pos) {
+                    if ((trNum - 1) > 0) {
+                        let newNum = (pos === 'top') ? trNum - 1 : trNum + 1,
+                            newTr = (newNum) ? _prefixes[0] + newNum : null,
+                            self = this;
+                        if (newTr) {
+                            let trKeys = Array.from(obj.tr, (x, i) => (x === newTr) ? i : -1),
+                                resObj = Array.from(trKeys).forEach((x) => {
+                                    if (x !== -1) {
+                                        if (obj.td[x] !== obj.box) {
+                                            return obj.box;
+                                        } else {
+                                            return obj.box = false;
+                                        }
+                                    }
+                                });
+                        } else {
+                            obj.box = false;
+                        }
+                        return {
+                            value: {
+                                'tr': (newTr) ? newTr : obj.parent,
+                                'td': obj.box,
+                                'direction': pos
+                            },
+                            done: false
+                        };
+                    } else {
+                        return false;
+                    }
+                },
+                getLeftRightPosition = function(pos) {
+                    if ((trNum - 1) > 0) {
+                        let newTd = (pos === 'left') ? 'td' + (parseFloat(tdNum) + 1) : 'td' + (parseFloat(tdNum) - 1),
+                            trKeys = Array.from(obj.tr, (x, i) => (x === obj.parent) ? i : -1),
+                            tds = Array.from(trKeys, (x) => (trKeys !== -1 && obj.td[x] !== newTd) ? newTd : -1);
+
+                        if (tds !== -1) {
+                            obj.box = newTd;
+                        } else {
+                            obj.box = false;
+                        }
+                        return {
+                            value: {
+                                'tr': obj.parent,
+                                'td': obj.box,
+                                'direction': pos
+                            },
+                            done: false
+                        };
+                    } else {
+                        return false;
+                    }
                 };
+
 
             directions[Symbol.iterator] = function() {
                 return {
                     next: function() {
                         if (this._top) {
-                            let newNum = ((trNum - 1) > 0) ? trNum - 1 : null,
-                                newTr = (newNum) ? _prefixes[0] + newNum : null,
-                                self = this;
-                            if (newTr) {
-                                let trKeys = Array.from(obj.tr, (x, i) => (x === newTr) ? i : -1),
-                                    resObj = Array.from(trKeys).forEach((x) => {
-                                        if (x !== -1) {
-                                            if (obj.td[x] !== obj.box) {
-                                                return obj.box;
-                                            } else {
-                                                return obj.box = false;
-                                            }
-                                        }
-                                    });
-                            } else {
-                                obj.box = false;
-                            }
                             this._top = false;
-                            return {
-                                value: {
-                                    'tr': (newTr) ? newTr : obj.parent,
-                                    'td': obj.box,
-                                    'direction': 'top'
-                                },
-                                done: false
-                            };
+                            return getTopBottomPosition('top');
                         } else if (this._bottom) {
-                            let newNum = ((trNum - 1) > 0) ? trNum + 1 : null,
-                                newTr = (newNum) ? _prefixes[0] + newNum : null,
-                                self = this;
-                            if (newTr) {
-                                let trKeys = Array.from(obj.tr, (x, i) => (x === newTr) ? i : -1),
-                                    resObj = Array.from(trKeys).forEach((x) => {
-                                        if (x !== -1) {
-                                            if (obj.td[x] !== obj.box) {
-                                                return obj.box;
-                                            } else {
-                                                return obj.box = false;
-                                            }
-                                        }
-                                    });
-                            } else {
-                                obj.box = false;
-                            }
                             this._bottom = false;
-                            return {
-                                value: {
-                                    'tr': (newTr) ? newTr : obj.parent,
-                                    'td': obj.box,
-                                    'direction': 'bottom'
-                                },
-                                done: false
-                            };
+                            return getTopBottomPosition('bottom');
                         } else if (this._left) {
-                            let newTd = 'td' + (parseFloat(tdNum) + 1),
-                                trKeys = Array.from(obj.tr, (x, i) => (x === obj.parent) ? i : -1),
-                                tds = Array.from(trKeys, (x) => (trKeys !== -1 && obj.td[x] !== newTd) ? newTd : -1);
-
-                            if (tds !== -1) {
-                                obj.box = newTd;
-                            } else {
-                                obj.box = false;
-                            }
-                            this._left = false;
-                            return {
-                                value: {
-                                    'tr': obj.parent,
-                                    'td': obj.box,
-                                    'direction': 'left'
-                                },
-                                done: false
-                            };
+                            this._bleft = false;
+                            return getLeftRightPosition('left');
                         } else if (this._right) {
-                            let newTd = 'td' + (parseFloat(tdNum) - 1),
-                                trKeys = Array.from(obj.tr, (x, i) => (x === obj.parent) ? i : -1),
-                                tds = Array.from(trKeys, (x) => (trKeys !== -1 && obj.td[x] !== newTd) ? newTd : -1);
-
-                            if (tds !== -1) {
-                                obj.box = newTd;
-                            } else {
-                                obj.box = false;
-                            }
                             this._right = false;
-                            return {
-                                value: {
-                                    'tr': obj.parent,
-                                    'td': obj.box,
-                                    'direction': 'right'
-                                },
-                                done: false
-                            };
+                            return getLeftRightPosition('right');
                         } else {
                             return {
                                 done: true
