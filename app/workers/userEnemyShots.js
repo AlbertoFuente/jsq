@@ -51,9 +51,9 @@
                     direction: null,
                     prev: 0
                 },
-                getTopBottomPosition = function(pos) {
+                getTopBottomPosition = (pos) => {
                     if ((trNum - 1) > 0) {
-                        let newNum = (pos === 'top') ? trNum - 1 : trNum + 1,
+                        let newNum = (pos === 'top') ? parseFloat(trNum) - 1 : parseFloat(trNum) + 1,
                             newTr = (newNum) ? _prefixes[0] + newNum : null,
                             self = this;
                         if (newTr) {
@@ -79,10 +79,17 @@
                             done: false
                         };
                     } else {
-                        return false;
+                        return {
+                            value: {
+                                'tr': objShooted.parent[0],
+                                'td': objShooted.box[0],
+                                'position': (pos === 'top') ? 'bottom' : 'top'
+                            },
+                            done: false
+                        };
                     }
                 },
-                getLeftRightPosition = function(pos) {
+                getLeftRightPosition = (pos) => {
                     if ((trNum - 1) > 0) {
                         let newTd = (pos === 'left') ? 'td' + (parseFloat(tdNum) + 1) : 'td' + (parseFloat(tdNum) - 1),
                             trKeys = Array.from(obj.tr, (x, i) => (x === obj.parent) ? i : -1),
@@ -102,7 +109,14 @@
                             done: false
                         };
                     } else {
-                        return false;
+                        return {
+                            value: {
+                                'tr': objShooted.parent[0],
+                                'td': objShooted.box[0],
+                                'position': (pos === 'left') ? 'right' : 'left'
+                            },
+                            done: false
+                        };
                     }
                 };
 
@@ -117,7 +131,7 @@
                             this._bottom = false;
                             return getTopBottomPosition('bottom');
                         } else if (this._left) {
-                            this._bleft = false;
+                            this._left = false;
                             return getLeftRightPosition('left');
                         } else if (this._right) {
                             this._right = false;
@@ -158,6 +172,9 @@
                     }
                 }());
             } else {
+                objShooted.parent = [];
+                objShooted.box = [];
+                objShooted.direction = null;
                 objShooted.prev = 0;
             }
         },
