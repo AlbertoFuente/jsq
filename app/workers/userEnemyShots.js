@@ -44,7 +44,13 @@
             let trNum = obj.parent.slice(2, 3),
                 tdNum = obj.box.slice(2, 3),
                 directions = ['top', 'bottom', 'left', 'right'],
-                result = null;
+                result = null,
+                objShooted = {
+                    parent: [],
+                    box: [],
+                    direction: null,
+                    prev: 0
+                };
 
             directions[Symbol.iterator] = function() {
                 return {
@@ -71,7 +77,8 @@
                             return {
                                 value: {
                                     'tr': (newTr) ? newTr : obj.parent,
-                                    'td': obj.box
+                                    'td': obj.box,
+                                    'direction': 'top'
                                 },
                                 done: false
                             };
@@ -97,12 +104,13 @@
                             return {
                                 value: {
                                     'tr': (newTr) ? newTr : obj.parent,
-                                    'td': obj.box
+                                    'td': obj.box,
+                                    'direction': 'bottom'
                                 },
                                 done: false
                             };
                         } else if (this._left) {
-                            let newTd = 'td' + (tdNum + 1),
+                            let newTd = 'td' + (parseFloat(tdNum) + 1),
                                 trKeys = Array.from(obj.tr, (x, i) => (x === obj.parent) ? i : -1),
                                 tds = Array.from(trKeys, (x) => (trKeys !== -1 && obj.td[x] !== newTd) ? newTd : -1);
 
@@ -115,12 +123,13 @@
                             return {
                                 value: {
                                     'tr': obj.parent,
-                                    'td': obj.box
+                                    'td': obj.box,
+                                    'direction': 'left'
                                 },
                                 done: false
                             };
                         } else if (this._right) {
-                            let newTd = 'td' + (tdNum - 1),
+                            let newTd = 'td' + (parseFloat(tdNum) - 1),
                                 trKeys = Array.from(obj.tr, (x, i) => (x === obj.parent) ? i : -1),
                                 tds = Array.from(trKeys, (x) => (trKeys !== -1 && obj.td[x] !== newTd) ? newTd : -1);
 
@@ -133,7 +142,8 @@
                             return {
                                 value: {
                                     'tr': obj.parent,
-                                    'td': obj.box
+                                    'td': obj.box,
+                                    'direction': 'right'
                                 },
                                 done: false
                             };
@@ -157,15 +167,23 @@
                 };
                 (function nextBox() {
                     let _obj = objResult();
+                    objShooted.parent.push(_obj.tr);
+                    objShooted.box.push(_obj.td);
+                    objShooted.direction = _obj.value.direction;
+                    objShooted.prev = 1;
                     if (!_obj.done) {
                         if (_obj.value['td'] !== false) {
                             obj.parent = _obj.value['tr'];
                             obj.box = _obj.value['td'];
                         } else {
+                            obj.parent = objShooted.parent[0];
+                            obj.box = objShooted.box[0];
                             nextBox();
                         }
                     }
                 }());
+            } else {
+                objShooted.prev = 0;
             }
         },
         _setUnShootedBox = (obj) => {
