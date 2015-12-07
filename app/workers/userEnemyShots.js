@@ -52,7 +52,7 @@
                     prev: 0
                 },
                 getTopBottomPosition = (pos) => {
-                    if ((trNum - 1) > 0) {
+                    if ((parseFloat(trNum) - 1) > 0) {
                         let newNum = (pos === 'top') ? parseFloat(trNum) - 1 : parseFloat(trNum) + 1,
                             newTr = (newNum) ? _prefixes[0] + newNum : null,
                             self = this;
@@ -90,7 +90,7 @@
                     }
                 },
                 getLeftRightPosition = (pos) => {
-                    if ((trNum - 1) > 0) {
+                    if ((parseFloat(trNum) - 1) > 0) {
                         let newTd = (pos === 'left') ? 'td' + (parseFloat(tdNum) + 1) : 'td' + (parseFloat(tdNum) - 1),
                             trKeys = Array.from(obj.tr, (x, i) => (x === obj.parent) ? i : -1),
                             tds = Array.from(trKeys, (x) => (trKeys !== -1 && obj.td[x] !== newTd) ? newTd : -1);
