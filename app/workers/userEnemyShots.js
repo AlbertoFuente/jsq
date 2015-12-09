@@ -30,27 +30,37 @@
                     });
                     return obj;
                 } else {
-                    let unShootedProm = new Promise((resolve) => {
-                        resolve(_setUnShootedBox(obj));
-                    });
-                    unShootedProm.then((result) => {
-                        obj = result;
-                    });
-                    return obj;
+                    if (_objShooted.hasOwnProperty('prev') && _objShooted.prev === 1) {
+                        let shootedProm = new Promise((resolve) => {
+                            resolve(_setShootedBox(obj));
+                        });
+                        shootedProm.then((result) => {
+                            obj = result;
+                        });
+                        return obj;
+                    } else {
+                        let unShootedProm = new Promise((resolve) => {
+                            resolve(_setUnShootedBox(obj));
+                        });
+                        unShootedProm.then((result) => {
+                            obj = result;
+                        });
+                        return obj;
+                    }
                 }
             }
+        },
+        _objShooted = {
+            parent: [],
+            box: [],
+            direction: null,
+            prev: 0
         },
         _setShootedBox = (obj) => {
             let trNum = obj.parent.slice(2, 3),
                 tdNum = obj.box.slice(2, 3),
                 directions = ['top', 'bottom', 'left', 'right'],
                 result = null,
-                objShooted = {
-                    parent: [],
-                    box: [],
-                    direction: null,
-                    prev: 0
-                },
                 getTopBottomPosition = (pos) => {
                     if ((parseFloat(trNum) - 1) > 0) {
                         let newNum = (pos === 'top') ? parseFloat(trNum) - 1 : parseFloat(trNum) + 1,
@@ -81,8 +91,8 @@
                     } else {
                         return {
                             value: {
-                                'tr': objShooted.parent[0],
-                                'td': objShooted.box[0],
+                                'tr': _objShooted.parent[0],
+                                'td': _objShooted.box[0],
                                 'position': (pos === 'top') ? 'bottom' : 'top'
                             },
                             done: false
@@ -111,8 +121,8 @@
                     } else {
                         return {
                             value: {
-                                'tr': objShooted.parent[0],
-                                'td': objShooted.box[0],
+                                'tr': _objShooted.parent[0],
+                                'td': _objShooted.box[0],
                                 'position': (pos === 'left') ? 'right' : 'left'
                             },
                             done: false
@@ -156,26 +166,21 @@
                 };
                 (function nextBox() {
                     let _obj = objResult();
-                    objShooted.parent.push(_obj.tr);
-                    objShooted.box.push(_obj.td);
-                    objShooted.direction = _obj.value.direction;
-                    objShooted.prev = 1;
+                    _objShooted.parent.push(_obj.tr);
+                    _objShooted.box.push(_obj.td);
+                    _objShooted.direction = _obj.value.direction;
+                    _objShooted.prev = 1;
                     if (!_obj.done) {
                         if (_obj.value['td'] !== false) {
                             obj.parent = _obj.value['tr'];
                             obj.box = _obj.value['td'];
                         } else {
-                            obj.parent = objShooted.parent[0];
-                            obj.box = objShooted.box[0];
+                            obj.parent = _objShooted.parent[0];
+                            obj.box = _objShooted.box[0];
                             nextBox();
                         }
                     }
                 }());
-            } else {
-                objShooted.parent = [];
-                objShooted.box = [];
-                objShooted.direction = null;
-                objShooted.prev = 0;
             }
         },
         _setUnShootedBox = (obj) => {
