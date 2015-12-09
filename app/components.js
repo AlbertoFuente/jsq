@@ -709,7 +709,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                     d.className += ' shot';
                                     boxObj.shooted = true;
                                     boxObj['td'].push(boxObj.box);
-                                } else if (d.classList.contains(boxObj.box)) {
+                                } else if (d.classList.contains(boxObj.box) && !d.classList.contains('selected')) {
                                     d.className += ' water';
                                     gameShots.user = gameShots.user + 10;
                                     boxObj.shooted = false;
