@@ -41,6 +41,7 @@ define(['utils', 'consts'], function(utils, consts) {
 
             expect(method(0, 4, 0)).toEqual([0, 1, 2, 3, 4]);
             expect(method(0, 4, 2)).toEqual([0, 2, 4]);
+            expect(method('a', 'e', 0)).toEqual(['A', 'B', 'C', 'D', 'E']);
         });
         // message
         it('Test message method', function() {
@@ -60,9 +61,11 @@ define(['utils', 'consts'], function(utils, consts) {
         it('Test diff method', function() {
             var arr1 = [1, 2, 3],
                 arr2 = [2, 3, 4],
-                diff = utils.diff(arr1, arr2);
+                diff = utils.diff(arr1, arr2),
+                diff2 = utils.diff(arr1, arr1);
 
             expect(diff).toEqual([1]);
+            expect(diff2).toEqual([]);
         });
         // tooltip
         it('Test tooltip method', function() {
