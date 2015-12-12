@@ -1,5 +1,5 @@
 var allTestFiles = [],
-    TEST_REGEXP = /(testApp|testButtons|testConsts|testUtils)\.js$/i;
+    TEST_REGEXP = /(testApp|testButtons|testConsts|testUtils|testEnemyWorker)\.js$/i;
 
 // Get a list of all the test files to include
 Object.keys(window.__karma__.files).forEach(function(file) {
@@ -23,7 +23,8 @@ require.config({
         'components': 'app/components',
         'events': 'app/events',
         'app': 'app/app',
-        'enemyWorker': 'workers/enemyWorker'
+        'enemyWorker': 'app/workers/enemyWorker',
+        'userEnemyShots': 'app/workers/userEnemyShots'
     },
     shim: {
         '$': {
