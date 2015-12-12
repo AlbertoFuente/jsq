@@ -40,7 +40,8 @@
         "jquery": true,
         "es6": true,
         "browser": true,
-        "node": true
+        "node": true,
+        "worker": true
     },
     "extends": "eslint:recommended"
 }
