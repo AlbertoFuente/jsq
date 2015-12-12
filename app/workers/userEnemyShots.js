@@ -57,12 +57,12 @@
             prev: 0
         },
         _setShootedBox = (obj) => {
-            let trNum = obj.parent.slice(2, 3),
-                tdNum = obj.box.slice(2, 3),
+            let trNum = (obj) ? obj.parent.slice(2, 3) : null,
+                tdNum = (obj) ? obj.box.slice(2, 3) : null,
                 directions = ['top', 'bottom', 'left', 'right'],
                 result = null,
                 getTopBottomPosition = (pos) => {
-                    if ((parseFloat(trNum) - 1) > 0) {
+                    if (trNum && (parseFloat(trNum) - 1) > 0) {
                         let newNum = (pos === 'top') ? parseFloat(trNum) - 1 : parseFloat(trNum) + 1,
                             newTr = (newNum) ? _prefixes[0] + newNum : null,
                             self = this;
@@ -89,10 +89,15 @@
                             done: false
                         };
                     } else {
+                        let _parent = () => {
+                            return (pos === 'top' && (parseFloat(trNum) - 1) > 0) ?
+                                _prefixes[0] + (parseFloat(trNum) - 1) :
+                                _prefixes[0] + (parseFloat(trNum) + 1);
+                        };
                         return {
                             value: {
-                                'tr': _objShooted.parent[0],
-                                'td': _objShooted.box[0],
+                                'tr': _parent(),
+                                'td': obj.box,
                                 'position': (pos === 'top') ? 'bottom' : 'top'
                             },
                             done: false
@@ -101,7 +106,7 @@
                 },
                 getLeftRightPosition = (pos) => {
                     if ((parseFloat(trNum) - 1) > 0) {
-                        let newTd = (pos === 'left') ? 'td' + (parseFloat(tdNum) + 1) : 'td' + (parseFloat(tdNum) - 1),
+                        let newTd = (pos === 'left') ? _prefixes[1] + (parseFloat(tdNum) + 1) : _prefixes[1] + (parseFloat(tdNum) - 1),
                             trKeys = Array.from(obj.tr, (x, i) => (x === obj.parent) ? i : -1),
                             tds = Array.from(trKeys, (x) => (trKeys !== -1 && obj.td[x] !== newTd) ? newTd : -1);
 
@@ -121,8 +126,8 @@
                     } else {
                         return {
                             value: {
-                                'tr': _objShooted.parent[0],
-                                'td': _objShooted.box[0],
+                                'tr': obj.parent,
+                                'td': (pos === 'left') ? _prefixes[1] + (parseFloat(tdNum) + 1) : _prefixes[1] + (parseFloat(tdNum) - 1),
                                 'position': (pos === 'left') ? 'right' : 'left'
                             },
                             done: false
@@ -166,14 +171,14 @@
                 };
                 (function nextBox() {
                     let _obj = objResult();
-                    _objShooted.parent.push(_obj.tr);
-                    _objShooted.box.push(_obj.td);
+                    _objShooted.parent.push(_obj.value.tr);
+                    _objShooted.box.push(_obj.value.td);
                     _objShooted.direction = _obj.value.direction;
                     _objShooted.prev = 1;
                     if (!_obj.done) {
-                        if (_obj.value['td'] !== false) {
-                            obj.parent = _obj.value['tr'];
-                            obj.box = _obj.value['td'];
+                        if (_obj.value.td !== false) {
+                            obj.parent = _obj.value.tr;
+                            obj.box = _obj.value.td;
                         } else {
                             obj.parent = _objShooted.parent[0];
                             obj.box = _objShooted.box[0];
