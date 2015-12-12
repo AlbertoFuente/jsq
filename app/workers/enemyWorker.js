@@ -87,7 +87,6 @@
                     position = _randomPosition(),
                     number = _randomNumber(),
                     placeControl = [],
-                    self = this,
                     setVertical = (number) => {
                         let td = ['td' + _randomNumber()],
                             num = number,
@@ -182,7 +181,7 @@
             resolve(_setEnemyShips(e.data.ships));
         });
         prom.then((data) => {
-            postMessage(data)
+            postMessage(data);
         });
     };
 }());
