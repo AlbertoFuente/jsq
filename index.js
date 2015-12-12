@@ -58,7 +58,9 @@
             // node modules
             '/node_modules/requirejs/require.js': './node_modules/requirejs/require.js',
             '/node_modules/jquery/dist/jquery.min.js': './node_modules/jquery/dist/jquery.min.js',
-            '/node_modules/jquery/dist/jquery.min.map': './node_modules/jquery/dist/jquery.min.map'
+            '/node_modules/jquery/dist/jquery.min.map': './node_modules/jquery/dist/jquery.min.map',
+            // karma coverage reporter
+            '/coverage/*/index.html': './coverage/*/index.html'
         };
         /**
          * Uncomment the following line if you are loading the server with 'node index.js'
