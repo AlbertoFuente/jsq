@@ -1,5 +1,5 @@
 var allTestFiles = [],
-    TEST_REGEXP = /(testApp|testButtons|testConsts|testUtils|testEnemyWorker)\.js$/i;
+    TEST_REGEXP = /(testApp|testButtons|testConsts|testUtils)\.js$/i;
 
 // Get a list of all the test files to include
 Object.keys(window.__karma__.files).forEach(function(file) {
