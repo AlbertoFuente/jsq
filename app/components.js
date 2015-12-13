@@ -687,7 +687,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         }
         activeEnemyBoard() {
             let table = consts.DOC.getElementById('enemyBoard'),
-                maxShots = 170,
+                //maxShots = 170,
                 gameShots = {
                     user: 0,
                     enemy: 0
