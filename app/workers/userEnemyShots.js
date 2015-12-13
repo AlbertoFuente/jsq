@@ -66,16 +66,16 @@
                         let newNum = (pos === 'top') ? parseFloat(trNum) - 1 : parseFloat(trNum) + 1,
                             newTr = (newNum) ? _prefixes[0] + newNum : null;
                         if (newTr) {
-                            let trKeys = Array.from(obj.tr, (x, i) => (x === newTr) ? i : -1),
-                                resObj = Array.from(trKeys).forEach((x) => {
-                                    if (x !== -1) {
-                                        if (obj.td[x] !== obj.box) {
-                                            return obj.box;
-                                        } else {
-                                            return obj.box = false;
-                                        }
+                            let trKeys = Array.from(obj.tr, (x, i) => (x === newTr) ? i : -1);
+                            Array.from(trKeys).forEach((x) => {
+                                if (x !== -1) {
+                                    if (obj.td[x] !== obj.box) {
+                                        return obj.box;
+                                    } else {
+                                        return obj.box = false;
                                     }
-                                });
+                                }
+                            });
                         } else {
                             obj.box = false;
                         }
