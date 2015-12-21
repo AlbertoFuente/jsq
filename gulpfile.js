@@ -8,25 +8,12 @@ var gulp = require('gulp'),
     eslint = require('gulp-eslint'),
     minifyCSS = require('gulp-minify-css'),
     rename = require('gulp-rename'),
-    devServer = require('gulp-develop-server'),
-    liveReload = require('gulp-livereload'),
     Server = require('karma').Server,
     // Files
     testFiles = ['js/*.min.js', 'spec/*.js'],
     testJsFiles = ['spec/*.js'],
     appFiles = ['app/*.js', 'app/workers/*.js', 'index.js'],
-    sassFiles = ['styles/*.scss'],
-    // Develop Server
-    options = {
-        path: 'index.js'
-    },
-    liveReloadOptions = {
-        //port: 3000,
-        host: 'localhost',
-        basePath: './',
-        start: true,
-        reloadPage: 'index.html'
-    };
+    sassFiles = ['styles/*.scss'];
 
 gulp.task('default', function() {
     'use strict';
@@ -36,8 +23,7 @@ gulp.task('default', function() {
         'sass',
         'eslint',
         'eslintTestFiles',
-        'karma',
-        'server:start'
+        'karma'
     ]);
 });
 
@@ -48,8 +34,7 @@ gulp.task('js', function() {
         .pipe(concat('app.min.js'))
         .pipe(babel())
         .pipe(uglify())
-        .pipe(gulp.dest('js/'))
-        .pipe(liveReload());
+        .pipe(gulp.dest('js/'));
 });
 
 gulp.task('sass', function() {
@@ -61,8 +46,7 @@ gulp.task('sass', function() {
             keepBreaks: true
         }))
         .pipe(rename('styles.min.css'))
-        .pipe(gulp.dest('css'))
-        .pipe(liveReload());
+        .pipe(gulp.dest('css'));
 });
 
 gulp.task('karma', function() {
@@ -92,12 +76,6 @@ gulp.task('eslintTestFiles', function() {
         .pipe(eslint.format());
 });
 
-gulp.task('server:start', function() {
-    'use strict';
-
-    devServer.listen(options, liveReload.listen);
-});
-
 gulp.task('watch', function() {
     'use strict';
     liveReload.listen(liveReloadOptions);
@@ -112,8 +90,7 @@ gulp.task('watch', function() {
 
     gulp.watch(sassFiles, function() {
         gulp.start([
-            'sass',
-            'server:restart'
+            'sass'
         ]);
         liveReload.reload();
     });
