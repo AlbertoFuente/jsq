@@ -40,8 +40,14 @@ module.exports = function(config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'app/*.js': ['coverage'],
-            'app/workers/*.js': ['coverage']
+            'app/app.js': ['coverage'],
+            'app/buttons.js': ['coverage'],
+            'app/components.js': ['coverage'],
+            'app/consts.js': ['coverage'],
+            'app/events.js': ['coverage'],
+            'app/utils.js': ['coverage'],
+            'app/workers/enemyWorker.js': ['coverage'],
+            'app/workers/userEnemyShots.js': ['coverage']
         },
 
 
