@@ -179,8 +179,7 @@
     onmessage = (e) => {
         let prom = new Promise((resolve) => {
             resolve(_setEnemyShips(e.data.ships));
-        });
-        prom.then((data) => {
+        }).then((data) => {
             postMessage(data);
         });
     };

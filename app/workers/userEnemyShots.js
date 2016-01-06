@@ -24,8 +24,7 @@
                 if (obj.shooted) {
                     let shootedProm = new Promise((resolve) => {
                         resolve(_setShootedBox(obj));
-                    });
-                    shootedProm.then((result) => {
+                    }).then((result) => {
                         obj = result;
                     });
                     return obj;
@@ -33,16 +32,14 @@
                     if (_objShooted.hasOwnProperty('prev') && _objShooted.prev === 1) {
                         let shootedProm = new Promise((resolve) => {
                             resolve(_setShootedBox(obj));
-                        });
-                        shootedProm.then((result) => {
+                        }).then((result) => {
                             obj = result;
                         });
                         return obj;
                     } else {
                         let unShootedProm = new Promise((resolve) => {
                             resolve(_setUnShootedBox(obj));
-                        });
-                        unShootedProm.then((result) => {
+                        }).then((result) => {
                             obj = result;
                         });
                         return obj;
@@ -229,8 +226,7 @@
             case 'response':
                 let emptyProm = new Promise((resolve) => {
                     resolve(_handleShots('response'));
-                });
-                emptyProm.then((result) => {
+                }).then((result) => {
                     postMessage(JSON.stringify(result));
                 });
                 break;
