@@ -35,17 +35,12 @@ define('utils', ['consts'], function(consts) {
         _message = (type, message) => {
             let parentContainer = consts.DOC.getElementById('gameContainer'),
                 toggleClass = (type) => {
-                    let typeClass = null;
+                    let typeObj = {
+                            'green': 'messageGreen',
+                            'red': 'messageRed'
+                        };
 
-                    switch (type) {
-                        case 'green':
-                            typeClass = 'messageGreen';
-                            break;
-                        case 'red':
-                            typeClass = 'messageRed';
-                            break;
-                    }
-                    return typeClass;
+                    return typeObj[type];
                 },
                 showMessage = (container) => {
                     container.className += ' showMessage';
