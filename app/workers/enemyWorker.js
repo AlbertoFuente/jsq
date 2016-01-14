@@ -71,7 +71,7 @@
                                 }
                             }
                         }
-                    }
+                    };
                     if (position && posObj.hasOwnProperty(position)) {
                         posObj[position](x);
                     } else {
@@ -170,9 +170,9 @@
                                     setVertical(number);
                                 },
                                 'horizontal': () => {
-                                    setHorizontal(number)
+                                    setHorizontal(number);
                                 }
-                            }
+                            };
                             if (posObj.hasOwnProperty(position)) {
                                 posObj[position]();
                             }
@@ -188,7 +188,8 @@
     onmessage = (e) => {
         let prom = new Promise((resolve) => {
             resolve(_setEnemyShips(e.data.ships));
-        }).then((data) => {
+        });
+        prom.then((data) => {
             postMessage(data);
         });
     };
