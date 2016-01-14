@@ -36,9 +36,9 @@ define('utils', ['consts'], function(consts) {
             let parentContainer = consts.DOC.getElementById('gameContainer'),
                 toggleClass = (type) => {
                     let typeObj = {
-                            'green': 'messageGreen',
-                            'red': 'messageRed'
-                        };
+                        'green': 'messageGreen',
+                        'red': 'messageRed'
+                    };
 
                     return typeObj[type];
                 },
