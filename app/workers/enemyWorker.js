@@ -48,31 +48,34 @@
             let result = false;
             if (Object.keys(_enemyShips).length > 0) {
                 Array.from(_ships).forEach((x) => {
-                    if (position) {
-                        switch (position) {
-                            case 'horizontal':
-                                if (_enemyShips[x] && _enemyShips[x].hasOwnProperty('trParent')) {
-                                    let trControl = _enemyShips[x]['trParent'].findIndex(d => d === parent);
-                                    if (trControl && trControl > -1) {
-                                        let tdControl = _enemyShips[x]['tdChild'].findIndex(d => d === child);
-                                        if (tdControl > -1) {
-                                            result = true;
-                                        }
-                                    }
-                                }
-                                break;
-                            case 'vertical':
-                                if (_enemyShips[x] && _enemyShips[x].hasOwnProperty('tdChild')) {
+                    let posObj = {
+                        'horizontal': (x) => {
+                            if (_enemyShips[x] && _enemyShips[x].hasOwnProperty('trParent')) {
+                                let trControl = _enemyShips[x]['trParent'].findIndex(d => d === parent);
+                                if (trControl && trControl > -1) {
                                     let tdControl = _enemyShips[x]['tdChild'].findIndex(d => d === child);
-                                    if (tdControl && tdControl > -1) {
-                                        let trControl = _enemyShips[x]['trParent'].findIndex(d => d === parent);
-                                        if (trControl > -1) {
-                                            result = true;
-                                        }
+                                    if (tdControl > -1) {
+                                        result = true;
                                     }
                                 }
-                                break;
+                            }
+                        },
+                        'vertical': (x) => {
+                            if (_enemyShips[x] && _enemyShips[x].hasOwnProperty('tdChild')) {
+                                let tdControl = _enemyShips[x]['tdChild'].findIndex(d => d === child);
+                                if (tdControl && tdControl > -1) {
+                                    let trControl = _enemyShips[x]['trParent'].findIndex(d => d === parent);
+                                    if (trControl > -1) {
+                                        result = true;
+                                    }
+                                }
+                            }
                         }
+                    }
+                    if (position && posObj.hasOwnProperty(position)) {
+                        posObj[position](x);
+                    } else {
+                        return false;
                     }
                 });
             }
@@ -161,14 +164,20 @@
                         number = _randomNumber();
                         canPlace(_controlPlaceShip(shipLen, number));
                     } else {
-                        switch (position) {
-                            case 'vertical':
-                                setVertical(number);
-                                break;
-                            case 'horizontal':
-                                setHorizontal(number);
-                                break;
+                        if (position) {
+                            let posObj = {
+                                'vertical': () => {
+                                    setVertical(number);
+                                },
+                                'horizontal': () => {
+                                    setHorizontal(number)
+                                }
+                            }
+                            if (posObj.hasOwnProperty(position)) {
+                                posObj[position]();
+                            }
                         }
+
                     }
                 }(_controlPlaceShip(shipLen, number)));
             });
