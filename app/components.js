@@ -352,7 +352,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                     }
                                 }
                             }
-                        }
+                        };
                         if (posObj.hasOwnProperty(_hoverSelected.position)) {
                             posObj[_hoverSelected.position]();
                         }
@@ -402,7 +402,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         _changeVerticalBox = (trs, range, name) => {
             let control = [],
                 menuGamer = new _MenuGamer(),
-                message = 'There have been some problems, please refresh the game.',
                 prom = new Promise((resolve) => {
                     resolve(function checkSpace(num) {
                         let i = 0,
@@ -439,19 +438,20 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             }
                         }
                     }(1));
-                }).then(() => {
-                    if (control.length === range.length) {
-                        Array.from(control).forEach((d) => {
-                            let trsChild = trs['tr' + d].childs[0];
-                            trsChild.className += ' selected';
-                            trsChild.setAttribute('data-name', name);
-                        });
-                        menuGamer.removeElement(name);
-                    } else {
-                        let message = 'Move your ships for place more.';
-                        utils.message('green', message);
-                    }
                 });
+            prom.then(() => {
+                if (control.length === range.length) {
+                    Array.from(control).forEach((d) => {
+                        let trsChild = trs['tr' + d].childs[0];
+                        trsChild.className += ' selected';
+                        trsChild.setAttribute('data-name', name);
+                    });
+                    menuGamer.removeElement(name);
+                } else {
+                    let message = 'Move your ships for place more.';
+                    utils.message('green', message);
+                }
+            });
         },
         _changeHorizontalBox = (trs, range, name) => {
             let i = 0,
@@ -459,7 +459,6 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 arr = {},
                 firstChild = null,
                 menuGamer = new _MenuGamer(),
-                message = 'There have been some problems, please refresh the game.',
                 prom = new Promise((resolve) => {
                     resolve(function checkSpace(num) {
                         if (trs['tr' + num].childsShips.length > 0) {
@@ -477,16 +476,17 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             arr['tr' + num] = trs['tr' + num];
                         }
                     }(1));
-                }).then(() => {
-                    Array.from(arr[firstChild].childs).forEach((j) => {
-                        if (d < range.length) {
-                            j.className += ' selected';
-                            j.setAttribute('data-name', name);
-                            d++;
-                        }
-                    });
-                    menuGamer.removeElement(name);
                 });
+            prom.then(() => {
+                Array.from(arr[firstChild].childs).forEach((j) => {
+                    if (d < range.length) {
+                        j.className += ' selected';
+                        j.setAttribute('data-name', name);
+                        d++;
+                    }
+                });
+                menuGamer.removeElement(name);
+            });
         },
         _horizontalShip = (num, name) => {
             let _table = consts.DOC.getElementsByClassName('panelGamerBoard'),
@@ -532,7 +532,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     'horizontal': () => {
                         _horizontalShip(shipSelected.boxes, shipSelected.name);
                     }
-                }
+                };
 
                 if (defaultPosition && posObj.hasOwnProperty(defaultPosition)) {
                     posObj[defaultPosition]();
@@ -740,7 +740,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 if (Object.keys(_enemyShips).length > 0) {
                     let prom = new Promise((resolve) => {
                         resolve(_findEnemyShips(e, _enemyShips));
-                    }).then((response) => {
+                    });
+                    prom.then((response) => {
                         if (response.control > 0) {
                             gameShots.enemy = gameShots.enemy + 10;
                         }
