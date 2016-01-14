@@ -299,58 +299,63 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 }
 
                 if (_hoverSelected.position && _hoverSelected.board === table.id) {
-                    switch (_hoverSelected.position) {
-                        case 'horizontal':
-                            if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
-                                _removeSelected(element);
+                    if (_hoverSelected.position) {
+                        let posObj = {
+                            'horizontal': () => {
+                                if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
+                                    _removeSelected(element);
 
-                                if (printHorizontalSelected) {
-                                    Array.from({
-                                        length: len
-                                    }, () => {
-                                        let selected = $('.td' + elementNumber);
-                                        if (selected.parent().hasClass(elementParent.className)) {
-                                            $(elementParent).find(selected).addClass('selected hover');
-                                            $(elementParent).find(selected).attr('data-name', _hoverSelected.name);
-                                            elementNumber++;
-                                        }
-                                    });
-                                    _canPlaceShip = false;
-                                }
-                            }
-                            break;
-                        case 'vertical':
-                            if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
-                                _removeSelected(element);
-
-                                if (printVerticalSelected) {
-                                    let trRange = utils.range(parseInt(elementParentNumber), 10, 0),
-                                        trClasses = Array.from(trRange, (x) => 'tr' + x),
-                                        notSelecteds = [];
-
-                                    Array.from(trClasses).forEach((x) => {
-                                        Array.from(table.childNodes).forEach((d) => {
-                                            if (d.classList.contains(x) && !d.classList.contains('selected')) {
-                                                notSelecteds.push(x);
-                                            }
-                                        });
-                                    });
-                                    if (notSelecteds.length >= _hoverSelected.number) {
+                                    if (printHorizontalSelected) {
                                         Array.from({
-                                            length: _hoverSelected.len
-                                        }, (x, i) => {
-                                            Array.from(table.childNodes).forEach((d) => {
-                                                if (d.classList.contains(notSelecteds[i]) && !d.childNodes[elementNumber].classList.contains('selected')) {
-                                                    d.childNodes[elementNumber].className += ' selected hover';
-                                                    d.childNodes[elementNumber].setAttribute('data-name', _hoverSelected.name);
-                                                }
-                                            });
+                                            length: len
+                                        }, () => {
+                                            let selected = $('.td' + elementNumber);
+                                            if (selected.parent().hasClass(elementParent.className)) {
+                                                $(elementParent).find(selected).addClass('selected hover');
+                                                $(elementParent).find(selected).attr('data-name', _hoverSelected.name);
+                                                elementNumber++;
+                                            }
                                         });
                                         _canPlaceShip = false;
                                     }
                                 }
+                            },
+                            'vertical': () => {
+                                if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
+                                    _removeSelected(element);
+
+                                    if (printVerticalSelected) {
+                                        let trRange = utils.range(parseInt(elementParentNumber), 10, 0),
+                                            trClasses = Array.from(trRange, (x) => 'tr' + x),
+                                            notSelecteds = [];
+
+                                        Array.from(trClasses).forEach((x) => {
+                                            Array.from(table.childNodes).forEach((d) => {
+                                                if (d.classList.contains(x) && !d.classList.contains('selected')) {
+                                                    notSelecteds.push(x);
+                                                }
+                                            });
+                                        });
+                                        if (notSelecteds.length >= _hoverSelected.number) {
+                                            Array.from({
+                                                length: _hoverSelected.len
+                                            }, (x, i) => {
+                                                Array.from(table.childNodes).forEach((d) => {
+                                                    if (d.classList.contains(notSelecteds[i]) && !d.childNodes[elementNumber].classList.contains('selected')) {
+                                                        d.childNodes[elementNumber].className += ' selected hover';
+                                                        d.childNodes[elementNumber].setAttribute('data-name', _hoverSelected.name);
+                                                    }
+                                                });
+                                            });
+                                            _canPlaceShip = false;
+                                        }
+                                    }
+                                }
                             }
-                            break;
+                        }
+                        if (posObj.hasOwnProperty(_hoverSelected.position)) {
+                            posObj[_hoverSelected.position]();
+                        }
                     }
                 } else {
                     return;
@@ -397,6 +402,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
         _changeVerticalBox = (trs, range, name) => {
             let control = [],
                 menuGamer = new _MenuGamer(),
+                message = 'There have been some problems, please refresh the game.',
                 prom = new Promise((resolve) => {
                     resolve(function checkSpace(num) {
                         let i = 0,
@@ -453,6 +459,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 arr = {},
                 firstChild = null,
                 menuGamer = new _MenuGamer(),
+                message = 'There have been some problems, please refresh the game.',
                 prom = new Promise((resolve) => {
                     resolve(function checkSpace(num) {
                         if (trs['tr' + num].childsShips.length > 0) {
@@ -518,13 +525,17 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 shipSelected = (typeof ship === 'object' && Object.keys(ship).length !== 0) ? ship : defaultShip();
 
             if (shipSelected.value && shipSelected.value !== noShips && defaultPosition) {
-                switch (defaultPosition) {
-                    case 'vertical':
+                let posObj = {
+                    'vertical': () => {
                         _verticalShip(shipSelected.boxes, shipSelected.name);
-                        break;
-                    case 'horizontal':
+                    },
+                    'horizontal': () => {
                         _horizontalShip(shipSelected.boxes, shipSelected.name);
-                        break;
+                    }
+                }
+
+                if (defaultPosition && posObj.hasOwnProperty(defaultPosition)) {
+                    posObj[defaultPosition]();
                 }
             } else if (shipSelected.value && !defaultPosition) {
                 let message = 'You must choose one ship and the position you want to place it.';
@@ -723,7 +734,8 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
 
             table.onclick = (e) => {
                 let karmaControl = (window.__karma__) ? '/base/' : './',
-                    enemyShotsUserShipsWorker = new Worker(karmaControl + 'app/workers/userEnemyShots.js');
+                    enemyShotsUserShipsWorker = new Worker(karmaControl + 'app/workers/userEnemyShots.js'),
+                    message = 'There have been some problems, please refresh the game.';
 
                 if (Object.keys(_enemyShips).length > 0) {
                     let prom = new Promise((resolve) => {
@@ -747,12 +759,10 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                             }
                         };
                         enemyShotsUserShipsWorker.onerror = () => {
-                            let message = 'There have been some problems, please refresh the game.';
                             utils.message('red', message);
                         };
                     });
                 } else {
-                    let message = 'There have been some problems, please refresh the game.';
                     utils.message('red', message);
                 }
             };
