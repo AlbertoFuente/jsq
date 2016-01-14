@@ -42,7 +42,7 @@
             return utils.randomNumber(1, 10);
         },
         _controlPlaceShip = (shipLen, number) => {
-            return ((shipLen + number) <= 10) ? true : false;
+            return !!((shipLen + number) <= 10);
         },
         _controlBoxes = (parent, child, position) => {
             let result = false;
