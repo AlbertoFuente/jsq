@@ -30,7 +30,7 @@
                     });
                     return obj;
                 } else {
-                    if (_objShooted.hasOwnProperty('prev') && _objShooted.prev === 1) {
+                    if (_objShooted['prev'] && _objShooted.prev === 1) {
                         let shootedProm = new Promise((resolve) => {
                             resolve(_setShootedBox(obj));
                         });
@@ -138,18 +138,14 @@
             directions[Symbol.iterator] = function() {
                 return {
                     next: function() {
-                        if (this._top) {
-                            this._top = false;
-                            return getTopBottomPosition('top');
-                        } else if (this._bottom) {
-                            this._bottom = false;
-                            return getTopBottomPosition('bottom');
-                        } else if (this._left) {
-                            this._left = false;
-                            return getLeftRightPosition('left');
-                        } else if (this._right) {
-                            this._right = false;
-                            return getLeftRightPosition('right');
+                        if (this._top || this._bottom) {
+                            let pos = (this._top) ? 'top' : 'bottom';
+                            (this._top) ? this._top = false: this._bottom = false;
+                            return getTopBottomPosition(pos);
+                        } else if (this._left || this._right) {
+                            let pos = (this._left) ? 'left' : 'right';
+                            (this._left) ? this._left = false: this._right = false;
+                            return getLeftRightPosition(pos);
                         } else {
                             return {
                                 done: true
