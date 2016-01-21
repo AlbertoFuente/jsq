@@ -14,7 +14,16 @@
         _prefixes = ['tr', 'td'],
         _setResponseObj = (obj) => {
             let trPrefix = _prefixes[0],
-                tdPrefix = _prefixes[1];
+                tdPrefix = _prefixes[1],
+                toggleShooted = (obj, callback) => {
+                    let toggleProm = new Promise((resolve) => {
+                        resolve(callback(obj));
+                    });
+                    toggleProm.then((result) => {
+                        obj = result;
+                    });
+                    return obj;
+                };
 
             if (obj === 'response') {
                 _responseObj.parent = trPrefix + _randomShot();
@@ -22,30 +31,12 @@
                 return _responseObj;
             } else {
                 if (obj.shooted) {
-                    let shootedProm = new Promise((resolve) => {
-                        resolve(_setShootedBox(obj));
-                    });
-                    shootedProm.then((result) => {
-                        obj = result;
-                    });
-                    return obj;
+                    return toggleShooted(obj, _setShootedBox);
                 } else {
                     if (_objShooted['prev'] && _objShooted.prev === 1) {
-                        let shootedProm = new Promise((resolve) => {
-                            resolve(_setShootedBox(obj));
-                        });
-                        shootedProm.then((result) => {
-                            obj = result;
-                        });
-                        return obj;
+                        return toggleShooted(obj, _setShootedBox);
                     } else {
-                        let unShootedProm = new Promise((resolve) => {
-                            resolve(_setUnShootedBox(obj));
-                        });
-                        unShootedProm.then((result) => {
-                            obj = result;
-                        });
-                        return obj;
+                        return toggleShooted(obj, _setUnShootedBox);
                     }
                 }
             }
