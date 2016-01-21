@@ -302,7 +302,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     if (_hoverSelected.position) {
                         let posObj = {
                             'horizontal': () => {
-                                if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
+                                if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected['name']) {
                                     _removeSelected(element);
 
                                     if (printHorizontalSelected) {
@@ -321,7 +321,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                 }
                             },
                             'vertical': () => {
-                                if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected.hasOwnProperty('name')) {
+                                if (!element.classList.contains('selected') && elementParent.className !== 'tr0' && element.className !== 'td0' && _hoverSelected['name']) {
                                     _removeSelected(element);
 
                                     if (printVerticalSelected) {
@@ -353,7 +353,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                                 }
                             }
                         };
-                        if (posObj.hasOwnProperty(_hoverSelected.position)) {
+                        if (posObj[_hoverSelected.position]) {
                             posObj[_hoverSelected.position]();
                         }
                     }
@@ -512,7 +512,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                 select = consts.DOC.getElementById('gamerSelect'),
                 defaultShip = () => {
                     Object.keys(select.childNodes).forEach((x) => {
-                        if (select.hasOwnProperty(x) && num < 1) {
+                        if (select[x] && num < 1) {
                             let selected = select.childNodes[x];
                             result.value = selected.value;
                             result.name = selected.getAttribute('data-name');
@@ -534,7 +534,7 @@ define('components', ['$', 'consts', 'buttons', 'utils'], function($, consts, bu
                     }
                 };
 
-                if (defaultPosition && posObj.hasOwnProperty(defaultPosition)) {
+                if (defaultPosition && posObj[defaultPosition]) {
                     posObj[defaultPosition]();
                 }
             } else if (shipSelected.value && !defaultPosition) {
