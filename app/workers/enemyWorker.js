@@ -50,7 +50,7 @@
                 Array.from(_ships).forEach((x) => {
                     let posObj = {
                         'horizontal': (x) => {
-                            if (_enemyShips[x] && _enemyShips[x].hasOwnProperty('trParent')) {
+                            if (_enemyShips[x] && _enemyShips[x]['trParent']) {
                                 let trControl = _enemyShips[x]['trParent'].findIndex(d => d === parent);
                                 if (trControl && trControl > -1) {
                                     let tdControl = _enemyShips[x]['tdChild'].findIndex(d => d === child);
@@ -61,7 +61,7 @@
                             }
                         },
                         'vertical': (x) => {
-                            if (_enemyShips[x] && _enemyShips[x].hasOwnProperty('tdChild')) {
+                            if (_enemyShips[x] && _enemyShips[x]['tdChild']) {
                                 let tdControl = _enemyShips[x]['tdChild'].findIndex(d => d === child);
                                 if (tdControl && tdControl > -1) {
                                     let trControl = _enemyShips[x]['trParent'].findIndex(d => d === parent);
@@ -72,7 +72,7 @@
                             }
                         }
                     };
-                    if (position && posObj.hasOwnProperty(position)) {
+                    if (position && posObj[position]) {
                         posObj[position](x);
                     } else {
                         return false;
@@ -173,7 +173,7 @@
                                     setHorizontal(number);
                                 }
                             };
-                            if (posObj.hasOwnProperty(position)) {
+                            if (posObj[position]) {
                                 posObj[position]();
                             }
                         }
