@@ -12,7 +12,9 @@
             parent: [],
             box: [],
             direction: null,
-            prev: 0
+            prev: 0,
+            prevParent: null,
+            prevBox: null
         },
         _prefixes = ['tr', 'td'],
         _randomShot = () => {
@@ -46,11 +48,7 @@
                 if (obj.shooted) {
                     return toggleShooted(obj, _setShootedBox);
                 } else {
-                    if (_objShooted['prev'] && _objShooted.prev === 1) {
-                        return toggleShooted(obj, _setShootedBox);
-                    } else {
-                        return toggleShooted(obj, _setUnShootedBox);
-                    }
+                    return toggleShooted(obj, _setUnShootedBox);
                 }
             }
         },
@@ -163,10 +161,16 @@
                 };
                 (function nextBox() {
                     let _obj = objResult();
+
                     _objShooted.parent.push(_obj.value.tr);
                     _objShooted.box.push(_obj.value.td);
                     _objShooted.direction = _obj.value.direction;
+                    if (_objShooted.prev !== 1) {
+                        _objShooted.prevParent = 'tr' + (trNum - 1);
+                        _objShooted.prevBox = _obj.value.td;
+                    }
                     _objShooted.prev = 1;
+
                     if (!_obj.done) {
                         if (_obj.value.td !== false) {
                             obj.parent = _obj.value.tr;
